@@ -1,7 +1,7 @@
 # Keywords:
 # {name} - The player that got killed.
 # {killer} - The player who killed {name}
-
+# § - Custom color format, Same like minecraft default
 
 
 generic: "{name} died" # The player killed himself or somebody /killed him
