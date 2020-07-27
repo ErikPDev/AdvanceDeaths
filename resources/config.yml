@@ -1,0 +1,21 @@
+# Keywords:
+# {name} - The player that got killed.
+# {killer} - The player who killed {name}
+
+
+
+generic: "{name} died" # The player killed himself or somebody /killed him
+player: "{killer} killed {name}" # When a player got killed by another killer
+mob: "{killer} killed {name}" # When a player got killed by a mob
+outOfWorld: "{name} fell out of the world" # When a player fell out of the world.
+suffocation: "{name} suffocated to death" # When a player died from suffocation
+onFire: "{name} burned to death" # When a player died on a fire.
+inFire: "{name} went up in flames" # When a player died from a fire
+drown: "{name} drowned" # When a player drowned
+explosion: "{name} exploded" # When a player died by an explosion
+magic: "{name} died by magic" # When a player died by magic
+cactus: "{name} was pricked to death" # When a player died by a cactus
+highplace: "{name} fell from a high place" # When a player died from fall damage
+arrow: "{name} was shot by {killer}" # When a player got shot with a arrow.
+lava: "{name} tried to swim in lava" # When a player died from lava.
+explosion: "{name} was blown up by {killer}" # When a player got blown up from a player or an entity
