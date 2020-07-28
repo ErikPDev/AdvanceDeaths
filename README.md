@@ -3,7 +3,7 @@
 [![Discord](https://discordapp.com/api/guilds/717993428423671818/embed.png)](https://discord.gg/ZyUUy57)
 ![GitHub All Releases](https://img.shields.io/github/downloads/ErikX-PMMP/AdvanceDeaths/total)
 ![GitHub](https://img.shields.io/github/license/ErikX-PMMP/AdvanceDeaths)
-[![HitCount](http://hits.dwyl.com/ErikX-PMMP/Sudo.svg)](http://hits.dwyl.com/ErikX-PMMP/AdvanceDeaths)
+[![HitCount](http://hits.dwyl.com/ErikX-PMMP/AdvanceDeaths.svg)](http://hits.dwyl.com/ErikX-PMMP/AdvanceDeaths)
 
 A plugin to customize the death messages!
 Read setup for more info!
