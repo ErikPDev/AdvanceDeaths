@@ -9,8 +9,8 @@ A plugin to customize the death messages!
 Read setup for more info!
 
 # Why choose this plugin?
-This plugin has been tested on every single death type. No lag and No crashs.
-This plugin is already reccomended for all types of servers, from anarchy to creative.
+This plugin has been tested on every single death type. No lag and No crashes.
+This plugin is already recommended for all types of servers, from anarchy to creative.
 # Setup
 The setup is really easy, you'll just need to download the phar file at the plugins folder.
 After that reboot/start your server up, all death messages are now editable at the config.yml located at plugin_data/AdvanceDeaths
