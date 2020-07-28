@@ -5,4 +5,5 @@ branches:
 projects:
   AdvanceDeaths:
     path: ""
+    icon: "resources/icon.png"
 ...
