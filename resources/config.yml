@@ -2,7 +2,25 @@
 # {name} - The player that got killed.
 # {killer} - The player who killed {name}
 # § - Custom color format, Same like minecraft default
-
+# A list of color codes
+# | Color Name   | Code |
+# |--------------|------|
+# | Dark Red     | §4   |
+# | Red          | §c   |
+# | Gold         | §    |
+# | Yellow       | §e   |
+# | Dark Green   | §2   |
+# | Green        | §a   |
+# | Aqua         | §b   |
+# | Dark Aqua    | §3   |
+# | Dark Blue    | §1   |
+# | Blue         | §9   |
+# | Light Purple | §d   |
+# | Dark Purple  | §5   |
+# | White        | §f   |
+# | Gray         | §7   |
+# | Dark Gray    | §8   |
+# | Black        | §0   |
 
 generic: "{name} died" # The player killed himself or somebody /killed him
 player: "{killer} killed {name}" # When a player got killed by another killer
