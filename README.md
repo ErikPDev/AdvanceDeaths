@@ -1,0 +1,33 @@
+# AdvanceDeaths
+A plugin to customize the death messages!
+Read setup for more info!
+
+# Why choose this plugin?
+This plugin has been tested on every single death type. No lag and No crashs.
+This plugin is already reccomended for all types of servers, from anarchy to creative.
+# Setup
+The setup is really easy, you'll just need to download the phar file at the plugins folder.
+After that reboot/start your server up, all death messages are now editable at the config.yml located at plugin_data/AdvanceDeaths
+
+
+# Minecraft color coding
+Color coding the death messages is possible!
+Here's a list of color codes.
+| Color Name   | Code |
+|--------------|------|
+| Dark Red     | §4   |
+| Red          | §c   |
+| Gold         | §    |
+| Yellow       | §e   |
+| Dark Green   | §2   |
+| Green        | §a   |
+| Aqua         | §b   |
+| Dark Aqua    | §3   |
+| Dark Blue    | §1   |
+| Blue         | §9   |
+| Light Purple | §d   |
+| Dark Purple  | §5   |
+| White        | §f   |
+| Gray         | §7   |
+| Dark Gray    | §8   |
+| Black        | §0   |
