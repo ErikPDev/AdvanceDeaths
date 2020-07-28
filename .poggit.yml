@@ -6,4 +6,6 @@ projects:
   AdvanceDeaths:
     path: ""
     icon: "resources/icon.png"
+    lint:
+      phpstan: false
 ...
