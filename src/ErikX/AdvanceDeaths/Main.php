@@ -11,7 +11,7 @@ use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
-
+use pocketmine\entity\Human;
 class Main extends PluginBase implements Listener { //Added "implements Listener" because of the Listener event
 
     public function onEnable() {
@@ -22,17 +22,7 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
     public function onLoad(){
       $this->reloadConfig();
     }
-
-    public function onDeath(PlayerDeathEvent $event){
-      $event->setDeathMessage(null);
-      $player = $event->getPlayer();
-      $name = $player->getName();
-      $entity = $event->getEntity();
-      $msgderive = $event->deriveMessage($entity->getDisplayName(), $entity->getLastDamageCause());
-
-      //$this->getServer()->broadcastMessage("[§aDEBUG§r] $msgderive");
-      //$this->getLogger()->info($msgderive);
-
+    public function DeathMSG($msgderive, $entity, $name, $player){
       switch($msgderive){
         case "death.attack.generic":
           $genericdeath = str_replace("{name}", "$name", $this->getConfig()->get("generic"));
@@ -99,4 +89,39 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
       }
 
     }
+    public function onDeath(PlayerDeathEvent $event){
+      $event->setDeathMessage(null);
+      $player = $event->getPlayer();
+      $name = $player->getName();
+      $entity = $event->getEntity();
+      $msgderive = $event->deriveMessage($entity->getDisplayName(), $entity->getLastDamageCause());
+
+      //$this->getServer()->broadcastMessage("[§aDEBUG§r] $msgderive");
+      //$this->getLogger()->info($msgderive);
+      $this->DeathMSG($msgderive, $entity, $name, $player);
+
+    }
+
+    public function onDamage(EntityDamageEvent $event) {
+      if($this->getConfig()->get("immediate-respawn") == true){
+        $player = $event->getEntity();
+
+        if($event->getFinalDamage() >= $player->getHealth()) {
+          if($player instanceof Human){
+            $event->setCancelled();
+            $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
+            $player->setHealth($player->getMaxHealth());
+            $player->addTitle($this->getConfig()->get("TitleDied"), $this->getConfig()->get("SubTitleDied"), 1, 100, 50);
+            $name = $player->getName();
+            $entity = $event->getEntity();
+            //$this->getServer()->broadcastMessage(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()));
+            $this->DeathMSG(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()), $entity, $name, $player);
+
+          }
+        }
+      }
+
+    }
+
+
 }

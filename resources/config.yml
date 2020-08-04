@@ -23,6 +23,10 @@
 # | Dark Gray    | §8   |
 # | Black        | §0   |
 
+immediate-respawn: false # Enable/disables immediate respawn. When you die it bypasses the death screen.
+TitleDied: "§l§cYOU DIED!" # Title of Death
+SubTitleDied: "§r§eTeleporting to spawn" # Sub Title of death
+
 generic: "{name} died" # The player killed himself or somebody /killed him.
 player: "{killer} killed {name}" # When a player got killed by another player.
 mob: "{killer} killed {name}" # When a player got killed by a mob.
