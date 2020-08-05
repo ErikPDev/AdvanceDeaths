@@ -109,11 +109,18 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
         if($event->getFinalDamage() >= $player->getHealth()) {
           if($player instanceof Human){
             $event->setCancelled();
-            $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
+
             $player->setHealth($player->getMaxHealth());
             $player->addTitle($this->getConfig()->get("TitleDied"), $this->getConfig()->get("SubTitleDied"), 1, 100, 50);
             $name = $player->getName();
             $entity = $event->getEntity();
+            if($this->getConfig()->get("keepInventory") == false){
+              $inventory = $player->getInventory();
+              $pos = $player->getPosition();
+              $level = $player->getLevel();
+              $inventory->dropContents($level,$pos);
+            }
+            $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
             //$this->getServer()->broadcastMessage(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()));
             $this->DeathMSG(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()), $entity, $name, $player);
 

@@ -24,6 +24,11 @@
 # | Black        | §0   |
 
 immediate-respawn: false # Enable/disables immediate respawn. When you die it bypasses the death screen.
+
+# true: Enables keepInventory when immediateRespawn is on.
+# false: Disables keepInventory when ImmediateRespawn is enabled.
+keepInventory: false
+
 TitleDied: "§l§cYOU DIED!" # Title of Death
 SubTitleDied: "§r§eTeleporting to spawn" # Sub Title of death
 
