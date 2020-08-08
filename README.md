@@ -1,5 +1,5 @@
 # AdvanceDeaths
-[![PoggitCI](https://poggit.pmmp.io/shield.state/Sudo)](https://poggit.pmmp.io/p/AdvanceDeaths)
+[![](https://poggit.pmmp.io/shield.state/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths)
 [![Discord](https://discordapp.com/api/guilds/717993428423671818/embed.png)](https://discord.gg/ZyUUy57)
 ![GitHub](https://img.shields.io/github/license/ErikX-PMMP/AdvanceDeaths)
 
