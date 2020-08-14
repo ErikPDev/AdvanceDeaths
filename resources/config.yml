@@ -33,7 +33,7 @@ TitleDied: "§l§cYOU DIED!" # Title of Death
 SubTitleDied: "§r§eTeleporting to spawn" # Sub Title of death
 
 generic: "{name} died" # The player killed himself or somebody /killed him.
-player: "{killer} killed {name}" # When a player got killed by another player.
+player: "{killer} killed {name} with {weapon}" # When a player got killed by another player.
 mob: "{killer} killed {name}" # When a player got killed by a mob.
 outOfWorld: "{name} fell out of the world" # When a player fell out of the world.
 suffocation: "{name} suffocated to death" # When a player died from suffocation.

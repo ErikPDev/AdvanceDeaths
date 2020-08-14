@@ -12,6 +12,8 @@ use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\entity\Human;
+use pocketmine\inventory\Inventory;
+use pocketmine\item\Item;
 class Main extends PluginBase implements Listener { //Added "implements Listener" because of the Listener event
 
     public function onEnable() {
@@ -31,7 +33,8 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
         case "death.attack.player":
           $playerdeat = str_replace("{name}", "$name", $this->getConfig()->get("player"));
           $playerdeath = str_replace("{killer}", $entity->getLastDamageCause()->getDamager()->getDisplayName(), $playerdeat);
-          $this->getServer()->broadcastMessage($playerdeath);
+          $playerdeath1 = str_replace("{weapon}", $entity->getLastDamageCause()->getDamager()->getInventory()->getItemInHand()->getName(), $playerdeath)
+          $this->getServer()->broadcastMessage($playerdeath1);
           break;
         case "death.attack.mob":
           $mobdeat = str_replace("{name}", "$name", $this->getConfig()->get("mob"));
