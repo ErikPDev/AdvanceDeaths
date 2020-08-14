@@ -12,6 +12,8 @@ use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\entity\Human;
+use pocketmine\inventory\Inventory;
+use pocketmine\item\Item;
 class Main extends PluginBase implements Listener { //Added "implements Listener" because of the Listener event
 
     public function onEnable() {
@@ -31,7 +33,8 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
         case "death.attack.player":
           $playerdeat = str_replace("{name}", "$name", $this->getConfig()->get("player"));
           $playerdeath = str_replace("{killer}", $entity->getLastDamageCause()->getDamager()->getDisplayName(), $playerdeat);
-          $this->getServer()->broadcastMessage($playerdeath);
+          $playerdeath1 = str_replace("{weapon}", $entity->getLastDamageCause()->getDamager()->getInventory()->getItemInHand()->getName(), $playerdeath);
+          $this->getServer()->broadcastMessage($playerdeath1);
           break;
         case "death.attack.mob":
           $mobdeat = str_replace("{name}", "$name", $this->getConfig()->get("mob"));
@@ -102,33 +105,42 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
 
     }
 
-    public function onDamage(EntityDamageEvent $event) {
-      if($this->getConfig()->get("immediate-respawn") == true){
-        $player = $event->getEntity();
+    // #immediate-respawn: false # Enable/disables immediate respawn. When you die it bypasses the death screen.
+    //
+    // # true: Enables keepInventory when immediateRespawn is on.
+    // # false: Disables keepInventory when ImmediateRespawn is enabled.
+    // #keepInventory: false
+    //
+    // #TitleDied: "§l§cYOU DIED!" # Title of Death
+    // #SubTitleDied: "§r§eTeleporting to spawn" # Sub Title of death
 
-        if($event->getFinalDamage() >= $player->getHealth()) {
-          if($player instanceof Human){
-            $event->setCancelled();
-
-            $player->setHealth($player->getMaxHealth());
-            $player->addTitle($this->getConfig()->get("TitleDied"), $this->getConfig()->get("SubTitleDied"), 1, 100, 50);
-            $name = $player->getName();
-            $entity = $event->getEntity();
-            if($this->getConfig()->get("keepInventory") == false){
-              $inventory = $player->getInventory();
-              $pos = $player->getPosition();
-              $level = $player->getLevel();
-              $inventory->dropContents($level,$pos);
-            }
-            $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
-            //$this->getServer()->broadcastMessage(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()));
-            $this->DeathMSG(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()), $entity, $name, $player);
-
-          }
-        }
-      }
-
-    }
+    // public function onDamage(EntityDamageEvent $event) {
+    //   if($this->getConfig()->get("immediate-respawn") == true){
+    //     $player = $event->getEntity();
+    //
+    //     if($event->getFinalDamage() >= $player->getHealth()) {
+    //       if($player instanceof Human){
+    //         $event->setCancelled();
+    //
+    //         $player->setHealth($player->getMaxHealth());
+    //         $player->addTitle($this->getConfig()->get("TitleDied"), $this->getConfig()->get("SubTitleDied"), 1, 100, 50);
+    //         $name = $player->getName();
+    //         $entity = $event->getEntity();
+    //         if($this->getConfig()->get("keepInventory") == false){
+    //           $inventory = $player->getInventory();
+    //           $pos = $player->getPosition();
+    //           $level = $player->getLevel();
+    //           $inventory->dropContents($level,$pos);
+    //         }
+    //         $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
+    //         //$this->getServer()->broadcastMessage(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()));
+    //         $this->DeathMSG(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()), $entity, $name, $player);
+    //
+    //       }
+    //     }
+    //   }
+    //
+    // }
 
 
 }

@@ -1,6 +1,7 @@
 # Keywords:
 # {name} - The player that got killed.
 # {killer} - The player who killed {name}
+# {weapon} - What weapon the killer used
 # § - Custom color format, Same like minecraft default
 # A list of color codes
 # | Color Name   | Code |
@@ -23,17 +24,8 @@
 # | Dark Gray    | §8   |
 # | Black        | §0   |
 
-immediate-respawn: false # Enable/disables immediate respawn. When you die it bypasses the death screen.
-
-# true: Enables keepInventory when immediateRespawn is on.
-# false: Disables keepInventory when ImmediateRespawn is enabled.
-keepInventory: false
-
-TitleDied: "§l§cYOU DIED!" # Title of Death
-SubTitleDied: "§r§eTeleporting to spawn" # Sub Title of death
-
 generic: "{name} died" # The player killed himself or somebody /killed him.
-player: "{killer} killed {name}" # When a player got killed by another player.
+player: "{killer} killed {name} with {weapon}" # When a player got killed by another player.
 mob: "{killer} killed {name}" # When a player got killed by a mob.
 outOfWorld: "{name} fell out of the world" # When a player fell out of the world.
 suffocation: "{name} suffocated to death" # When a player died from suffocation.
