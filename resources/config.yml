@@ -1,7 +1,10 @@
 # Keywords:
 # {name} - The player that got killed.
 # {killer} - The player who killed {name}
+# {killerCurrentHealth} - Shows the killer's health
+# {killerMaxHealth} - Shows the killer's Max Health
 # {weapon} - What weapon the killer used
+
 # § - Custom color format, Same like minecraft default
 # A list of color codes
 # | Color Name   | Code |
@@ -25,7 +28,7 @@
 # | Black        | §0   |
 
 generic: "{name} died" # The player killed himself or somebody /killed him.
-player: "{killer} killed {name} with {weapon}" # When a player got killed by another player.
+player: "{killer} [{killerCurrentHealth}/{killerMaxHealth}] killed {name} with {weapon}" # When a player got killed by another player.
 mob: "{killer} killed {name}" # When a player got killed by a mob.
 outOfWorld: "{name} fell out of the world" # When a player fell out of the world.
 suffocation: "{name} suffocated to death" # When a player died from suffocation.

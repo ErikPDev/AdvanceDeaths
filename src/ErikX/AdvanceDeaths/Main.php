@@ -34,7 +34,9 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
           $playerdeat = str_replace("{name}", "$name", $this->getConfig()->get("player"));
           $playerdeath = str_replace("{killer}", $entity->getLastDamageCause()->getDamager()->getDisplayName(), $playerdeat);
           $playerdeath1 = str_replace("{weapon}", $entity->getLastDamageCause()->getDamager()->getInventory()->getItemInHand()->getName(), $playerdeath);
-          $this->getServer()->broadcastMessage($playerdeath1);
+          $playerdeath2 = str_replace("{killerCurrentHealth}", $entity->getLastDamageCause()->getDamager()->getHealth(), $playerdeath1);
+          $playerdeath3 = str_replace("{killerMaxHealth}", $entity->getLastDamageCause()->getDamager()->getMaxHealth(), $playerdeath2);
+          $this->getServer()->broadcastMessage($playerdeath3);
           break;
         case "death.attack.mob":
           $mobdeat = str_replace("{name}", "$name", $this->getConfig()->get("mob"));
