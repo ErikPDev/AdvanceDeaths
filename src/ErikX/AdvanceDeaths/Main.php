@@ -75,7 +75,7 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
           $this->getServer()->broadcastMessage($highplace);
           break;
         case "death.attack.arrow":
-          $arro = str_replace("{name}", "$name", $this->getConfig()->get("player"));
+          $arro = str_replace("{name}", "$name", $this->getConfig()->get("arrow"));
           $arrow = str_replace("{killer}", $entity->getLastDamageCause()->getDamager()->getName(), $arro);
           $this->getServer()->broadcastMessage($arrow);
           break;
