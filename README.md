@@ -1,6 +1,6 @@
 # AdvanceDeaths
 [![](https://poggit.pmmp.io/shield.state/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths)
-[![Discord](https://discordapp.com/api/guilds/717993428423671818/embed.png)](https://discord.gg/ZyUUy57)
+
 ![GitHub](https://img.shields.io/github/license/ErikX-PMMP/AdvanceDeaths)
 [![HitCount](http://hits.dwyl.com/ErikX-PMMP/ErikX-PMMP/AdvanceDeaths.svg)](http://hits.dwyl.com/ErikX-PMMP/ErikX-PMMP/AdvanceDeaths)
 
@@ -15,6 +15,8 @@ This plugin is already recommended for all types of servers, from anarchy to cre
 The setup is really easy, you'll just need to download the phar file at the plugins folder.
 After that reboot/start your server up, all death messages are now editable at the config.yml located at plugin_data/AdvanceDeaths
 
+# Removed Discord link
+If you need help or want to contact help, create an issue.
 
 # Minecraft color coding
 Color coding the death messages is possible!
