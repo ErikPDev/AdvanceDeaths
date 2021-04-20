@@ -2,7 +2,6 @@
 [![](https://poggit.pmmp.io/shield.state/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths)
 
 ![GitHub](https://img.shields.io/github/license/ErikX-PMMP/AdvanceDeaths)
-[![HitCount](http://hits.dwyl.com/ErikX-PMMP/ErikX-PMMP/AdvanceDeaths.svg)](http://hits.dwyl.com/ErikX-PMMP/ErikX-PMMP/AdvanceDeaths)
 
 A plugin to customize the death messages, and inbuilt Immediate Respawn!
 
