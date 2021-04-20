@@ -25,7 +25,7 @@ Here's a list of color codes.
 |--------------|------|
 | Dark Red     | §4   |
 | Red          | §c   |
-| Gold         | §    |
+| Gold         | §6   |
 | Yellow       | §e   |
 | Dark Yellow  | §g   |
 | Dark Green   | §2   |
