@@ -27,6 +27,19 @@
 # | Dark Gray    | §8   |
 # | Black        | §0   |
 
+# Start of Imediate Respawn config, this is experimental.
+
+immediate-respawn: false # Enable/disables immediate respawn. When you die it bypasses the death screen.
+# true: Enables keepInventory when immediateRespawn is on.
+# false: Disables keepInventory when ImmediateRespawn is enabled.
+keepInventory: false
+TitleDied: "§l§cYOU DIED!" # Title of Death
+SubTitleDied: "§r§eTeleporting to spawn" # Sub Title of death
+
+
+
+# End of custom respawn config
+
 generic: "{name} died" # The player killed himself or somebody /killed him.
 player: "{killer} [{killerCurrentHealth}/{killerMaxHealth}] killed {name} with {weapon}" # When a player got killed by another player.
 mob: "{killer} killed {name}" # When a player got killed by a mob.
