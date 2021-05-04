@@ -3,7 +3,7 @@
 
 ![GitHub](https://img.shields.io/github/license/ErikX-PMMP/AdvanceDeaths)
 
-A plugin to customize the death messages, and inbuilt Immediate Respawn!
+A plugin to customize the death messages.
 
 Read setup for more info!
 
