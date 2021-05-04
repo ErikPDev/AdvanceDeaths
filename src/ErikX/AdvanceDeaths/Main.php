@@ -104,7 +104,8 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
       //$this->getServer()->broadcastMessage("[§aDEBUG§r] $msgderive");
       //$this->getLogger()->info($msgderive);
       $this->DeathMSG($msgderive, $entity, $name, $player);
-
+      
+      
     }
 
     // #immediate-respawn: false # Enable/disables immediate respawn. When you die it bypasses the death screen.
@@ -116,33 +117,39 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
     // #TitleDied: "§l§cYOU DIED!" # Title of Death
     // #SubTitleDied: "§r§eTeleporting to spawn" # Sub Title of death
 
-    // public function onDamage(EntityDamageEvent $event) {
-    //   if($this->getConfig()->get("immediate-respawn") == true){
-    //     $player = $event->getEntity();
-    //
-    //     if($event->getFinalDamage() >= $player->getHealth()) {
-    //       if($player instanceof Human){
-    //         $event->setCancelled();
-    //
-    //         $player->setHealth($player->getMaxHealth());
-    //         $player->addTitle($this->getConfig()->get("TitleDied"), $this->getConfig()->get("SubTitleDied"), 1, 100, 50);
-    //         $name = $player->getName();
-    //         $entity = $event->getEntity();
-    //         if($this->getConfig()->get("keepInventory") == false){
-    //           $inventory = $player->getInventory();
-    //           $pos = $player->getPosition();
-    //           $level = $player->getLevel();
-    //           $inventory->dropContents($level,$pos);
-    //         }
-    //         $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
-    //         //$this->getServer()->broadcastMessage(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()));
-    //         $this->DeathMSG(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()), $entity, $name, $player);
-    //
-    //       }
-    //     }
-    //   }
-    //
-    // }
+    public function onDamage(EntityDamageEvent $event) {
+      if($this->getConfig()->get("immediate-respawn") == true){
+        $player = $event->getEntity();
+    
+        if($event->getFinalDamage() >= $player->getHealth()) {
+          if($player instanceof Player){
+            $event->setCancelled();
+    
+            $player->setHealth($player->getMaxHealth());
+            $player->setFood($player->getMaxFood());
+            $player->addTitle($this->getConfig()->get("TitleDied"), $this->getConfig()->get("SubTitleDied"), 1, 100, 50);
+            $name = $player->getName();
+            $entity = $event->getEntity();
+            if($this->getConfig()->get("keepInventory") == false){
+              $inventory = $player->getInventory();
+              $pos = $player->getPosition();
+              $level = $player->getLevel();
+              $AmrorInventory = $player->getArmorInventory();
+              $inventory->dropContents($level,$pos);
+              $AmrorInventory->dropContents($level,$pos);
+
+            }
+            $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
+            //$this->getServer()->broadcastMessage(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()));
+            $AttemptonDeath = new PlayerDeathEvent($player, $inventory->getContents(), null, $player->getXpDropAmount());
+            $AttemptonDeath->call();
+            // $this->DeathMSG(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()), $entity, $name, $player);
+    
+          }
+        }
+      }
+    
+    }
 
 
 }
