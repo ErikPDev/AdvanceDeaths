@@ -5,6 +5,8 @@
 # {killerMaxHealth} - Shows the killer's Max Health
 # {weapon} - What weapon the killer used
 
+# Warning! The Keywords are case-sensitive!! 
+
 # § - Custom color format, Same like minecraft default
 # A list of color codes
 # | Color Name   | Code |
@@ -30,15 +32,14 @@
 # Start of Imediate Respawn config, this is experimental.
 
 immediate-respawn: false # Enable/disables immediate respawn. When you die it bypasses the death screen.
-# true: Enables keepInventory when immediateRespawn is on.
-# false: Disables keepInventory when ImmediateRespawn is enabled.
-keepInventory: false
+keepInventory: false # This only works when immediate respawn is setted to true.
 TitleDied: "§l§cYOU DIED!" # Title of Death
 SubTitleDied: "§r§eTeleporting to spawn" # Sub Title of death
-
-
-
 # End of custom respawn config
+
+Hitted-Hearts: false # Set this to true if you want to the player to show heart particle on hit.
+Heal-Killer: false # Set this to true if you want to heal the Killer when he kills a player.
+HealMessage: "You have been healed!" # Message to send to the Player when it's healed.
 
 generic: "{name} died" # The player killed himself or somebody /killed him.
 player: "{killer} [{killerCurrentHealth}/{killerMaxHealth}] killed {name} with {weapon}" # When a player got killed by another player.
@@ -55,3 +56,11 @@ highplace: "{name} fell from a high place" # When a player died from fall damage
 arrow: "{name} was shot by {killer}" # When a player got shot with a arrow.
 lava: "{name} tried to swim in lava" # When a player died from lava.
 explosion: "{name} was blown up by {killer}" # When a player got blown up from a player or an entity.
+
+
+
+
+
+
+# Don't modify the below value, or delete it.
+config-verison: 1

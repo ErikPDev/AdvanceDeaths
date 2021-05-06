@@ -14,113 +14,78 @@ use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\entity\Human;
 use pocketmine\inventory\Inventory;
 use pocketmine\item\Item;
-class Main extends PluginBase implements Listener { //Added "implements Listener" because of the Listener event
+use pocketmine\utils\Random;
+use pocketmine\level\Level;
+use pocketmine\level\particle\ExplodeParticle;
+use pocketmine\level\particle\HeartParticle;
+use pocketmine\level\particle\Particle;
+use pocketmine\math\Vector3;
+use ErikX\AdvanceDeaths\DeathContainer;
+use ErikX\AdvanceDeaths\Update;
 
-    public function onEnable() {
-        $this->getServer()->getPluginManager()->registerEvents($this,$this); // This is the new line
-        $this->saveDefaultConfig(); // Saves config.yml if not created.
-        $this->reloadConfig(); // Fix bugs sometimes by getting configs values
+class Main extends PluginBase implements Listener {
+  private $DeathContainer;
+  public function onEnable() {
+      $this->getServer()->getPluginManager()->registerEvents($this,$this);
+      $this->saveDefaultConfig();
+      $this->reloadConfig();
+      if ($this->getConfig()->get("config-verison") != 1){
+        $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Please use the new config.yml. To get it, delete the the old one.");
+        $this->getServer()->getPluginManager()->disablePlugin($this);
+      }
+        
+      $this->DeathContainer = new DeathContainer($this);
+      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "1.8"));
     }
     public function onLoad(){
       $this->reloadConfig();
     }
-    public function DeathMSG($msgderive, $entity, $name, $player){
-      switch($msgderive){
-        case "death.attack.generic":
-          $genericdeath = str_replace("{name}", "$name", $this->getConfig()->get("generic"));
-          $this->getServer()->broadcastMessage($genericdeath);
-          break;
-        case "death.attack.player":
-          $playerdeat = str_replace("{name}", "$name", $this->getConfig()->get("player"));
-          $playerdeath = str_replace("{killer}", $entity->getLastDamageCause()->getDamager()->getDisplayName(), $playerdeat);
-          $playerdeath1 = str_replace("{weapon}", $entity->getLastDamageCause()->getDamager()->getInventory()->getItemInHand()->getName(), $playerdeath);
-          $playerdeath2 = str_replace("{killerCurrentHealth}", $entity->getLastDamageCause()->getDamager()->getHealth(), $playerdeath1);
-          $playerdeath3 = str_replace("{killerMaxHealth}", $entity->getLastDamageCause()->getDamager()->getMaxHealth(), $playerdeath2);
-          $this->getServer()->broadcastMessage($playerdeath3);
-          break;
-        case "death.attack.mob":
-          $mobdeat = str_replace("{name}", "$name", $this->getConfig()->get("mob"));
-          $mobdeath = str_replace("{killer}", $entity->getLastDamageCause()->getDamager()->getName(), $mobdeat);
-          $this->getServer()->broadcastMessage($mobdeath);
-          break;
-        case "death.attack.outOfWorld":
-          $outOfWorld = str_replace("{name}", "$name", $this->getConfig()->get("outOfWorld"));
-          $this->getServer()->broadcastMessage($outOfWorld);
-          break;
-        case "death.attack.inWall":
-          $suffocation = str_replace("{name}", "$name", $this->getConfig()->get("suffocation"));
-          $this->getServer()->broadcastMessage($suffocation);
-          break;
-        case "death.attack.onFire":
-          $onFire = str_replace("{name}", "$name", $this->getConfig()->get("onFire"));
-          $this->getServer()->broadcastMessage($onFire);
-          break;
-        case "death.attack.inFire":
-          $inFire = str_replace("{name}", "$name", $this->getConfig()->get("inFire"));
-          $this->getServer()->broadcastMessage($inFire);
-          break;
-
-        case "death.attack.drown":
-          $drown = str_replace("{name}", "$name", $this->getConfig()->get("drown"));
-          $this->getServer()->broadcastMessage($drown);
-          break;
-        case "death.attack.magic":
-          $magic = str_replace("{name}", "$name", $this->getConfig()->get("magic"));
-          $this->getServer()->broadcastMessage($magic);
-          break;
-        case "death.attack.cactus":
-          $cactus = str_replace("{name}", "$name", $this->getConfig()->get("cactus"));
-          $this->getServer()->broadcastMessage($cactus);
-          break;
-        case "death.fell.accident.generic":
-          $highplace = str_replace("{name}", "$name", $this->getConfig()->get("highplace"));
-          $this->getServer()->broadcastMessage($highplace);
-          break;
-        case "death.attack.arrow":
-          $arro = str_replace("{name}", "$name", $this->getConfig()->get("arrow"));
-          $arrow = str_replace("{killer}", $entity->getLastDamageCause()->getDamager()->getName(), $arro);
-          $this->getServer()->broadcastMessage($arrow);
-          break;
-        case "death.attack.lava":
-          $lava = str_replace("{name}", "$name", $this->getConfig()->get("lava"));
-          $this->getServer()->broadcastMessage($lava);
-          break;
-        case "death.attack.explosion.player":
-          $explosio = str_replace("{name}", "$name", $this->getConfig()->get("explosion"));
-          $explosion = str_replace("{killer}", $entity->getLastDamageCause()->getDamager()->getName(), $explosio);
-          $this->getServer()->broadcastMessage($explosion);
-          break;
-
-      }
-
-    }
     public function onDeath(PlayerDeathEvent $event){
-      $event->setDeathMessage(null);
       $player = $event->getPlayer();
       $name = $player->getName();
       $entity = $event->getEntity();
       $msgderive = $event->deriveMessage($entity->getDisplayName(), $entity->getLastDamageCause());
+      $event->setDeathMessage($this->DeathContainer->Translate($msgderive, $entity)); // Changed the Broadcast message to SetDeathMessage
 
-      //$this->getServer()->broadcastMessage("[§aDEBUG§r] $msgderive");
-      //$this->getLogger()->info($msgderive);
-      $this->DeathMSG($msgderive, $entity, $name, $player);
-      
+      if($event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent){
+
+        if($this->getConfig()->get("Heal-Killer") == true and $entity->getLastDamageCause()->getDamager() instanceof Player and $msgderive == "death.attack.player"){
+          $entity->getLastDamageCause()->getDamager()->setHealth($player->getMaxHealth());
+          $entity->getLastDamageCause()->getDamager()->setFood($player->getMaxFood());
+          $entity->getLastDamageCause()->getDamager()->sendMessage($this->getConfig()->get("HealMessage"));
+          
+        }
+      }
       
     }
 
-    // #immediate-respawn: false # Enable/disables immediate respawn. When you die it bypasses the death screen.
-    //
-    // # true: Enables keepInventory when immediateRespawn is on.
-    // # false: Disables keepInventory when ImmediateRespawn is enabled.
-    // #keepInventory: false
-    //
-    // #TitleDied: "§l§cYOU DIED!" # Title of Death
-    // #SubTitleDied: "§r§eTeleporting to spawn" # Sub Title of death
-
     public function onDamage(EntityDamageEvent $event) {
+      $player = $event->getEntity();
+      $entity = $event->getEntity();
+      
+      if ($player instanceof Player && $this->getConfig()->get("Hitted-Hearts") == true && $event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent){
+        $xd = (float) 1;
+        $yd = (float) 1;
+        $zd = (float) 1;
+        $level = $player->getServer()->getDefaultLevel();
+        $pos = $player->getPosition();
+
+        $count = 1; // Is this too much?
+
+        $data = null;
+
+        $particle = new HeartParticle($pos, 0);
+
+        $random = new Random((int) (microtime(true) * 1000) + mt_rand());
+
+        for($i = 0; $i < $count; ++$i){
+          $particle->setComponents($pos->x, $pos->y+0.5, $pos->z);
+          $level->addParticle($particle);
+        }
+      }
+
       if($this->getConfig()->get("immediate-respawn") == true){
-        $player = $event->getEntity();
-    
+
         if($event->getFinalDamage() >= $player->getHealth()) {
           if($player instanceof Player){
             $event->setCancelled();
@@ -129,7 +94,6 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
             $player->setFood($player->getMaxFood());
             $player->addTitle($this->getConfig()->get("TitleDied"), $this->getConfig()->get("SubTitleDied"), 1, 100, 50);
             $name = $player->getName();
-            $entity = $event->getEntity();
             if($this->getConfig()->get("keepInventory") == false){
               $inventory = $player->getInventory();
               $pos = $player->getPosition();
@@ -139,17 +103,36 @@ class Main extends PluginBase implements Listener { //Added "implements Listener
               $AmrorInventory->dropContents($level,$pos);
 
             }
-            $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
-            //$this->getServer()->broadcastMessage(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()));
+            $inventory = $player->getInventory();
             $AttemptonDeath = new PlayerDeathEvent($player, $inventory->getContents(), null, $player->getXpDropAmount());
             $AttemptonDeath->call();
-            // $this->DeathMSG(PlayerDeathEvent::deriveMessage($player->getDisplayName(), $player->getLastDamageCause()), $entity, $name, $player);
-    
+
+            $xd = (float) 1;
+            $yd = (float) 1;
+            $zd = (float) 1;
+            $level = $player->getServer()->getDefaultLevel();
+			      $pos = $player->getPosition();
+
+            $count = 50; // Is this too much?
+
+            $data = null;
+
+            $particle = new ExplodeParticle($pos);
+
+            $random = new Random((int) (microtime(true) * 1000) + mt_rand());
+
+            for($i = 0; $i < $count; ++$i){
+              $particle->setComponents($pos->x + $random->nextSignedFloat() * $xd,$pos->y + $random->nextSignedFloat() * $yd, $pos->z + $random->nextSignedFloat() * $zd);
+              $level->addParticle($particle);
+            }
+            $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
+          
           }
         }
       }
     
     }
+
 
 
 }
