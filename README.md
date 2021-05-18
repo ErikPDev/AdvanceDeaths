@@ -1,7 +1,6 @@
 # AdvanceDeaths
 [![](https://poggit.pmmp.io/shield.state/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths)
-
-![GitHub](https://img.shields.io/github/license/ErikX-PMMP/AdvanceDeaths)
+![GitHub](https://img.shields.io/github/license/ErikPDev/AdvanceDeaths)
 
 A plugin to customize the death messages.
 
