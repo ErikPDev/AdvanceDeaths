@@ -1,5 +1,5 @@
 name: AdvanceDeaths
-author: ErikX
+author: ErikPDev
 api: 3.0.0
-version: 1.8
-main: ErikX\AdvanceDeaths\Main
+version: 1.9
+main: ErikPDev\AdvanceDeaths\Main

@@ -1,12 +1,21 @@
 <?php
 
-namespace ErikX\AdvanceDeaths;
-
+namespace ErikPDev\AdvanceDeaths;
+use ErikPDev\AdvanceDeaths\Main;
 class DeathTypes {
+
+    /** @var Main */
     private $plugin;
     function __construct($plugin) {
         $this->plugin = $plugin;
     }
+    /**
+	* Convert message to config Translation
+	*
+	* @param string $id
+	*
+	* @return string | NULL
+	*/
     public function DeathConverter($death){
         
         $array = array(

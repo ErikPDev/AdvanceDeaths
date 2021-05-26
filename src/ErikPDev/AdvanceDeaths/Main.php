@@ -1,6 +1,6 @@
 <?php
 
-namespace ErikX\AdvanceDeaths;
+namespace ErikPDev\AdvanceDeaths;
 
 use pocketmine\plugin\PluginBase;
 use pocketmine\Player;
@@ -20,11 +20,14 @@ use pocketmine\level\particle\ExplodeParticle;
 use pocketmine\level\particle\HeartParticle;
 use pocketmine\level\particle\Particle;
 use pocketmine\math\Vector3;
-use ErikX\AdvanceDeaths\DeathContainer;
-use ErikX\AdvanceDeaths\Update;
+use ErikPDev\AdvanceDeaths\DeathContainer;
+use ErikPDev\AdvanceDeaths\Update;
 
 class Main extends PluginBase implements Listener {
+
+  /** @var DeathContainer */
   private $DeathContainer;
+
   public function onEnable() {
       $this->getServer()->getPluginManager()->registerEvents($this,$this);
       $this->saveDefaultConfig();
@@ -35,11 +38,16 @@ class Main extends PluginBase implements Listener {
       }
         
       $this->DeathContainer = new DeathContainer($this);
-      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "1.8"));
+      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "1.9"));
     }
     public function onLoad(){
       $this->reloadConfig();
     }
+    /**
+     * @priority HIGHEST
+     * @ignoreCancelled false
+     * @param PlayerDeathEvent $event
+     */
     public function onDeath(PlayerDeathEvent $event){
       $player = $event->getPlayer();
       $name = $player->getName();
@@ -58,11 +66,16 @@ class Main extends PluginBase implements Listener {
       }
       
     }
-
+    /**
+     * @priority HIGHEST
+     * @ignoreCancelled true
+     * @param EntityDamageEvent $event
+     */
     public function onDamage(EntityDamageEvent $event) {
       $player = $event->getEntity();
       $entity = $event->getEntity();
       if($player->isCreative()){return;}
+      if($event->isCancelled()){return;}
       if ($player instanceof Player && $this->getConfig()->get("Hitted-Hearts") == true && $event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent){
         $xd = (float) 1;
         $yd = (float) 1;

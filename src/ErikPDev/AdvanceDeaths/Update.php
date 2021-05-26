@@ -29,7 +29,7 @@
  * ------------------------------------------------------------------------
  */
 
-namespace ErikX\AdvanceDeaths;
+namespace ErikPDev\AdvanceDeaths;
 
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;

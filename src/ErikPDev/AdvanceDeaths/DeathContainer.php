@@ -1,11 +1,12 @@
 <?php
 
-namespace ErikX\AdvanceDeaths;
-use ErikX\AdvanceDeaths\DeathTypes;
+namespace ErikPDev\AdvanceDeaths;
+use ErikPDev\AdvanceDeaths\DeathTypes;
+use ErikPDev\AdvanceDeaths\Main;
 class DeathContainer {
+    /** @var Main */
     private $plugin;
-    private $translate;
-    private $DeathTypes;
+    /** @var Object */
     private $KeyWords;
     function __construct($plugin) {
         $this->plugin = $plugin;
@@ -18,6 +19,13 @@ class DeathContainer {
         );
 
     }
+    /**
+	* Convert variables to proper Data
+	*
+	* @param string $id
+	*
+	* @return string 
+	*/
     function ExecuteHelper($entity, $keyWord){
         switch( strtolower($keyWord) ){
             case "{name}":
@@ -32,6 +40,14 @@ class DeathContainer {
                 return $entity->getLastDamageCause()->getDamager()->getInventory()->getItemInHand()->getName();
         }
     }
+    /**
+	* This will return the complete translation with KeyWords and proper formatting from the config.
+	*
+	* @param string $id
+	*
+	* @return string | NULL
+	*/
+
     public function Translate($translate, $entity){
         
 
