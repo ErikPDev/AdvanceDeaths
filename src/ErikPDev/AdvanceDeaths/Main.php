@@ -74,7 +74,11 @@ class Main extends PluginBase implements Listener {
     public function onDamage(EntityDamageEvent $event) {
       $player = $event->getEntity();
       $entity = $event->getEntity();
-      if($player->isCreative()){return;}
+      if(!$player instanceof Player){
+        if($player->isCreative()){
+          return;
+        }
+      }
       if($event->isCancelled()){return;}
       if ($player instanceof Player && $this->getConfig()->get("Hitted-Hearts") == true && $event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent){
         $xd = (float) 1;
