@@ -74,7 +74,7 @@ class Main extends PluginBase implements Listener {
     public function onDamage(EntityDamageEvent $event) {
       $player = $event->getEntity();
       $entity = $event->getEntity();
-      if(!$player instanceof Player){
+      if($player instanceof Player){
         if($player->isCreative()){
           return;
         }
