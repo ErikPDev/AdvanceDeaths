@@ -3,6 +3,7 @@
 namespace ErikPDev\AdvanceDeaths;
 use ErikPDev\AdvanceDeaths\DeathTypes;
 use ErikPDev\AdvanceDeaths\Main;
+use pocketmine\Player;
 class DeathContainer {
     /** @var Main */
     private $plugin;
@@ -22,7 +23,7 @@ class DeathContainer {
     /**
 	* Convert variables to proper Data
 	*
-	* @param \pocketmine\entity\Entity|\pocketmine\Player $entity
+	* @param \pocketmine\entity\Entity|Player $entity
     * @param string $keyWord
 	*
 	* @return string 
