@@ -22,7 +22,7 @@ class DeathContainer {
     /**
 	* Convert variables to proper Data
 	*
-	* @param \pocketmine\entity\Entity $entity
+	* @param \pocketmine\entity\Entity|\pocketmine\Player $entity
     * @param string $keyWord
 	*
 	* @return string 
@@ -30,8 +30,14 @@ class DeathContainer {
     function ExecuteHelper($entity, $keyWord){
         switch( strtolower($keyWord) ){
             case "{name}":
+                if(!$entity instanceof Player){
+                    return $entity->getNameTag();
+                }
                 return $entity->getName();
             case "{killer}":
+                if(!$entity->getLastDamageCause()->getDamager() instanceof Player){
+                    return $entity->getLastDamageCause()->getDamager()->getNameTag();
+                }
                 return $entity->getLastDamageCause()->getDamager()->getName();
             case "{killercurrenthealth}":
                 return $entity->getLastDamageCause()->getDamager()->getMaxHealth();
