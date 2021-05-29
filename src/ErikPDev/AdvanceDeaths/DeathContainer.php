@@ -40,7 +40,7 @@ class DeathContainer {
             case "{weapon}":
                 return $entity->getLastDamageCause()->getDamager()->getInventory()->getItemInHand()->getName();
         }
-        return "?"
+        return "?";
     }
     /**
 	* This will return the complete translation with KeyWords and proper formatting from the config.
