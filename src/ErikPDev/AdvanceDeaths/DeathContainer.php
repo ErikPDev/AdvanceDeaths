@@ -29,7 +29,7 @@ class DeathContainer {
 	* @return string 
 	*/
     function ExecuteHelper($entity, $keyWord){
-        /** @param EntityDamageByEntityEvent getDamager() */
+        /** @param EntityDamageByEntityEvent $entity->GetLastDamageCause() */
         switch( strtolower($keyWord) ){
             case "{name}":
                 if(!$entity instanceof Player){
