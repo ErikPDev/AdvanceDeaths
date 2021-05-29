@@ -6,7 +6,7 @@ use ErikPDev\AdvanceDeaths\Main;
 class DeathContainer {
     /** @var Main */
     private $plugin;
-    /** @var Object */
+    /** @var Array */
     private $KeyWords;
     function __construct($plugin) {
         $this->plugin = $plugin;
@@ -22,7 +22,8 @@ class DeathContainer {
     /**
 	* Convert variables to proper Data
 	*
-	* @param string $id
+	* @param \pocketmine\entity\Entity $entity
+    * @param string $keyWord
 	*
 	* @return string 
 	*/
@@ -39,11 +40,13 @@ class DeathContainer {
             case "{weapon}":
                 return $entity->getLastDamageCause()->getDamager()->getInventory()->getItemInHand()->getName();
         }
+        return "?"
     }
     /**
 	* This will return the complete translation with KeyWords and proper formatting from the config.
 	*
-	* @param string $id
+	* @param string $translate
+    * @param \pocketmine\entity\Entity $entity
 	*
 	* @return string | NULL
 	*/
