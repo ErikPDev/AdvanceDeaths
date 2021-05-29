@@ -56,7 +56,7 @@ class Main extends PluginBase implements Listener {
       $event->setDeathMessage($this->DeathContainer->Translate($msgderive, $entity)); // Changed the Broadcast message to SetDeathMessage
 
       if($event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent){
-
+        /** @param EntityDamageByEntityEvent $getLastDamageCause */
         if($this->getConfig()->get("Heal-Killer") == true and $entity->getLastDamageCause()->getDamager() instanceof Player and $msgderive == "death.attack.player"){
           $entity->getLastDamageCause()->getDamager()->setHealth($player->getMaxHealth());
           $entity->getLastDamageCause()->getDamager()->setFood($player->getMaxFood());
