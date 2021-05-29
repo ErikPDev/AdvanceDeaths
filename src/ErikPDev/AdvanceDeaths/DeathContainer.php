@@ -24,12 +24,12 @@ class DeathContainer {
 	* Convert variables to proper Data
 	*
 	* @param \pocketmine\entity\Entity|Player $entity
-    * @param EntityDamageByEntityEvent getDamager()
     * @param string $keyWord
 	*
 	* @return string 
 	*/
     function ExecuteHelper($entity, $keyWord){
+        /** @param EntityDamageByEntityEvent getDamager() */
         switch( strtolower($keyWord) ){
             case "{name}":
                 if(!$entity instanceof Player){
