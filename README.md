@@ -28,8 +28,8 @@ Found a bug?
 | advancedeaths.topKiller | Shows the Top Killer    |
 I will add KDR on the next update.
 # Photos
-<img src="https://raw.githubusercontent.com/ErikPDev/AdvanceDeaths/main/assets/FloatingText.png">
-<img src="https://raw.githubusercontent.com/ErikPDev/AdvanceDeaths/main/assets/ScoreBoard.png">
+<img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/FloatingText.png">
+<img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/ScoreBoard.png">
 
 # Config file
 If you are updating AdvanceDeaths, Make sure you rename the old file to something else other than `config.yml`
