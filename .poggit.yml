@@ -9,6 +9,6 @@ projects:
     lint:
       phpstan: false 
     libs:
-    - src: poggit/libasynql
+    - src: poggit/libasynql/libasynql
       version: ^3.3.1
 ...
