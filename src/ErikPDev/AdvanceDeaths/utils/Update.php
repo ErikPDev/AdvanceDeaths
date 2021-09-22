@@ -30,7 +30,7 @@
  */
 
  // I have modifed this file to send OP players to update the plugin if it's downgraded.
-namespace ErikPDev\AdvanceDeaths\utlis;
+namespace ErikPDev\AdvanceDeaths\utils;
 
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
