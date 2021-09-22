@@ -46,7 +46,7 @@ HealMessage: "You have been healed!" # Message to send to the Player when it's h
 instant-respawn: false # Set this to true if you want the player to instantly respawn.
 
 # Start of Death Effect config
-onDeathEffect: "CreeperParticle" # Available summon types: "None", and "CreeperParticle", and "Lighting". Please add more Types in Github.
+onDeathEffect: "CreeperParticle" # Available death effect types: "None", and "CreeperParticle", and "Lighting". Please add more Types in Github.
 NotOnWorlds: [ # Level names entered below on this array will not have the Death Effect.
   "AWorldWithNoDeathEffect"
 ]

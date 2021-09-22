@@ -18,9 +18,7 @@ use ErikPDev\AdvanceDeaths\effects\{
   Creeper,
   Lighting
 };
-use ErikPDev\AdvanceDeaths\Listeners\{
-  ScoreHudListener
-};
+use ErikPDev\AdvanceDeaths\Listeners\ScoreHUDListener; // Forgot to captilize!!
 
 use pocketmine\level\particle\FloatingTextParticle;
 use pocketmine\math\Vector3;
