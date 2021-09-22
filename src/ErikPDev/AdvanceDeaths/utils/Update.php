@@ -29,11 +29,13 @@
  * ------------------------------------------------------------------------
  */
 
-namespace ErikPDev\AdvanceDeaths;
+ // I have modifed this file to send OP players to update the plugin if it's downgraded.
+namespace ErikPDev\AdvanceDeaths\Utils;
 
 use pocketmine\scheduler\AsyncTask;
 use pocketmine\Server;
 use pocketmine\utils\Internet;
+use ErikPDev\AdvanceDeaths\Main;
 use function is_array;
 use function json_decode;
 use function version_compare;
@@ -95,6 +97,7 @@ class Update extends AsyncTask{
 		if($highestVersion !== $this->pluginVersion){
 			$artifactUrl = $artifactUrl . "/" . $this->pluginName . "_" . $highestVersion . ".phar";
 			$plugin->getLogger()->notice(vsprintf("Version %s has been released for API %s. Download the new release at %s", [$highestVersion, $api, $artifactUrl]));
+			Main::getInstance()->isUpdated = false;
 		}
 	}
 }

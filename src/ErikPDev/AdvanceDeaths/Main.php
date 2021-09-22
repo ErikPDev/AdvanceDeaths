@@ -3,46 +3,121 @@
 namespace ErikPDev\AdvanceDeaths;
 
 use pocketmine\plugin\PluginBase;
-use pocketmine\Player;
-use pocketmine\Server;
+use pocketmine\{Player, Server};
 use pocketmine\event\Listener;
-use pocketmine\utils\TextFormat;
 use pocketmine\event\player\PlayerDeathEvent;
-use pocketmine\event\entity\EntityDamageByBlockEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
-use pocketmine\entity\Human;
-use pocketmine\inventory\Inventory;
-use pocketmine\item\Item;
-use pocketmine\utils\Random;
+use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\level\Level;
-use pocketmine\level\particle\ExplodeParticle;
 use pocketmine\level\particle\HeartParticle;
-use pocketmine\level\particle\Particle;
-use pocketmine\math\Vector3;
-use ErikPDev\AdvanceDeaths\DeathContainer;
-use ErikPDev\AdvanceDeaths\Update;
 
+use ErikPDev\AdvanceDeaths\{DeathContainer,API};
+use ErikPDev\AdvanceDeaths\utils\{DatabaseProvider,Update};
+use ErikPDev\AdvanceDeaths\effects\{
+  Creeper,
+  Lighting
+};
+use ErikPDev\AdvanceDeaths\Listeners\{
+  ScoreHudListener
+};
+
+use pocketmine\level\particle\FloatingTextParticle;
+use pocketmine\math\Vector3;
 class Main extends PluginBase implements Listener {
 
   /** @var DeathContainer */
   private $DeathContainer;
-
+  /** @var DatabaseProvider */
+  private $database;
+  /** @var Main */
+  public static $instance;
+  /** @var bool */
+  public $isUpdated;
+  /** @var FloatingTextParticle */
+  private $KillsLeaderBoard;
+  /** @var bool */
+  private $FloatingTxtSupported;
+  /** @var string */
+  private $world;
+  private $scoreHud;
   public function onEnable() {
       $this->getServer()->getPluginManager()->registerEvents($this,$this);
       $this->saveDefaultConfig();
       $this->reloadConfig();
-      if ($this->getConfig()->get("config-verison") != 1){
-        $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Please use the new config.yml. To get it, delete the the old one.");
+      if ($this->getConfig()->get("config-verison") != 2){
+        $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Please use the new config.yml. To get it, delete/rename the the old one.");
         $this->getServer()->getPluginManager()->disablePlugin($this);
       }
-        
-      $this->DeathContainer = new DeathContainer($this);
-      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "1.9"));
+      $this->saveResource("sqlite.sql");
+      $this->saveResource("mysql.sql");
+      $this->database = new DatabaseProvider($this);
+      $this->database->prepare();
+      $this->DeathContainer = new DeathContainer($this, $this->database);
+      if($this->getServer()->getPluginManager()->getPlugin("ScoreHud") != null){
+        $this->scoreHud = new ScoreHUDListener($this->database);
+        $this->getServer()->getPluginManager()->registerEvents($this->scoreHud, $this);
+        $this->getLogger()->debug("ScoreHud support is enabled.");
+      }
+      $this->isUpdated = true;
+      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "2.0"));
+      $this->FloatingTxtSupported = $this->getConfig()->get("FEnableFloatingText");
+      if($this->FloatingTxtSupported !== true){return;}
+      $pos = $this->getConfig()->get("FLeaderBoardCoordinates");
+      $this->world = $this->getConfig()->get("FLeaderboardWorld");
+      if(!$this->getServer()->isLevelLoaded($this->world)) {
+        $this->getServer()->loadLevel($this->world);
+      }
+      if(!$this->getServer()->getLevelByName($this->world)->isChunkLoaded($pos["X"] >> 4, $pos["Z"] >> 4)) {
+          $this->getServer()->getLevelByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
+      }
+      
+      $this->KillsLeaderBoard = new FloatingTextParticle(new Vector3($pos["X"],$pos["Y"],$pos["Z"]), "Loading...", "§bAdvance§cDeaths§r");
+      $this->KillsLeaderBoard->setInvisible(false);
+      $this->updateLeaderboard();
+  }
+  
+  public static function getInstance(){
+    return self::$instance;
+  }
+  
+  public function onDisable() {
+    if(isset($this->database)) $this->database->close();
+    if(isset($this->KillsLeaderBoard)) $this->KillsLeaderBoard->setInvisible(true);
+  }
+  
+  public function onLoad(){
+    $this->reloadConfig();
+    self::$instance = $this;
+  }
+  
+  public function updateLeaderboard(){
+    $KillsLeaderBoard = $this->KillsLeaderBoard;
+    $this->database->getDatabase()->executeSelect(DatabaseProvider::SCOREBOARD_TOP5,[], 
+      function(array $rows) use ($KillsLeaderBoard){
+        $LeaderBoardText = "";
+        foreach ($rows as $X => $Element) {
+          $LeaderBoardText .= strval($X+1).". ".$Element["PlayerName"]." - Kills: ".strval($Element["Kills"])."\n";
+        }
+        $KillsLeaderBoard->setText($LeaderBoardText);
+        Server::getInstance()->getLevelByName($this->world)->addParticle($KillsLeaderBoard);
+          // $kills = $rows[0]["Kills"] ?? 0;
+      });
+    
+  }
+  
+  public function JoinEvent(PlayerJoinEvent $event) : void{
+    if($event->getPlayer()->isOp() == true){
+      if($this->isUpdated == false){
+        $event->getPlayer()->sendMessage("§bAdvance§cDeaths §6>§r §ePlease update AdvanceDeaths to the lastest verison from poggit.pmmp.io.");
+      }
     }
-    public function onLoad(){
-      $this->reloadConfig();
-    }
+    if($this->FloatingTxtSupported == true) $this->getServer()->getLevelByName("world")->addParticle($this->KillsLeaderBoard, [$event->getPlayer()]);
+    if($this->getConfig()->get("instant-respawn") == false){return;}
+    $pk = new \pocketmine\network\mcpe\protocol\GameRulesChangedPacket();
+    $pk->gameRules = ["doimmediaterespawn" => [1, true, false]]; // Yes, this is all it takes for immediate respawn.
+    $event->getPlayer()->sendDataPacket($pk);
+  }
     /**
      * @priority HIGHEST
      * @ignoreCancelled false
@@ -50,22 +125,45 @@ class Main extends PluginBase implements Listener {
      */
     public function onDeath(PlayerDeathEvent $event){
       $player = $event->getPlayer();
+      if(!$player instanceof Player) return;
       $name = $player->getName();
       $entity = $event->getEntity();
       $msgderive = $event->deriveMessage($entity->getDisplayName(), $entity->getLastDamageCause());
-      $event->setDeathMessage($this->DeathContainer->Translate($msgderive, $entity)); // Changed the Broadcast message to SetDeathMessage
-
+      $event->setDeathMessage(""); // Using BroadcastMessage instead.
+      $this->DeathContainer->Translate($msgderive, $entity);
       if($event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent){
-        /** @param EntityDamageByEntityEvent getDamager() */
         if($this->getConfig()->get("Heal-Killer") == true and $entity->getLastDamageCause()->getDamager() instanceof Player and $msgderive == "death.attack.player"){
           $entity->getLastDamageCause()->getDamager()->setHealth($player->getMaxHealth());
           $entity->getLastDamageCause()->getDamager()->setFood($player->getMaxFood());
-          $entity->getLastDamageCause()->getDamager()->sendMessage($this->getConfig()->get("HealMessage"));
-          
+          $entity->getLastDamageCause()->getDamager()->sendMessage("§bAdvance§cDeaths §6>§r ".$this->getConfig()->get("HealMessage"));
         }
       }
-      
+      if($player->getLastDamageCause() instanceof EntityDamageByEntityEvent){
+        $damager = $player->getLastDamageCause()->getDamager();
+        if(!$damager instanceof Player) return;
+        $this->database->IncrecementKill($damager->getUniqueId()->toString(), $damager->getName());
+        $this->database->IncrecementDeath($player->getUniqueId()->toString(), $player->getName());
+        if($this->FloatingTxtSupported == true) $this->updateLeaderboard();
+      }
+      if(in_array($player->getLevel()->getFolderName(), $this->getConfig()->get("NotOnWorlds"))){return;}
+      if(strtolower( $this->getConfig()->get("onDeathEffect") ) == "none"){return;}
+      switch (strtolower($this->getConfig()->get("onDeathEffect"))) {
+        case 'creeperparticle':
+          $CreeperEffect = new Creeper($player);
+          $CreeperEffect->run();
+          break;
+        case "lighting":
+          $LightingEffect = new Lighting($player);
+          $LightingEffect->run();
+          break;
+        default:
+          $this->getLogger()->critical("Unsupported Effect type; Change this asap or the plugin will break!");
+          $this->getServer()->getPluginManager()->disablePlugin($this);
+          break;
+      }
+
     }
+
     /**
      * @priority HIGHEST
      * @ignoreCancelled true
@@ -74,77 +172,23 @@ class Main extends PluginBase implements Listener {
     public function onDamage(EntityDamageEvent $event) {
       $player = $event->getEntity();
       $entity = $event->getEntity();
-      if($player instanceof Player){
-        if($player->isCreative()){
-          return;
-        }
-      }
+      if($player instanceof Player && $player->isCreative()) return;
+        
       if($event->isCancelled()){return;}
       if ($player instanceof Player && $this->getConfig()->get("Hitted-Hearts") == true && $event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent){
         $xd = (float) 1;
         $yd = (float) 1;
         $zd = (float) 1;
-        $level = $player->getServer()->getDefaultLevel();
+        $level = $player->getLevel();
         $pos = $player->getPosition();
 
-        $count = 1; // Is this too much?
-
+        $count = 1;
         $data = null;
-
         $particle = new HeartParticle($pos, 0);
-
-        $random = new Random((int) (microtime(true) * 1000) + mt_rand());
 
         for($i = 0; $i < $count; ++$i){
           $particle->setComponents($pos->x, $pos->y+0.5, $pos->z);
           $level->addParticle($particle);
-        }
-      }
-
-      if($this->getConfig()->get("immediate-respawn") == true){
-
-        if($event->getFinalDamage() >= $player->getHealth()) {
-          if($player instanceof Player){
-            $event->setCancelled();
-    
-            $player->setHealth($player->getMaxHealth());
-            $player->setFood($player->getMaxFood());
-            $player->addTitle($this->getConfig()->get("TitleDied"), $this->getConfig()->get("SubTitleDied"), 1, 100, 50);
-            $name = $player->getName();
-            if($this->getConfig()->get("keepInventory") == false){
-              $inventory = $player->getInventory();
-              $pos = $player->getPosition();
-              $level = $player->getLevel();
-              $AmrorInventory = $player->getArmorInventory();
-              $inventory->dropContents($level,$pos);
-              $AmrorInventory->dropContents($level,$pos);
-
-            }
-            $inventory = $player->getInventory();
-            $AttemptonDeath = new PlayerDeathEvent($player, $inventory->getContents(), null, $player->getXpDropAmount());
-            $AttemptonDeath->call();
-
-            $xd = (float) 1;
-            $yd = (float) 1;
-            $zd = (float) 1;
-            $level = $player->getServer()->getDefaultLevel();
-			      $pos = $player->getPosition();
-
-            $count = 50; // Is this too much?
-
-            $data = null;
-
-            $particle = new ExplodeParticle($pos);
-
-            $random = new Random((int) (microtime(true) * 1000) + mt_rand());
-
-            for($i = 0; $i < $count; ++$i){
-              $particle->setComponents($pos->x + $random->nextSignedFloat() * $xd,$pos->y + $random->nextSignedFloat() * $yd, $pos->z + $random->nextSignedFloat() * $zd);
-              $level->addParticle($particle);
-            }
-            $player->teleport($this->getServer()->getDefaultLevel()->getSafeSpawn());
-          
-          }
         }
       }
     

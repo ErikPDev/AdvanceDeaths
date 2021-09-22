@@ -35,8 +35,7 @@ class DeathTypes {
             "death.attack.explosion.player" => "explosion",
             "death.attack.fall" => "highplace"
         );
-        $deathSTR = (string) $death; // Turn $death to string
-        $deathSTRARRY = $array[$deathSTR]; // Get the translated death
+        $deathSTRARRY = $array[$death->getText()]; // Get the translated death
         $DeathMessage = $this->plugin->getConfig()->get($deathSTRARRY); // Get the death message from config
         return $DeathMessage; // Return the Death
     }

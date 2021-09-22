@@ -1,6 +1,9 @@
-Better Code
-Immediate Respawn Death looks better now
-Heal Killer Option
-HealMessage Option
-Hitted Hearts Option
-Fixed Minor Bugs
+Better and Vanilia Like Instant Respawn!
+KDR Update, You can now see kdr,kills and deaths of a player!
+FloatingText Leaderboard!
+ScoreHud Update!
+Death Effects! CreeperParticle and Lighting!
+MYSQL and SQLITE Support!
+
+Future Updates:
+Gain/Lose Money 

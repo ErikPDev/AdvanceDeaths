@@ -5,5 +5,10 @@ branches:
 projects:
   AdvanceDeaths:
     path: ""
-    icon: "resources/icon.png"
+    icon: "assets/icon.png"
+    lint:
+      phpstan: false 
+    libs:
+    - src: poggit\libasynql
+      version: ^3.3.1
 ...

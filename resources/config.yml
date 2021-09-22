@@ -4,6 +4,12 @@
 # {killerCurrentHealth} - Shows the killer's health
 # {killerMaxHealth} - Shows the killer's Max Health
 # {weapon} - What weapon the killer used
+# {killer_kills} - Kills of the Killer
+# {player_kills} - Kills of the player
+# {killer_deaths} - Deaths of the Killer
+# {player_deaths} - Deaths of the player
+# {killer_kdr} - KDR of the killer
+# {player_kdr} - KDR of the player
 
 # Warning! The Keywords are case-sensitive!! 
 
@@ -29,20 +35,35 @@
 # | Dark Gray    | §8   |
 # | Black        | §0   |
 
-# Start of Imediate Respawn config, this is experimental.
 
-immediate-respawn: false # Enable/disables immediate respawn. When you die it bypasses the death screen.
-keepInventory: false # This only works when immediate respawn is setted to true.
 TitleDied: "§l§cYOU DIED!" # Title of Death
 SubTitleDied: "§r§eTeleporting to spawn" # Sub Title of death
-# End of custom respawn config
 
-Hitted-Hearts: false # Set this to true if you want to the player to show heart particle on hit.
-Heal-Killer: false # Set this to true if you want to heal the Killer when he kills a player.
+Hitted-Hearts: true # Set this to true if you want to the player to show heart particle on hit.
+Heal-Killer: true # Set this to true if you want to heal the Killer when he kills a player.
 HealMessage: "You have been healed!" # Message to send to the Player when it's healed.
 
+instant-respawn: false # Set this to true if you want the player to instantly respawn.
+
+# Start of Death Effect config
+onDeathEffect: "CreeperParticle" # Available summon types: "None", and "CreeperParticle", and "Lighting". Please add more Types in Github.
+NotOnWorlds: [ # Level names entered below on this array will not have the Death Effect.
+  "AWorldWithNoDeathEffect"
+]
+# End of Death Effect
+
+# Start of FloatingText Leaderboard config
+FEnableFloatingText: false # Set this to true to enable the floating text Leaderboard!
+FLeaderboardWorld: "TheWorldTheLeaderboardWillBeIn" # The world where the floating text will spawn in. Make sure it's the folder name.
+FLeaderBoardCoordinates: { # The coordinates where the floating text should be.
+  X: 250,
+  Y: 77,
+  Z: 273
+}
+# End of FloatingText Leaderboard config
+
 generic: "{name} died" # The player killed himself or somebody /killed him.
-player: "{killer} [{killerCurrentHealth}/{killerMaxHealth}] killed {name} with {weapon}" # When a player got killed by another player.
+player: "{killer}[K:{killer_kills}][D:{killer_deaths}][KDR:{killer_kdr}] [{killerCurrentHealth}/{killerMaxHealth}] killed {name}[K:{player_kills}][D:{player_deaths}][KDR:{player_kdr}] with {weapon}" # When a player got killed by another player.
 mob: "{killer} killed {name}" # When a player got killed by a mob.
 outOfWorld: "{name} fell out of the world" # When a player fell out of the world.
 suffocation: "{name} suffocated to death" # When a player died from suffocation.
@@ -58,9 +79,26 @@ lava: "{name} tried to swim in lava" # When a player died from lava.
 explosion: "{name} was blown up by {killer}" # When a player got blown up from a player or an entity.
 
 
-
+database:
+  # The database type. "sqlite" and "mysql" are supported.
+  type: sqlite # I reccomend using sqlite for faster speeds.
+  # Edit these settings only if you choose "sqlite".
+  sqlite:
+    # The file name of the database in the plugin data folder.
+    # You can also put an absolute path here.
+    file: data.sqlite
+  # Edit these settings only if you choose "mysql".
+  mysql:
+    host: 127.0.0.1
+    # Avoid using the "root" user for security reasons.
+    username: root
+    password: ""
+    schema: your_database_name # Database name
+  # The maximum number of simultaneous SQL queries
+  # Recommended: 1 for sqlite, 2 for MySQL. You may want to further increase this value if your MySQL connection is very slow.
+  worker-limit: 1
 
 
 
 # Don't modify the below value, or delete it.
-config-verison: 1
+config-verison: 2
