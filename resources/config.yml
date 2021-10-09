@@ -62,7 +62,7 @@ FLeaderBoardCoordinates: { # The coordinates where the floating text should be.
 }
 # End of FloatingText Leaderboard config
 
-generic: "{name} died" # The player killed himself or somebody /killed him.
+generic: "{name} died" # The player killed himself or he died by /kill.
 player: "{killer}[K:{killer_kills}][D:{killer_deaths}][KDR:{killer_kdr}] [{killerCurrentHealth}/{killerMaxHealth}] killed {name}[K:{player_kills}][D:{player_deaths}][KDR:{player_kdr}] with {weapon}" # When a player got killed by another player.
 mob: "{killer} killed {name}" # When a player got killed by a mob.
 outOfWorld: "{name} fell out of the world" # When a player fell out of the world.
@@ -77,7 +77,7 @@ highplace: "{name} fell from a high place" # When a player died from fall damage
 arrow: "{name} was shot by {killer}" # When a player got shot with a arrow.
 lava: "{name} tried to swim in lava" # When a player died from lava.
 explosion: "{name} was blown up by {killer}" # When a player got blown up from a player or an entity.
-
+GenericExplosion: "{name} exploded."
 
 database:
   # The database type. "sqlite" and "mysql" are supported.
@@ -101,4 +101,4 @@ database:
 
 
 # Don't modify the below value, or delete it.
-config-verison: 2
+config-verison: 2.1

@@ -5,6 +5,7 @@ use ErikPDev\AdvanceDeaths\DeathTypes;
 use ErikPDev\AdvanceDeaths\Main;
 use ErikPDev\AdvanceDeaths\utils\DatabaseProvider;
 use pocketmine\Player;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
 class DeathContainer {
     /** @var Main */
     private $plugin;
@@ -58,11 +59,14 @@ class DeathContainer {
         $DeathMessage = $this->DeathTypes->DeathConverter($translate);
         preg_match_all("/{(\w+)}/", $DeathMessage, $KeyWordsFound);
         foreach ($KeyWordsFound[0] as $value => $KeyWord) {
-            if($KeyWord == "{killer_kills}" || $KeyWord == "{killer_deaths}"  || $KeyWord == "{player_kills}" || $KeyWord == "{player_deaths}" || $KeyWord == "{player_kdr}" || $KeyWord == "{killer_kdr}"){continue;}
+            if($entity->getLastDamageCause() instanceof EntityDamageByEntityEvent){
+                if($KeyWord == "{killer_kills}" || $KeyWord == "{killer_deaths}"  || $KeyWord == "{player_kills}" || $KeyWord == "{player_deaths}" || $KeyWord == "{player_kdr}" || $KeyWord == "{killer_kdr}"){continue;}      
+            }
             $DeathMessage = str_replace($KeyWord, $this->ExecuteHelper($entity, $KeyWord, $translate->getText()), $DeathMessage);
         }
+        
         preg_match_all("/{(\w+)}/", $DeathMessage, $RemaningMatches);
-        if(count($RemaningMatches) == 0) return $DeathMessage;
+        if(count($RemaningMatches[0]) == 0) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
         foreach ($RemaningMatches[0] as $value => $RemainingKeyWord){
             if($RemainingKeyWord == "{killer_kills}"){
                 $this->database->getDatabase()->executeSelect(DatabaseProvider::GET_KILLS, ["UUID" => $entity->getLastDamageCause()->getDamager()->getUniqueID()->toString()], 

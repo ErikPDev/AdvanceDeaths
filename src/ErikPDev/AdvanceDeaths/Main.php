@@ -13,12 +13,15 @@ use pocketmine\level\Level;
 use pocketmine\level\particle\HeartParticle;
 
 use ErikPDev\AdvanceDeaths\{DeathContainer,API};
-use ErikPDev\AdvanceDeaths\utils\{DatabaseProvider,Update};
+use ErikPDev\AdvanceDeaths\utils\{DatabaseProvider,Update,configUpdater};
 use ErikPDev\AdvanceDeaths\effects\{
   Creeper,
   Lighting
 };
-use ErikPDev\AdvanceDeaths\Listeners\ScoreHUDListener; // Forgot to captilize!!
+use ErikPDev\AdvanceDeaths\Listeners\{
+  ScoreHUDListener,
+  instantRespawn
+};
 
 use pocketmine\level\particle\FloatingTextParticle;
 use pocketmine\math\Vector3;
@@ -43,9 +46,16 @@ class Main extends PluginBase implements Listener {
       $this->getServer()->getPluginManager()->registerEvents($this,$this);
       $this->saveDefaultConfig();
       $this->reloadConfig();
-      if ($this->getConfig()->get("config-verison") != 2){
-        $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Please use the new config.yml. To get it, delete/rename the the old one.");
-        $this->getServer()->getPluginManager()->disablePlugin($this);
+      if ($this->getConfig()->get("config-verison") != 2.1){
+        if($this->getConfig()->get("config-verison") == 2){
+          $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Updating to lastest configuration.");
+          $configUpdater = new configUpdater($this, $this->getConfig());
+          $configUpdater->update();
+        }else{
+          $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Please use the new config.yml. To get it, delete/rename the the old one.");
+          $this->getServer()->getPluginManager()->disablePlugin($this);
+          return;
+        }
       }
       $this->saveResource("sqlite.sql");
       $this->saveResource("mysql.sql");
@@ -57,8 +67,15 @@ class Main extends PluginBase implements Listener {
         $this->getServer()->getPluginManager()->registerEvents($this->scoreHud, $this);
         $this->getLogger()->debug("ScoreHud support is enabled.");
       }
+      if($this->getConfig()->get("instant-respawn") == true){
+        $this->getServer()->getPluginManager()->registerEvents(new instantRespawn(), $this);
+        $this->getLogger()->debug("InstantRespawn is enabled.");
+      }
+
       $this->isUpdated = true;
-      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "2.0"));
+      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "2.5"));
+      
+
       $this->FloatingTxtSupported = $this->getConfig()->get("FEnableFloatingText");
       if($this->FloatingTxtSupported !== true){return;}
       $pos = $this->getConfig()->get("FLeaderBoardCoordinates");
@@ -67,7 +84,7 @@ class Main extends PluginBase implements Listener {
         $this->getServer()->loadLevel($this->world);
       }
       if(!$this->getServer()->getLevelByName($this->world)->isChunkLoaded($pos["X"] >> 4, $pos["Z"] >> 4)) {
-          $this->getServer()->getLevelByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
+        $this->getServer()->getLevelByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
       }
       
       $this->KillsLeaderBoard = new FloatingTextParticle(new Vector3($pos["X"],$pos["Y"],$pos["Z"]), "Loading...", "§bAdvance§cDeaths§r");
@@ -99,7 +116,6 @@ class Main extends PluginBase implements Listener {
         }
         $KillsLeaderBoard->setText($LeaderBoardText);
         Server::getInstance()->getLevelByName($this->world)->addParticle($KillsLeaderBoard);
-          // $kills = $rows[0]["Kills"] ?? 0;
       });
     
   }
@@ -111,10 +127,6 @@ class Main extends PluginBase implements Listener {
       }
     }
     if($this->FloatingTxtSupported == true) $this->getServer()->getLevelByName("world")->addParticle($this->KillsLeaderBoard, [$event->getPlayer()]);
-    if($this->getConfig()->get("instant-respawn") == false){return;}
-    $pk = new \pocketmine\network\mcpe\protocol\GameRulesChangedPacket();
-    $pk->gameRules = ["doimmediaterespawn" => [1, true, false]]; // Yes, this is all it takes for immediate respawn.
-    $event->getPlayer()->sendDataPacket($pk);
   }
     /**
      * @priority HIGHEST
