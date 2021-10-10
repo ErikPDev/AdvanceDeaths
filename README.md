@@ -28,6 +28,21 @@ Found a bug?
 | advancedeaths.topKiller | Shows the Top Killer    |
 | advancedeaths.kdr       | Shows the player KDR    |
 
+# Config Variables
+| Tag name              | Description                             | Death Types that can be used on.   |
+|-----------------------|-----------------------------------------|------------------------------------|
+| {name}                | The player that got killed.             | All Death Types                    |
+| {killer}              | The player who killed {name}            | Player, Mob, Arrow, and explosion. |
+| {killerCurrentHealth} | Shows the killer's health               | Player                             |
+| {killerMaxHealth}     | Shows the killer's Max Health           | Player                             |
+| {weapon}              | What's the weapon name the killer used. | Player                             |
+| {killer_kills}        | Kills of the Killer                     | Player                             |
+| {player_kills}        | Kills of the player                     | Player                             |
+| {killer_deaths}       | Deaths of the Killer                    | Player                             |
+| {player_deaths}       | Deaths of the player                    | Player                             |
+| {killer_kdr}          | KDR of the killer                       | Player                             |
+| {player_kdr}          | KDR of the player                       | Player                             |
+
 # Photos
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/FloatingText.png">
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/ScoreBoard.png">
