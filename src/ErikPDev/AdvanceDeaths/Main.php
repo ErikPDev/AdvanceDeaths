@@ -13,14 +13,15 @@ use pocketmine\level\Level;
 use pocketmine\level\particle\HeartParticle;
 
 use ErikPDev\AdvanceDeaths\{DeathContainer,API};
-use ErikPDev\AdvanceDeaths\utils\{DatabaseProvider,Update,configUpdater};
+use ErikPDev\AdvanceDeaths\utils\{DatabaseProvider,Update,configUpdater,configValidator};
 use ErikPDev\AdvanceDeaths\effects\{
   Creeper,
   Lighting
 };
 use ErikPDev\AdvanceDeaths\Listeners\{
   ScoreHUDListener,
-  instantRespawn
+  instantRespawn,
+  EconomySupport
 };
 
 use pocketmine\level\particle\FloatingTextParticle;
@@ -46,17 +47,20 @@ class Main extends PluginBase implements Listener {
       $this->getServer()->getPluginManager()->registerEvents($this,$this);
       $this->saveDefaultConfig();
       $this->reloadConfig();
-      if ($this->getConfig()->get("config-verison") != 2.1){
-        if($this->getConfig()->get("config-verison") == 2){
+      if ($this->getConfig()->get("config-verison") != 2.2){
+        if($this->getConfig()->get("config-verison") >= 2){
           $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Updating to lastest configuration.");
           $configUpdater = new configUpdater($this, $this->getConfig());
           $configUpdater->update();
+          $this->reloadConfig();
         }else{
           $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Please use the new config.yml. To get it, delete/rename the the old one.");
           $this->getServer()->getPluginManager()->disablePlugin($this);
           return;
         }
       }
+      $configValidator = new configValidator($this, $this->getConfig());
+      $configValidator->Check();
       $this->saveResource("sqlite.sql");
       $this->saveResource("mysql.sql");
       $this->database = new DatabaseProvider($this);
@@ -67,6 +71,12 @@ class Main extends PluginBase implements Listener {
         $this->getServer()->getPluginManager()->registerEvents($this->scoreHud, $this);
         $this->getLogger()->debug("ScoreHud support is enabled.");
       }
+
+      if($this->getServer()->getPluginManager()->getPlugin("EconomyAPI") != null){
+        $this->getServer()->getPluginManager()->registerEvents(new EconomySupport($this), $this);
+        $this->getLogger()->debug("EconomyAPI support is enabled.");
+      }
+
       if($this->getConfig()->get("instant-respawn") == true){
         $this->getServer()->getPluginManager()->registerEvents(new instantRespawn(), $this);
         $this->getLogger()->debug("InstantRespawn is enabled.");

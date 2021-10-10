@@ -26,7 +26,8 @@ Found a bug?
 | advancedeaths.myDeaths  | Get's the player Deaths |
 | advancedeaths.myKills   | Get's the player Kills  |
 | advancedeaths.topKiller | Shows the Top Killer    |
-I will add KDR on the next update.
+| advancedeaths.kdr       | Shows the player KDR    |
+
 # Photos
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/FloatingText.png">
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/ScoreBoard.png">

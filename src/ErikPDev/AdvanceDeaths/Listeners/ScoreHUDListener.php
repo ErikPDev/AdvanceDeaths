@@ -27,29 +27,47 @@ class ScoreHUDListener implements Listener{
         $player = $event->getPlayer();
         $tag = $event->getTag();
     
-        if($tag->getName() == "advancedeaths.myDeaths" || $tag->getName() == "advancedeaths.myKills" || $tag->getName() == "advancedeaths.topKiller"){
+        if($tag->getName() == "advancedeaths.myDeaths" || $tag->getName() == "advancedeaths.myKills" || $tag->getName() == "advancedeaths.topKiller" || $tag->getName() == "advancedeaths.kdr"){
             $tag->setValue("?");
         }
-    }
-    public function onJoin(PlayerJoinEvent $event){
-        $player = $event->getPlayer();
-        $this->Database->getDatabase()->executeSelect(DatabaseProvider::GETKILLS_AND_DEATHS, ["UUID" => $event->getPlayer()->getUniqueID()->toString()], 
-            function(array $rows) use (&$player){
-                $deaths = $rows[0]["Deaths"] ?? 0;
-                $kills = $rows[0]["Kills"] ?? 0;
-                $DeathsEv = new PlayerTagUpdateEvent($player, new ScoreTag("advancedeaths.myDeaths",strval($deaths)));
-                $DeathsEv->call();
-                $KillsEv = new PlayerTagUpdateEvent($player, new ScoreTag("advancedeaths.myKills",strval($kills)));
-                $KillsEv->call();
-            });
-
-            $this->Database->getDatabase()->executeSelect(DatabaseProvider::SCOREBOARD_TOP,[], 
-            function(array $rows){
-                $PlayerName = $rows[0]["PlayerName"] ?? "?";
-                $kills = $rows[0]["Kills"] ?? 0;
-                $topKiller = new ServerTagUpdateEvent(new ScoreTag("advancedeaths.topKiller",$PlayerName.":".strval($kills)));
-                $topKiller->call();
-            });
+        switch ($tag->getname()) {
+            case "advancedeaths.myDeaths":
+                $this->Database->getDatabase()->executeSelect(DatabaseProvider::GET_DEATHS, ["UUID" => $player->getUniqueID()->toString()], 
+                    function(array $rows) use (&$player){
+                        $deaths = $rows[0]["Deaths"] ?? 0;
+                        $DeathsEv = new PlayerTagUpdateEvent($player, new ScoreTag("advancedeaths.myDeaths",strval($deaths)));
+                        $DeathsEv->call();
+                    });
+                break;
+            case "advancedeaths.myKills":
+                $this->Database->getDatabase()->executeSelect(DatabaseProvider::GET_KILLS, ["UUID" => $player->getUniqueID()->toString()], 
+                    function(array $rows) use (&$player){
+                        $kills = $rows[0]["Kills"] ?? 0;
+                        $KillsEv = new PlayerTagUpdateEvent($player, new ScoreTag("advancedeaths.myKills",strval($kills)));
+                        $KillsEv->call();
+                    });
+                break;
+            case "advancedeaths.topKiller":
+                $this->Database->getDatabase()->executeSelect(DatabaseProvider::SCOREBOARD_TOP,[], 
+                    function(array $rows){
+                        $PlayerName = $rows[0]["PlayerName"] ?? "?";
+                        $kills = $rows[0]["Kills"] ?? 0;
+                        $topKiller = new ServerTagUpdateEvent(new ScoreTag("advancedeaths.topKiller",$PlayerName.":".strval($kills)));
+                        $topKiller->call();
+                    });
+                break;
+            case "advancedeaths.kdr":
+                $this->Database->getDatabase()->executeSelect(DatabaseProvider::GETKILLS_AND_DEATHS, ["UUID" => $event->getPlayer()->getUniqueID()->toString()], 
+                    function(array $rows) use (&$player){
+                        $deaths = $rows[0]["Deaths"] ?? 0;
+                        $kills = $rows[0]["Kills"] ?? 0;
+                        $kdr = new PlayerTagUpdateEvent($player, new ScoreTag("advancedeaths.kdr",strval(DatabaseProvider::getKillToDeathRatio($kills, $deaths))));
+                        $kdr->call();
+                    });
+                break;
+            default:
+                break;
+        }
     }
 
     public function onDeath(PlayerDeathEvent $event){
@@ -78,6 +96,23 @@ class ScoreHUDListener implements Listener{
                 $kills = $rows[0]["Kills"] ?? 0;
                 $topKiller = new ServerTagUpdateEvent(new ScoreTag("advancedeaths.topKiller",$PlayerName.":".strval($kills)));
                 $topKiller->call();
+            });
+
+
+        $this->Database->getDatabase()->executeSelect(DatabaseProvider::GETKILLS_AND_DEATHS, ["UUID" => $player->getUniqueID()->toString()], 
+            function(array $rows) use(&$player){
+                $deaths = $rows[0]["Deaths"] ?? 0;
+                $kills = $rows[0]["Kills"] ?? 0;
+                $kdr = new PlayerTagUpdateEvent($player, new ScoreTag("advancedeaths.kdr",strval(DatabaseProvider::getKillToDeathRatio($kills, $deaths))));
+                $kdr->call();
+            });
+
+        $this->Database->getDatabase()->executeSelect(DatabaseProvider::GETKILLS_AND_DEATHS, ["UUID" => $damager->getUniqueID()->toString()], 
+            function(array $rows) use(&$damager){
+                $deaths = $rows[0]["Deaths"] ?? 0;
+                $kills = $rows[0]["Kills"] ?? 0;
+                $kdr = new PlayerTagUpdateEvent($damager, new ScoreTag("advancedeaths.kdr",strval(DatabaseProvider::getKillToDeathRatio($kills, $deaths))));
+                $kdr->call();
             });
         
     }

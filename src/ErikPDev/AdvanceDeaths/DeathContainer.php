@@ -29,7 +29,7 @@ class DeathContainer {
                 return $entity->getName();
             case "{killer}":
                 if($derive !== "death.attack.player" && $derive !== "death.attack.mob" && $derive !== "death.attack.arrow" && $derive !== "death.attack.explosion.player") return "?";
-                if(!$entity->getLastDamageCause()->getDamager() instanceof Player) return $entity->getLastDamageCause()->getDamager()->getNameTag();
+                if(!$entity->getLastDamageCause()->getDamager() instanceof Player) return $entity->getLastDamageCause()->getDamager()->getName();
                 return $entity->getLastDamageCause()->getDamager()->getName();
             case "{killercurrenthealth}":
                 if($derive == "death.attack.player") return $entity->getLastDamageCause()->getDamager()->getMaxHealth();
@@ -57,6 +57,10 @@ class DeathContainer {
 
     public function Translate($translate, $entity){
         $DeathMessage = $this->DeathTypes->DeathConverter($translate);
+        if($DeathMessage == 102){
+            $entity->sendMessage("§bAdvance§cDeaths §r Error §6>§c\nError Code: 102\n"."Unknown Derive: ".(string)$translate->getText()."\nPlease send this error to the Server owner.\nCreate an issue at github with this screenshot.");
+            return;
+        }
         preg_match_all("/{(\w+)}/", $DeathMessage, $KeyWordsFound);
         foreach ($KeyWordsFound[0] as $value => $KeyWord) {
             if($entity->getLastDamageCause() instanceof EntityDamageByEntityEvent){

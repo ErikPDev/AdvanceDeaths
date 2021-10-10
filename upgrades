@@ -1,9 +1,7 @@
-Better and Vanilia Like Instant Respawn!
-KDR Update, You can now see kdr,kills and deaths of a player!
-FloatingText Leaderboard!
-ScoreHud Update!
-Death Effects! CreeperParticle and Lighting!
-MYSQL and SQLITE Support!
-
-Future Updates:
-Gain/Lose Money 
+Pure Entities Support
+KDR Added to Scoreboard
+Add GenericExplosion Death Type
+Added FailSafe if the death type isn't known.
+Fixed Bugs
+Automatic Configuration Updater
+Add/Remove Money on Kill/Death
