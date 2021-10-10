@@ -61,7 +61,6 @@ class configValidator{
     }
     public function Check(){
         $ConfigVariables = $this->Config->getAll();
-        echo($this->Config->get("config-verison"));
         foreach ($ConfigVariables as $key => $value) {
             if(!array_key_exists($key, $this->VariablesInstances)) continue;
             if(!$this->isInstanceOf($value, $this->VariablesInstances[$key])){
