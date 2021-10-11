@@ -1,7 +1,7 @@
-Pure Entities Support
-KDR Added to Scoreboard
-Add GenericExplosion Death Type
-Added FailSafe if the death type isn't known.
-Fixed Bugs
-Automatic Configuration Updater
-Add/Remove Money on Kill/Death
+- [x] Add/Remove Money on Kill/Death
+- [x] Automatic Configuration Updater
+- [x] Command to see other player stats
+- [x] Fixed bugs
+- [x] More death types and add safety net
+- [x] KDR Scoreboard 
+- [x] Pure Entities Support

@@ -6,5 +6,21 @@ main: ErikPDev\AdvanceDeaths\Main
 mcpe-protocol: [440, 449, 465] # More protocols are supported but I don't know how to get the id. Make a pull request if you know =D
 softdepend:
   - EconomyAPI
+  - ScoreHud
 virions:
   - libasynql
+  - FormAPI 
+
+commands:
+  advancedeaths:
+    description: "See a player stat!"
+    permission: "advancedeaths.use"
+  ads:
+    description: "See a player stat!"
+    permission: "advancedeaths.use"
+
+
+permissions:
+  advancedeaths.use:
+    description: "Permission to use the AdvanceDeaths commands."
+    default: true

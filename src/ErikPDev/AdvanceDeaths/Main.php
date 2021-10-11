@@ -14,6 +14,7 @@ use pocketmine\level\particle\HeartParticle;
 
 use ErikPDev\AdvanceDeaths\{DeathContainer,API};
 use ErikPDev\AdvanceDeaths\utils\{DatabaseProvider,Update,configUpdater,configValidator};
+use ErikPDev\AdvanceDeaths\Commands\advancedeaths;
 use ErikPDev\AdvanceDeaths\effects\{
   Creeper,
   Lighting
@@ -43,6 +44,7 @@ class Main extends PluginBase implements Listener {
   /** @var string */
   private $world;
   private $scoreHud;
+  private $advanceDeathsCommand;
   public function onEnable() {
       $this->getServer()->getPluginManager()->registerEvents($this,$this);
       $this->saveDefaultConfig();
@@ -82,6 +84,7 @@ class Main extends PluginBase implements Listener {
         $this->getLogger()->debug("InstantRespawn is enabled.");
       }
 
+      $this->advanceDeathsCommand = new advancedeaths($this, $this->database);
       $this->isUpdated = true;
       Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "2.5"));
       
@@ -215,5 +218,6 @@ class Main extends PluginBase implements Listener {
     }
 
 
+    public function onCommand(\pocketmine\command\CommandSender $sender, \pocketmine\command\Command $command, string $label, array $args) : bool{return $this->advanceDeathsCommand->onCommand($sender, $command, $label, $args);}
 
 }

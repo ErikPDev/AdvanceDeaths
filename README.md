@@ -12,6 +12,15 @@ The setup is really easy, you'll just need to download the phar file at the plug
 After that reboot/start your server up, all configurations are now editable at the config.yml located at plugin_data/AdvanceDeaths. 
 If you own a sql server the set the parameters in the config.yml
 
+# What's new?
+- [x] Kill/Death Money
+- [x] Automatic Configuration Updater
+- [x] Added a command to see other player stats (/ads OR /advancedeaths)
+- [x] Fixed bugs
+- [x] Added GenericExplosion and failsafe to prevent crashing.
+- [x] KDR added to Scoreboard 
+- [x] Pure Entities Support
+
 # Bug Report
 Found a bug?
 - Head to [Issues](https://github.com/ErikPDev/AdvanceDeaths/issues)
@@ -43,10 +52,15 @@ Found a bug?
 | {killer_kdr}          | KDR of the killer                       | Player                             |
 | {player_kdr}          | KDR of the player                       | Player                             |
 
+# Commands
+| Command       | Description                 | Permission        | Default |
+|---------------|-----------------------------|-------------------|---------|
+| advancedeaths | See an online player stats. | advancedeaths.use | True    |
+| ads           | See an online player stats. | advancedeaths.use | True    |
 # Photos
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/FloatingText.png">
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/ScoreBoard.png">
-
+<img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/Form.png">
 # Config file
 If you are updating AdvanceDeaths, Make sure you rename the old file to something else other than `config.yml`
 
