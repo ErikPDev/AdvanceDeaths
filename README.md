@@ -79,6 +79,10 @@ Special thank to minijaham for helping me out with this project, and Primus for 
 Usage example:
 `$AdvanceDeathDatabase = new \ErikPDev\AdvanceDeaths\utils\DatabaseProvider($AdvanceDeathsMain);`
 Check out the source code to see how to use it, or create an issue.
+
+# Used by:
+Create an issue or open an ticket on discord to add you server to this list.
+
 # Minecraft color coding
 Color coding the death messages is possible!
 Here's a list of color codes.
