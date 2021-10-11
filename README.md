@@ -19,6 +19,7 @@ If you own a sql server the set the parameters in the config.yml
 - [x] Fixed bugs
 - [x] Added GenericExplosion and failsafe to prevent crashing.
 - [x] KDR added to Scoreboard 
+- [X] Fixed ScoreBoard Bug where Kills/Deaths/KDR doesn't load.
 - [x] Pure Entities Support
 
 # Bug Report
