@@ -37,7 +37,7 @@ class advancedeaths{
             $PlayerNames[] = $PLAr->getName();
         }
         $form->addLabel("Verison: \n    ".$this->plugin->getFullName());
-
+        $form->addLabel("Discord: \n    discord.gg/96yKvdDxrR");
         $form->addDropdown("Player name:", $PlayerNames);
         $player->sendForm($form);
 
