@@ -3,15 +3,14 @@
 namespace ErikPDev\AdvanceDeaths;
 
 use pocketmine\plugin\PluginBase;
-use pocketmine\{Player, Server};
+use pocketmine\{player\Player, Server};
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\level\Level;
-use pocketmine\level\particle\HeartParticle;
-
+use pocketmine\world\particle\HeartParticle;
+use pocketmine\permission\DefaultPermissions;
 use ErikPDev\AdvanceDeaths\{DeathContainer,API};
 use ErikPDev\AdvanceDeaths\utils\{DatabaseProvider,Update,configUpdater,configValidator};
 use ErikPDev\AdvanceDeaths\Commands\advancedeaths;
@@ -25,7 +24,7 @@ use ErikPDev\AdvanceDeaths\Listeners\{
   EconomySupport
 };
 
-use pocketmine\level\particle\FloatingTextParticle;
+use pocketmine\world\particle\FloatingTextParticle;
 use pocketmine\math\Vector3;
 class Main extends PluginBase implements Listener {
 
@@ -39,13 +38,15 @@ class Main extends PluginBase implements Listener {
   public $isUpdated;
   /** @var FloatingTextParticle */
   private $KillsLeaderBoard;
+  /** @var Vector3 */
+  private $KillsLeaderBoardPOS;
   /** @var bool */
   private $FloatingTxtSupported;
   /** @var string */
   private $world;
   private $scoreHud;
   private $advanceDeathsCommand;
-  public function onEnable() {
+  public function onEnable() : void{
       $this->getServer()->getPluginManager()->registerEvents($this,$this);
       $this->saveDefaultConfig();
       $this->reloadConfig();
@@ -93,14 +94,15 @@ class Main extends PluginBase implements Listener {
       if($this->FloatingTxtSupported !== true){return;}
       $pos = $this->getConfig()->get("FLeaderBoardCoordinates");
       $this->world = $this->getConfig()->get("FLeaderboardWorld");
-      if(!$this->getServer()->isLevelLoaded($this->world)) {
-        $this->getServer()->loadLevel($this->world);
+      if(!$this->getServer()->getWorldManager()->isWorldLoaded($this->world)) {
+        $this->getServer()->getWorldManager()->loadWorld($this->world);
       }
-      if(!$this->getServer()->getLevelByName($this->world)->isChunkLoaded($pos["X"] >> 4, $pos["Z"] >> 4)) {
-        $this->getServer()->getLevelByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
+      if(!$this->getServer()->getWorldManager()->getWorldByName($this->world)->isChunkLoaded($pos["X"] >> 4, $pos["Z"] >> 4)) {
+        $this->getServer()->getWorldManager()->getWorldByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
       }
       
-      $this->KillsLeaderBoard = new FloatingTextParticle(new Vector3($pos["X"],$pos["Y"],$pos["Z"]), "Loading...", "§bAdvance§cDeaths§r");
+      $this->KillsLeaderBoard = new FloatingTextParticle("Loading...", "§bAdvance§cDeaths§r");
+      $this->KillsLeaderBoardPOS = new Vector3($pos["X"],$pos["Y"],$pos["Z"]);
       $this->KillsLeaderBoard->setInvisible(false);
       $this->updateLeaderboard();
   }
@@ -109,44 +111,43 @@ class Main extends PluginBase implements Listener {
     return self::$instance;
   }
   
-  public function onDisable() {
+  public function onDisable() : void {
     if(isset($this->database)) $this->database->close();
     if(isset($this->KillsLeaderBoard)) $this->KillsLeaderBoard->setInvisible(true);
   }
   
-  public function onLoad(){
+  public function onLoad() : void{
     $this->reloadConfig();
     self::$instance = $this;
   }
   
   public function updateLeaderboard(){
-    $KillsLeaderBoard = $this->KillsLeaderBoard;
     $this->database->getDatabase()->executeSelect(DatabaseProvider::SCOREBOARD_TOP5,[], 
-      function(array $rows) use ($KillsLeaderBoard){
+      function(array $rows){
         $LeaderBoardText = "";
         foreach ($rows as $X => $Element) {
           $LeaderBoardText .= strval($X+1).". ".$Element["PlayerName"]." - Kills: ".strval($Element["Kills"])."\n";
         }
-        $KillsLeaderBoard->setText($LeaderBoardText);
-        Server::getInstance()->getLevelByName($this->world)->addParticle($KillsLeaderBoard);
+        $this->KillsLeaderBoard->setText($LeaderBoardText);
+        Server::getInstance()->getWorldManager()->getWorldByName($this->world)->addParticle($this->KillsLeaderBoardPOS, $this->KillsLeaderBoard);
       });
     
   }
   
   public function JoinEvent(PlayerJoinEvent $event) : void{
-    if($event->getPlayer()->isOp() == true){
+    if($event->getPlayer()->hasPermission(DefaultPermissions::ROOT_OPERATOR)    == true){
       if($this->isUpdated == false){
         $event->getPlayer()->sendMessage("§bAdvance§cDeaths §6>§r §ePlease update AdvanceDeaths to the lastest verison from poggit.pmmp.io.");
       }
     }
-    if($this->FloatingTxtSupported == true) $this->getServer()->getLevelByName("world")->addParticle($this->KillsLeaderBoard, [$event->getPlayer()]);
+    if($this->FloatingTxtSupported == true) $this->getServer()->getWorldManager()->getWorldByName("world")->addParticle($this->KillsLeaderBoardPOS, $this->KillsLeaderBoard, [$event->getPlayer()]);
   }
     /**
      * @priority HIGHEST
      * @ignoreCancelled false
      * @param PlayerDeathEvent $event
      */
-    public function onDeath(PlayerDeathEvent $event){
+    public function onDeath(PlayerDeathEvent $event): void{
       $player = $event->getPlayer();
       if(!$player instanceof Player) return;
       $name = $player->getName();
@@ -168,7 +169,7 @@ class Main extends PluginBase implements Listener {
         $this->database->IncrecementDeath($player->getUniqueId()->toString(), $player->getName());
         if($this->FloatingTxtSupported == true) $this->updateLeaderboard();
       }
-      if(in_array($player->getLevel()->getFolderName(), $this->getConfig()->get("NotOnWorlds"))){return;}
+      if(in_array($player->getWorld()->getFolderName(), $this->getConfig()->get("NotOnWorlds"))){return;}
       if(strtolower( $this->getConfig()->get("onDeathEffect") ) == "none"){return;}
       switch (strtolower($this->getConfig()->get("onDeathEffect"))) {
         case 'creeperparticle':
@@ -202,17 +203,12 @@ class Main extends PluginBase implements Listener {
         $xd = (float) 1;
         $yd = (float) 1;
         $zd = (float) 1;
-        $level = $player->getLevel();
+        $level = $player->getWorld();
         $pos = $player->getPosition();
-
-        $count = 1;
-        $data = null;
-        $particle = new HeartParticle($pos, 0);
-
-        for($i = 0; $i < $count; ++$i){
-          $particle->setComponents($pos->x, $pos->y+0.5, $pos->z);
-          $level->addParticle($particle);
-        }
+        $pos->y = $pos->y +0.5;
+        $particle = new HeartParticle();
+        $level->addParticle($pos, $particle);
+        
       }
     
     }

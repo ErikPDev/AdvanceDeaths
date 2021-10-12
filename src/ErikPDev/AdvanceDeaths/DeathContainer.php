@@ -4,7 +4,7 @@ namespace ErikPDev\AdvanceDeaths;
 use ErikPDev\AdvanceDeaths\DeathTypes;
 use ErikPDev\AdvanceDeaths\Main;
 use ErikPDev\AdvanceDeaths\utils\DatabaseProvider;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 class DeathContainer {
     /** @var Main */

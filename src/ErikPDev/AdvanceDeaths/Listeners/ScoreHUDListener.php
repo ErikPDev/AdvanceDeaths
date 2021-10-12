@@ -11,7 +11,7 @@ use ErikPDev\AdvanceDeaths\utils\DatabaseProvider;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\Player;
+use pocketmine\player\Player;
 class ScoreHUDListener implements Listener{
 
     /** @var DatabaseProvider */

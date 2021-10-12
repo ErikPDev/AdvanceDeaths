@@ -5,13 +5,13 @@ namespace ErikPDev\AdvanceDeaths\Commands;
 use pocketmine\event\Listener;
 use pocketmine\command\Command;
 use pocketmine\command\CommandSender;
-use pocketmine\Player;
+use pocketmine\player\Player;
 use pocketmine\Server;
 use jojoe77777\FormAPI\{CustomForm, SimpleForm};
 use ErikPDev\AdvanceDeaths\utils\DatabaseProvider;
 class advancedeaths{
     private $plugin,$database;
-
+// THIS WILL BE PORTED LATER! IT"S A PAIN ON THE ARSE!
     public function __construct($plugin, $database){$this->plugin = $plugin;$this->database = $database;}
 
     public function onCommand(CommandSender $player, Command $cmd, string $label, array $args) : bool{

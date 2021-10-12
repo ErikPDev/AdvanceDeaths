@@ -5,7 +5,7 @@ namespace ErikPDev\AdvanceDeaths\Listeners;
 use pocketmine\event\Listener;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\event\player\PlayerDeathEvent;
-use pocketmine\Player;
+use pocketmine\player\Player;
 
 class EconomySupport implements Listener{
     private $plugin;
@@ -26,7 +26,7 @@ class EconomySupport implements Listener{
         $KillMoneyConfig = $this->plugin->getConfig()->get("KillMoneyConfig");
         $PlayerMoney = EconomyAPI::getInstance()->myMoney($player);
         if($DeathMoneyConfig["isEnabled"] == true){
-            if(in_array($player->getLevel()->getFolderName(), $KillMoneyConfig["disabledOnWorlds"])) return;
+            if(in_array($player->getWorld()->getFolderName(), $KillMoneyConfig["disabledOnWorlds"])) return;
             if($DeathMoneyConfig["ValueType"] == "lose"){
                 $OptionA = "lost";
             }
@@ -61,7 +61,7 @@ class EconomySupport implements Listener{
         }
 
         if($KillMoneyConfig["isEnabled"] == true){
-            if(in_array($player->getLevel()->getFolderName(), $KillMoneyConfig["disabledOnWorlds"])) return;
+            if(in_array($player->getWorld()->getFolderName(), $KillMoneyConfig["disabledOnWorlds"])) return;
             if(!$event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent) return;
             if(!$player->getLastDamageCause()->getDamager() instanceof Player) return;
             
