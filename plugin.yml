@@ -7,9 +7,6 @@ mcpe-protocol: [440, 449, 465] # More protocols are supported but I don't know h
 softdepend:
   - EconomyAPI
   - ScoreHud
-virions:
-  - libasynql
-  - FormAPI 
 
 commands:
   advancedeaths:
