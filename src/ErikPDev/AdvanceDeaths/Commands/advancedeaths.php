@@ -18,9 +18,9 @@ class advancedeaths{
         if(!strtolower( $cmd->getName() ) == "advancedeaths" && !strtolower($cmd->getName()) == "ads") return false;
         if(!$player instanceof Player){$player->sendMessage("§bAdvance§cDeaths §6>§c Please run the command from in-game.");return false;}
         $form = new CustomForm(function (\pocketmine\Player $player, $data) use (&$PlayerNames){
-            if(!isset($data[0])){return $player->sendMessage("§bAdvance§cDeaths §6>§r No Player Name has been selected.");}
-            if($data[0] > count($PlayerNames)){return $player->kick("             §b~ Advance§cDeaths ~\nKicked for attempted data manipulation.",false);}
-            $PLYR = Server::getInstance()->getOfflinePlayer($PlayerNames[$data[0]]);
+            if(!isset($data[1])){return $player->sendMessage("§bAdvance§cDeaths §6>§r No Player Name has been selected.");}
+            if($data[1] > count($PlayerNames)){return $player->kick("             §b~ Advance§cDeaths ~\nKicked for attempted data manipulation.",false);}
+            $PLYR = Server::getInstance()->getOfflinePlayer($PlayerNames[$data[1]]);
 
             $this->database->getDatabase()->executeSelect(DatabaseProvider::GETKILLS_AND_DEATHS, ["UUID" => $PLYR->getUniqueID()->toString()], 
                 function(array $rows) use (&$PLYR, &$player){

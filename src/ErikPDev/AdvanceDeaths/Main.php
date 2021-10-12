@@ -86,7 +86,7 @@ class Main extends PluginBase implements Listener {
 
       $this->advanceDeathsCommand = new advancedeaths($this, $this->database);
       $this->isUpdated = true;
-      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "2.5"));
+      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "2.6"));
       
 
       $this->FloatingTxtSupported = $this->getConfig()->get("FEnableFloatingText");
