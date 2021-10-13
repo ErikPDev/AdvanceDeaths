@@ -46,8 +46,9 @@ instant-respawn: true # Set this to true if you want the player to instantly res
 
 # Possible Type:
   # all - Takes all of the Player Money when it dies.
-  # percent - Removes a percentage of the player money.
-  # amount - Removed the amount of money.
+  # percent - Removes/Gives a percentage of the player money.
+  # amount - Removed/Gives the amount of money.
+  # playerMoney - Gives
 
 # Possible ValueType:
   # gain = The player will gain x amount of money.

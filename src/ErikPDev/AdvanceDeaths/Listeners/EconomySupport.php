@@ -5,6 +5,7 @@ namespace ErikPDev\AdvanceDeaths\Listeners;
 use pocketmine\event\Listener;
 use onebone\economyapi\EconomyAPI;
 use pocketmine\event\player\PlayerDeathEvent;
+use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\Player;
 
 class EconomySupport implements Listener{
@@ -62,8 +63,10 @@ class EconomySupport implements Listener{
 
         if($KillMoneyConfig["isEnabled"] == true){
             if(in_array($player->getLevel()->getFolderName(), $KillMoneyConfig["disabledOnWorlds"])) return;
-            if(!$event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent) return;
+            if(!$player->getLastDamageCause() instanceof EntityDamageByEntityEvent) return;
             if(!$player->getLastDamageCause()->getDamager() instanceof Player) return;
+            $Killer = $player->getLastDamageCause()->getDamager();
+            $KillerMoney = EconomyAPI::getInstance()->myMoney($Killer);
             
             if($KillMoneyConfig["ValueType"] == "lose"){
                 $OptionA = "lost";
@@ -73,23 +76,23 @@ class EconomySupport implements Listener{
             }
             switch (strtolower($KillMoneyConfig["type"])) {
                 case "all":
-                    $player->sendMessage("§bAdvance§cDeaths §6>§r §aYou killed and $OptionA $" . $PlayerMoney);
-                    $this->ModifyMoney($player, $PlayerMoney, $KillMoneyConfig["ValueType"]);
+                    $Killer->sendMessage("§bAdvance§cDeaths §6>§r §aYou killed and $OptionA $" . $KillerMoney);
+                    $this->ModifyMoney($Killer, $KillerMoney, $KillMoneyConfig["ValueType"]);
                     break;
                 
                 case "half":
-                    $player->sendMessage("§bAdvance§cDeaths §6>§r §aYou killed and $OptionA $" . $playerMoney / 2);
-                    $this->ModifyMoney($player, $playerMoney / 2, $KillMoneyConfig["ValueType"]);
+                    $Killer->sendMessage("§bAdvance§cDeaths §6>§r §aYou killed and $OptionA $" . $KillerMoney / 2);
+                    $this->ModifyMoney($Killer, $KillerMoney / 2, $KillMoneyConfig["ValueType"]);
                     break;
 
                 case "percent":
-                    $player->sendMessage("§bAdvance§cDeaths §6>§r §aYou killed and $OptionA $" . ((double)$KillMoneyConfig["amount"] / 100) * $PlayerMoney);
-                    $this->ModifyMoney($player, ((double)$KillMoneyConfig["amount"] / 100) * $PlayerMoney, $KillMoneyConfig["ValueType"]);
+                    $Killer->sendMessage("§bAdvance§cDeaths §6>§r §aYou killed and $OptionA $" . ((double)$KillMoneyConfig["amount"] / 100) * $KillerMoney);
+                    $this->ModifyMoney($Killer, ((double)$KillMoneyConfig["amount"] / 100) * $KillerMoney, $KillMoneyConfig["ValueType"]);
                     break;
 
                 case "amount":
-                    $player->sendMessage("§bAdvance§cDeaths §6>§r §aYou killed and $OptionA $" . (double)$KillMoneyConfig["amount"]);
-                    $this->ModifyMoney($player, (double)$KillMoneyConfig["amount"], $KillMoneyConfig["ValueType"]);
+                    $Killer->sendMessage("§bAdvance§cDeaths §6>§r §aYou killed and $OptionA $" . (double)$KillMoneyConfig["amount"]);
+                    $this->ModifyMoney($Killer, (double)$KillMoneyConfig["amount"], $KillMoneyConfig["ValueType"]);
                     break;
                 
                 default:
