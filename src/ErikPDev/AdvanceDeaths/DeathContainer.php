@@ -136,7 +136,7 @@ class DeathContainer {
 
 
     private function broadcast($message){
-        if($this->getConfig()->get("DiscordEnabled") == true){
+        if($this->plugin->getConfig()->get("DiscordEnabled") == true){
             $this->plugin->discord->sendMessage($message);
         }
         $this->plugin->getServer()->broadcastMessage($message);
