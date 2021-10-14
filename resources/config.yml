@@ -42,6 +42,11 @@ HealMessage: "You have been healed!" # Message to send to the Player when it's h
 
 instant-respawn: true # Set this to true if you want the player to instantly respawn.
 
+# Discord Configuration
+DiscordEnabled: false
+discordWebHook: "https://discord.com/api/webhooks/"
+
+# End of Discord Configuration
 # Start of Death/Kill Money Config, NOTICE: EconomyAPI needs to be installed!
 
 # Possible Type:

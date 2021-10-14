@@ -70,14 +70,14 @@ class DeathContainer {
         }
         
         preg_match_all("/{(\w+)}/", $DeathMessage, $RemaningMatches);
-        if(count($RemaningMatches[0]) == 0) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+        if(count($RemaningMatches[0]) == 0) return $this->broadcast($DeathMessage);
         foreach ($RemaningMatches[0] as $value => $RemainingKeyWord){
             if($RemainingKeyWord == "{killer_kills}"){
                 $this->database->getDatabase()->executeSelect(DatabaseProvider::GET_KILLS, ["UUID" => $entity->getLastDamageCause()->getDamager()->getUniqueID()->toString()], 
                 function(array $rows) use (&$RemainingKeyWord, &$DeathMessage, &$RemaningMatches, $value){
                     $kills = $rows[0]["Kills"] ?? 0;
                     $DeathMessage = str_replace("{killer_kills}", (string)$kills, $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
 
@@ -86,7 +86,7 @@ class DeathContainer {
                 function(array $rows) use (&$RemainingKeyWord, &$DeathMessage, &$RemaningMatches, $value){
                     $deaths = $rows[0]["Deaths"] ?? 0;
                     $DeathMessage = str_replace("{killer_deaths}", (string)$deaths, $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
 
@@ -96,7 +96,7 @@ class DeathContainer {
                 function(array $rows) use (&$RemainingKeyWord, &$DeathMessage, &$RemaningMatches, $value){
                     $kills = $rows[0]["Kills"] ?? 0;
                     $DeathMessage = str_replace("{player_kills}", (string)$kills, $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
 
@@ -105,7 +105,7 @@ class DeathContainer {
                 function(array $rows) use (&$RemainingKeyWord, &$DeathMessage, &$RemaningMatches, $value){
                     $deaths = $rows[0]["Deaths"] ?? 0;
                     $DeathMessage = str_replace("{player_deaths}", (string)$deaths, $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
 
@@ -116,7 +116,7 @@ class DeathContainer {
                     $kills = $rows[0]["Kills"] ?? 0;
                     
                     $DeathMessage = str_replace("{player_kdr}", (string)DatabaseProvider::getKillToDeathRatio($kills, $deaths), $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
             
@@ -127,11 +127,19 @@ class DeathContainer {
                     $kills = $rows[0]["Kills"] ?? 0;
                     
                     $DeathMessage = str_replace("{killer_kdr}", (string)DatabaseProvider::getKillToDeathRatio($kills, $deaths), $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
         }
         
+    }
+
+
+    private function broadcast($message){
+        if($this->getConfig()->get("DiscordEnabled") == true){
+            $this->plugin->discord->sendMessage($message);
+        }
+        $this->plugin->getServer()->broadcastMessage($message);
     }
 
 

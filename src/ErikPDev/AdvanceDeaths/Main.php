@@ -24,9 +24,10 @@ use ErikPDev\AdvanceDeaths\Listeners\{
   instantRespawn,
   EconomySupport
 };
-
+use ErikPDev\AdvanceDeaths\webhook\discord;
 use pocketmine\level\particle\FloatingTextParticle;
 use pocketmine\math\Vector3;
+
 class Main extends PluginBase implements Listener {
 
   /** @var DeathContainer */
@@ -88,6 +89,10 @@ class Main extends PluginBase implements Listener {
       $this->isUpdated = true;
       Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "2.7"));
       
+      // Discord Webhook
+      if($this->getConfig()->get("DiscordEnabled") == true){
+        $this->discord = new discord($this->getConfig()->get("discordWebHook"), $this);
+      }
 
       $this->FloatingTxtSupported = $this->getConfig()->get("FEnableFloatingText");
       if($this->FloatingTxtSupported !== true){return;}
@@ -112,6 +117,9 @@ class Main extends PluginBase implements Listener {
   public function onDisable() {
     if(isset($this->database)) $this->database->close();
     if(isset($this->KillsLeaderBoard)) $this->KillsLeaderBoard->setInvisible(true);
+    if($this->getConfig()->get("DiscordEnabled") == true){
+      $this->discord->sendMessage("[AdvanceDeaths] Plugin is disabled.");
+    }
   }
   
   public function onLoad(){
