@@ -48,11 +48,12 @@ instant-respawn: true # Set this to true if you want the player to instantly res
   # all - Takes all of the Player Money when it dies.
   # percent - Removes/Gives a percentage of the player money.
   # amount - Removed/Gives the amount of money.
-  # playerMoney - Gives
+  # playerMoney - Gives/Removes the player money
 
 # Possible ValueType:
   # gain = The player will gain x amount of money.
   # lose = The player will lose x amount of money.
+
 DeathMoneyConfig: {
   isEnabled: true,
   disabledOnWorlds: [
@@ -60,7 +61,7 @@ DeathMoneyConfig: {
   ],
   type: "percent",
   ValueType: "lose",
-  amount: 10 # This does not need to be set if Type is set to "all" or "half"
+  amount: 10 # This does not need to be set if Type is set to "all", "half" or "playerMoney"
 }
 
 KillMoneyConfig: {
@@ -70,7 +71,7 @@ KillMoneyConfig: {
   ],
   type: "percent",
   ValueType: "gain",
-  amount: 10 # This does not need to be set if Type is set to "all" or "half"
+  amount: 10 # This does not need to be set if Type is set to "all", "half" or "playerMoney"
 }
 
 
@@ -132,4 +133,4 @@ database:
 
 
 # Don't modify the below value, or delete it.
-config-verison: 2.2
+config-verison: 2.3

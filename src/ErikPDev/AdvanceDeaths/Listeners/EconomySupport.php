@@ -54,7 +54,12 @@ class EconomySupport implements Listener{
                     $player->sendMessage("§bAdvance§cDeaths §6>§r §aYou died and $OptionA $" . (double)$DeathMoneyConfig["amount"]);
                     $this->ModifyMoney($player, (double)$DeathMoneyConfig["amount"], $DeathMoneyConfig["ValueType"]);
                     break;
-                
+
+                case "playermoney":
+                    $player->sendMessage("§bAdvance§cDeaths §6>§r §aYou died and $OptionA $" . (double)$PlayerMoney);
+                    $this->ModifyMoney($player, (double) $PlayerMoney, $DeathMoneyConfig["ValueType"]);
+                    break;
+
                 default:
                     # code...
                     break;
@@ -93,6 +98,11 @@ class EconomySupport implements Listener{
                 case "amount":
                     $Killer->sendMessage("§bAdvance§cDeaths §6>§r §aYou killed and $OptionA $" . (double)$KillMoneyConfig["amount"]);
                     $this->ModifyMoney($Killer, (double)$KillMoneyConfig["amount"], $KillMoneyConfig["ValueType"]);
+                    break;
+                
+                case "playermoney":
+                    $Killer->sendMessage("§bAdvance§cDeaths §6>§r §aYou killed and $OptionA $" . (double)$PlayerMoney);
+                    $this->ModifyMoney($Killer, $PlayerMoney, $KillMoneyConfig["ValueType"]);
                     break;
                 
                 default:

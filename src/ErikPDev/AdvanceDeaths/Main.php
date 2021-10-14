@@ -49,7 +49,7 @@ class Main extends PluginBase implements Listener {
       $this->getServer()->getPluginManager()->registerEvents($this,$this);
       $this->saveDefaultConfig();
       $this->reloadConfig();
-      if ($this->getConfig()->get("config-verison") != 2.2){
+      if ($this->getConfig()->get("config-verison") != 2.3){
         if($this->getConfig()->get("config-verison") >= 2){
           $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Updating to lastest configuration.");
           $configUpdater = new configUpdater($this, $this->getConfig());
@@ -86,7 +86,7 @@ class Main extends PluginBase implements Listener {
 
       $this->advanceDeathsCommand = new advancedeaths($this, $this->database);
       $this->isUpdated = true;
-      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "2.6"));
+      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "2.7"));
       
 
       $this->FloatingTxtSupported = $this->getConfig()->get("FEnableFloatingText");
