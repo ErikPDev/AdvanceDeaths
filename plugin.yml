@@ -1,7 +1,7 @@
 name: AdvanceDeaths
 author: ErikPDev
 api: 3.20.0
-version: 2.7.1
+version: 2.8
 main: ErikPDev\AdvanceDeaths\Main
 mcpe-protocol: [440, 449, 465, 471] # More protocols are supported but I don't know how to get the id. Make a pull request if you know =D
 softdepend:
