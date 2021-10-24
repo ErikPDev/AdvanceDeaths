@@ -9,6 +9,9 @@ Vanilia like Instant Respawn, KDR, Kill and Death stats, including a Leaderboard
 
 Read setup for more info!
 
+# Important
+When you are updating AdvanceDeaths to V3.0 make sure you delete the previous database.
+
 # Setup
 The setup is really easy, you'll just need to download the phar file at the plugins folder.
 After that reboot/start your server up, all configurations are now editable at the config.yml located at plugin_data/AdvanceDeaths. 
@@ -104,8 +107,6 @@ Found a bug?
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/FloatingText.png">
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/ScoreBoard.png">
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/Form.png">
-# Config file
-If you are updating AdvanceDeaths, Make sure you rename the old file to something else other than `config.yml`
 
 # Effects
 There are currently two effects supported.
