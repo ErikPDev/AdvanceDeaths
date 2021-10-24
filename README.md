@@ -103,8 +103,11 @@ Found a bug?
 |---------------|-----------------------------|-------------------|---------|
 | advancedeaths | See an online player stats. | advancedeaths.use | True    |
 | ads           | See an online player stats. | advancedeaths.use | True    |
+
 # Photos
-<img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/FloatingText.png">
+<img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/Kill.png">
+<img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/Deaths.png">
+<img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/Killstreak.png">
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/ScoreBoard.png">
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/Form.png">
 
