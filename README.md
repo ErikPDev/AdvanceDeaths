@@ -1,7 +1,6 @@
 # AdvanceDeaths
 [![](https://poggit.pmmp.io/shield.state/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths) [![](https://poggit.pmmp.io/shield.dl.total/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths) [![](https://poggit.pmmp.io/shield.dl/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths) [![](https://poggit.pmmp.io/shield.api/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths)
 
-Discord: https://discord.gg/96yKvdDxrR
 
 A plugin to take advantage of the Minecraft Death to improve your server.
 With this plugin you can customize death messages with advanced keywords.
