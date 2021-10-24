@@ -49,7 +49,13 @@ Features:
   * You can also have support for the Discord Bot to get the ingame leaderboards.
 
 # Setting up the discord bot
-1] Enable rcon from server.properties
+Steps:
+1] Enable RCON in your server from server.properties
+2] Add the AdvanceDeaths plugin to your server. Version 3 or higher should be installed.
+3] Add the bot to your server using this link. https://discord.com/api/oauth2/authorize?client_id=900282852577509436&permissions=537259089&scope=bot
+4] Run >help to see the list of command or run >setup to set your server up.
+If you ran into any errors, bugs, something isn't working or if you need help.
+Join the discord server.
 
 # Bug Report
 Found a bug?
