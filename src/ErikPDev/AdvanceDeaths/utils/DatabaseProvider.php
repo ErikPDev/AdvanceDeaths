@@ -13,7 +13,13 @@ class DatabaseProvider{
     public const GET_DEATHS = "advancedeaths.getDeaths";
     public const GETKILLS_AND_DEATHS = "advancedeaths.getKills&Deaths";
     public const SCOREBOARD_TOP = "advancedeaths.ScoreBoardTOP";
-    public const SCOREBOARD_TOP5 = "advancedeaths.ScoreBoardTOP5";
+    public const TOP5KILLS = "advancedeaths.Top5Kills";
+    public const TOP5DEATHS = "advancedeaths.Top5Deaths";
+    public const IncrecementKillstreak = "advancedeaths.addKillstreak";
+    public const ResetKillstreak = "advancedeaths.ResetKillstreak";
+    public const getKillstreak = "advancedeaths.getKillstreak";
+    public const TOP5KillSTREAKS = "advancedeaths.Top5Killstreaks";
+
     /** @var Main */
     private $plugin;
 
@@ -35,6 +41,14 @@ class DatabaseProvider{
 
     public function IncrecementDeath(string $UUID, string $PlayerName): void{
         $this->database->executeInsert(DatabaseProvider::INCREASEMENT_DEATH, ["UUID" => $UUID, "PlayerName" => $PlayerName]);
+    }
+    
+    public function IncrecementKillstreak(string $UUID, string $PlayerName): void{
+        $this->database->executeInsert(DatabaseProvider::IncrecementKillstreak, ["UUID" => $UUID, "PlayerName" => $PlayerName]);
+    }
+
+    public function EndKillstreak(string $UUID, string $PlayerName): void{
+        $this->database->executeInsert(DatabaseProvider::ResetKillstreak, ["UUID" => $UUID, "PlayerName" => $PlayerName]);
     }
 
     public function getDatabase(){

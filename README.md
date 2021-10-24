@@ -14,15 +14,42 @@ The setup is really easy, you'll just need to download the phar file at the plug
 After that reboot/start your server up, all configurations are now editable at the config.yml located at plugin_data/AdvanceDeaths. 
 If you own a sql server the set the parameters in the config.yml
 
-# What's new?
-- [x] Kill/Death Money
-- [x] Automatic Configuration Updater
-- [x] Added a command to see other player stats (/ads OR /advancedeaths)
-- [x] Fixed bugs
-- [x] Added GenericExplosion and failsafe to prevent crashing.
-- [x] KDR added to Scoreboard 
-- [X] Fixed ScoreBoard Bug where Kills/Deaths/KDR doesn't load.
-- [x] Pure Entities Support
+# Features
+Features:
+* Death Messages
+  * You can modify all the death messages with variables
+* EconomyAPI Support
+  * Gain/Lose money on both Death and Kill.
+* Commands
+  * Commands to see other player stats
+* Configuration
+  * All Configurations will be automatically updated from 2.0.0 to 2.5
+  * Configuration Validator to prevent crashes caused by mis-configured config file.
+* AI Mobs
+  * Pure Entities is now supported.
+* ScoreHud
+  * You can display a player Kills, Deaths or KDR on a scoreHud
+  * Multiworld is now supported
+* Instant Respawn
+  * Instant Respawn is now client sided unlike other plugins!
+* Leaderboards
+  * There are 3 leaderboards available that can be enabled on the config file. They include Kills, Killstreaks, and deaths leaderboards.
+* Effects
+  * There are currently two effects. `CreeperParticle` and `Lighting`.
+* Databases
+  * AdvanceDeaths supports SQLite and MySql Databases
+  * SQLite is preferred over MySql.
+  * Database queries are asynchronous
+* Particles
+  * You can enable hitted-hearts on config.yml to show hearts when a player is hit.
+* Killer Effetcs
+  * You can heal the killer after death.
+* Discord
+  * You can enable discord webhooks to display death messages in your discord server.
+  * You can also have support for the Discord Bot to get the ingame leaderboards.
+
+# Setting up the discord bot
+1] Enable rcon from server.properties
 
 # Bug Report
 Found a bug?
@@ -54,6 +81,7 @@ Found a bug?
 | {player_deaths}       | Deaths of the player                    | Player                             |
 | {killer_kdr}          | KDR of the killer                       | Player                             |
 | {player_kdr}          | KDR of the player                       | Player                             |
+| {killer_killstreak}   | Killstreak of the killer                | Player                             |
 
 # Commands
 | Command       | Description                 | Permission        | Default |

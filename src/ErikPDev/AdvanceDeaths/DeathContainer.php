@@ -64,7 +64,7 @@ class DeathContainer {
         preg_match_all("/{(\w+)}/", $DeathMessage, $KeyWordsFound);
         foreach ($KeyWordsFound[0] as $value => $KeyWord) {
             if($entity->getLastDamageCause() instanceof EntityDamageByEntityEvent){
-                if($KeyWord == "{killer_kills}" || $KeyWord == "{killer_deaths}"  || $KeyWord == "{player_kills}" || $KeyWord == "{player_deaths}" || $KeyWord == "{player_kdr}" || $KeyWord == "{killer_kdr}"){continue;}      
+                if($KeyWord == "{killer_kills}" || $KeyWord == "{killer_deaths}"  || $KeyWord == "{player_kills}" || $KeyWord == "{player_deaths}" || $KeyWord == "{player_kdr}" || $KeyWord == "{killer_kdr}" || $KeyWord == "{killer_killstreak}"){continue;}      
             }
             $DeathMessage = str_replace($KeyWord, $this->ExecuteHelper($entity, $KeyWord, $translate->getText()), $DeathMessage);
         }
@@ -130,6 +130,17 @@ class DeathContainer {
                     if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
+
+            if($RemainingKeyWord == "{killer_killstreak}"){
+                $this->database->getDatabase()->executeSelect(DatabaseProvider::getKillstreak, ["UUID" => $entity->getLastDamageCause()->getDamager()->getUniqueID()->toString()], 
+                function(array $rows) use (&$RemainingKeyWord, &$DeathMessage, &$RemaningMatches, $value){
+                    $Killstreak = $rows[0]["Killstreak"] ?? 0;
+                    
+                    $DeathMessage = str_replace("{killer_killstreak}", (string)$Killstreak, $DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
+                });
+            }
+
         }
         
     }

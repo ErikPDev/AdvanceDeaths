@@ -3,6 +3,7 @@
 namespace ErikPDev\AdvanceDeaths;
 
 use pocketmine\plugin\PluginBase;
+use pocketmine\plugin\PluginException;
 use pocketmine\{Player, Server};
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
@@ -13,7 +14,13 @@ use pocketmine\level\Level;
 use pocketmine\level\particle\HeartParticle;
 
 use ErikPDev\AdvanceDeaths\{DeathContainer,API};
-use ErikPDev\AdvanceDeaths\utils\{DatabaseProvider,Update,configUpdater,configValidator};
+use ErikPDev\AdvanceDeaths\utils\{
+  DatabaseProvider,
+  Update,
+  configUpdater,
+  configValidator,
+  leaderboardData
+};
 use ErikPDev\AdvanceDeaths\Commands\advancedeaths;
 use ErikPDev\AdvanceDeaths\effects\{
   Creeper,
@@ -22,11 +29,15 @@ use ErikPDev\AdvanceDeaths\effects\{
 use ErikPDev\AdvanceDeaths\Listeners\{
   ScoreHUDListener,
   instantRespawn,
-  EconomySupport
+  EconomySupport,
+  killsLeaderboard,
+  deathsLeaderboard,
+  killstreakLeaderBoard
 };
 use ErikPDev\AdvanceDeaths\webhook\discord;
-use pocketmine\level\particle\FloatingTextParticle;
-use pocketmine\math\Vector3;
+use pocketmine\command\RemoteConsoleCommandSender;
+use raklib\utils\InternetAddress;
+use ErikPDev\AdvanceDeaths\WS\WebSocket;
 
 class Main extends PluginBase implements Listener {
 
@@ -38,76 +49,53 @@ class Main extends PluginBase implements Listener {
   public static $instance;
   /** @var bool */
   public $isUpdated;
-  /** @var FloatingTextParticle */
-  private $KillsLeaderBoard;
-  /** @var bool */
-  private $FloatingTxtSupported;
-  /** @var string */
-  private $world;
   private $scoreHud;
   private $advanceDeathsCommand;
+  private $leaderboardData;
+  private $killsLeaderboard;
+  private $deathsLeaderboard;
+  private $killstreakLeaderBoard;
+  private $internetAddress;
+  private $websocketServer;
   public function onEnable() {
       $this->getServer()->getPluginManager()->registerEvents($this,$this);
-      $this->saveDefaultConfig();
-      $this->reloadConfig();
-      if ($this->getConfig()->get("config-verison") != 2.3){
-        if($this->getConfig()->get("config-verison") >= 2){
-          $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Updating to lastest configuration.");
-          $configUpdater = new configUpdater($this, $this->getConfig());
-          $configUpdater->update();
-          $this->reloadConfig();
-        }else{
-          $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Please use the new config.yml. To get it, delete/rename the the old one.");
-          $this->getServer()->getPluginManager()->disablePlugin($this);
-          return;
-        }
-      }
-      $configValidator = new configValidator($this, $this->getConfig());
-      $configValidator->Check();
-      $this->saveResource("sqlite.sql");
-      $this->saveResource("mysql.sql");
+      $this->configLoad();
+
+      $this->saveResource("sqlite.sql", true);
+      $this->saveResource("mysql.sql", true);
       $this->database = new DatabaseProvider($this);
       $this->database->prepare();
+
       $this->DeathContainer = new DeathContainer($this, $this->database);
-      if($this->getServer()->getPluginManager()->getPlugin("ScoreHud") != null){
-        $this->scoreHud = new ScoreHUDListener($this->database);
-        $this->getServer()->getPluginManager()->registerEvents($this->scoreHud, $this);
-        $this->getLogger()->debug("ScoreHud support is enabled.");
-      }
-
-      if($this->getServer()->getPluginManager()->getPlugin("EconomyAPI") != null){
-        $this->getServer()->getPluginManager()->registerEvents(new EconomySupport($this), $this);
-        $this->getLogger()->debug("EconomyAPI support is enabled.");
-      }
-
-      if($this->getConfig()->get("instant-respawn") == true){
-        $this->getServer()->getPluginManager()->registerEvents(new instantRespawn(), $this);
-        $this->getLogger()->debug("InstantRespawn is enabled.");
-      }
+      $this->featuresLoad();
 
       $this->advanceDeathsCommand = new advancedeaths($this, $this->database);
       $this->isUpdated = true;
-      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "2.7"));
+      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "3.0"));
       
       // Discord Webhook
       if($this->getConfig()->get("DiscordEnabled") == true){
         $this->discord = new discord($this->getConfig()->get("discordWebHook"), $this);
       }
 
-      $this->FloatingTxtSupported = $this->getConfig()->get("FEnableFloatingText");
-      if($this->FloatingTxtSupported !== true){return;}
-      $pos = $this->getConfig()->get("FLeaderBoardCoordinates");
-      $this->world = $this->getConfig()->get("FLeaderboardWorld");
-      if(!$this->getServer()->isLevelLoaded($this->world)) {
-        $this->getServer()->loadLevel($this->world);
-      }
-      if(!$this->getServer()->getLevelByName($this->world)->isChunkLoaded($pos["X"] >> 4, $pos["Z"] >> 4)) {
-        $this->getServer()->getLevelByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
-      }
+
+      $this->leaderboardData = new leaderboardData($this->database);
+      $this->getServer()->getPluginManager()->registerEvents($this->leaderboardData, $this);
       
-      $this->KillsLeaderBoard = new FloatingTextParticle(new Vector3($pos["X"],$pos["Y"],$pos["Z"]), "Loading...", "§bAdvance§cDeaths§r");
-      $this->KillsLeaderBoard->setInvisible(false);
-      $this->updateLeaderboard();
+      if($this->getConfig()->get("KillsFEnableFloatingText") == true){
+        $this->killsLeaderboard = new killsLeaderboard($this);
+        $this->getServer()->getPluginManager()->registerEvents($this->killsLeaderboard, $this);
+      }
+
+      if($this->getConfig()->get("DeathsFEnableFloatingText") == true){
+        $this->deathsLeaderboard = new deathsLeaderboard($this);
+        $this->getServer()->getPluginManager()->registerEvents($this->deathsLeaderboard, $this);
+      }
+
+      if($this->getConfig()->get("KillstreaksFEnableFloatingText") == true){
+        $this->killstreakLeaderBoard = new killstreakLeaderBoard($this);
+        $this->getServer()->getPluginManager()->registerEvents($this->killstreakLeaderBoard, $this);
+      }
   }
   
   public static function getInstance(){
@@ -116,7 +104,9 @@ class Main extends PluginBase implements Listener {
   
   public function onDisable() {
     if(isset($this->database)) $this->database->close();
-    if(isset($this->KillsLeaderBoard)) $this->KillsLeaderBoard->setInvisible(true);
+    if(isset($this->killsLeaderboard)) $this->killsLeaderboard->disableLeaderboard();
+    if(isset($this->deathsLeaderboard)) $this->deathsLeaderboard->disableLeaderboard();
+    if(isset($this->killstreakLeaderBoard)) $this->killstreakLeaderBoard->disableLeaderboard();
     if($this->getConfig()->get("DiscordEnabled") == true){
       $this->discord->sendMessage("[AdvanceDeaths] Plugin is disabled.");
     }
@@ -127,18 +117,44 @@ class Main extends PluginBase implements Listener {
     self::$instance = $this;
   }
   
-  public function updateLeaderboard(){
-    $KillsLeaderBoard = $this->KillsLeaderBoard;
-    $this->database->getDatabase()->executeSelect(DatabaseProvider::SCOREBOARD_TOP5,[], 
-      function(array $rows) use ($KillsLeaderBoard){
-        $LeaderBoardText = "";
-        foreach ($rows as $X => $Element) {
-          $LeaderBoardText .= strval($X+1).". ".$Element["PlayerName"]." - Kills: ".strval($Element["Kills"])."\n";
-        }
-        $KillsLeaderBoard->setText($LeaderBoardText);
-        Server::getInstance()->getLevelByName($this->world)->addParticle($KillsLeaderBoard);
-      });
+  private function configLoad(){
+    $this->saveDefaultConfig();
+    $this->reloadConfig();
+    if ($this->getConfig()->get("config-verison") != 2.4){
+      if($this->getConfig()->get("config-verison") >= 2){
+        $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Updating to lastest configuration.");
+        $configUpdater = new configUpdater($this, $this->getConfig());
+        $configUpdater->update();
+        $this->reloadConfig();
+      }else{
+        $this->getLogger()->critical("Your config.yml file for AdvanceDeaths is outdated. Please use the new config.yml. To get it, delete/rename the the old one.");
+        $this->getServer()->getPluginManager()->disablePlugin($this);
+        return;
+      }
+    }
+    $configValidator = new configValidator($this, $this->getConfig());
+    $configValidator->Check();
+
+
     
+  }
+
+  private function featuresLoad(){
+    if($this->getServer()->getPluginManager()->getPlugin("ScoreHud") != null){
+      $this->scoreHud = new ScoreHUDListener($this->database);
+      $this->getServer()->getPluginManager()->registerEvents($this->scoreHud, $this);
+      $this->getLogger()->debug("ScoreHud support is enabled.");
+    }
+
+    if($this->getServer()->getPluginManager()->getPlugin("EconomyAPI") != null){
+      $this->getServer()->getPluginManager()->registerEvents(new EconomySupport($this), $this);
+      $this->getLogger()->debug("EconomyAPI support is enabled.");
+    }
+
+    if($this->getConfig()->get("instant-respawn") == true){
+      $this->getServer()->getPluginManager()->registerEvents(new instantRespawn(), $this);
+      $this->getLogger()->debug("InstantRespawn is enabled.");
+    }
   }
   
   public function JoinEvent(PlayerJoinEvent $event) : void{
@@ -147,7 +163,6 @@ class Main extends PluginBase implements Listener {
         $event->getPlayer()->sendMessage("§bAdvance§cDeaths §6>§r §ePlease update AdvanceDeaths to the lastest verison from poggit.pmmp.io.");
       }
     }
-    if($this->FloatingTxtSupported == true) $this->getServer()->getLevelByName("world")->addParticle($this->KillsLeaderBoard, [$event->getPlayer()]);
   }
     /**
      * @priority HIGHEST
@@ -174,7 +189,8 @@ class Main extends PluginBase implements Listener {
         if(!$damager instanceof Player) return;
         $this->database->IncrecementKill($damager->getUniqueId()->toString(), $damager->getName());
         $this->database->IncrecementDeath($player->getUniqueId()->toString(), $player->getName());
-        if($this->FloatingTxtSupported == true) $this->updateLeaderboard();
+        $this->database->IncrecementKillstreak($damager->getUniqueId()->toString(), $damager->getName());
+        $this->database->EndKillstreak($player->getUniqueId()->toString(), $player->getName());
       }
       if(in_array($player->getLevel()->getFolderName(), $this->getConfig()->get("NotOnWorlds"))){return;}
       if(strtolower( $this->getConfig()->get("onDeathEffect") ) == "none"){return;}
@@ -226,6 +242,48 @@ class Main extends PluginBase implements Listener {
     }
 
 
-    public function onCommand(\pocketmine\command\CommandSender $sender, \pocketmine\command\Command $command, string $label, array $args) : bool{return $this->advanceDeathsCommand->onCommand($sender, $command, $label, $args);}
+    public function onCommand(\pocketmine\command\CommandSender $sender, \pocketmine\command\Command $command, string $label, array $args) : bool{
+      switch (strtolower( $command->getName() )) {
+        case 'advancedeaths':
+          return $this->advanceDeathsCommand->onCommand($sender, $command, $label, $args);
+          break;
+        
+        case 'ads':
+          return $this->advanceDeathsCommand->onCommand($sender, $command, $label, $args);
+          break;
+        
+        case 'rconadvancedeathsmanager':
+          if(!$sender instanceof RemoteConsoleCommandSender){
+            $sender->sendMessage("§bAdvance§cDeaths§r §6>§c This is a rcon command only!");
+            return true;
+          }
+          switch ($args[0]) {
+            case 'kills':
+              $sender->sendMessage(base64_encode(leaderboardData::getKillsLeaderboard()));
+              break;
+            
+            case 'deaths':
+              $sender->sendMessage(base64_encode(leaderboardData::getDeathsLeaderboard()));
+              break;
+            
+            case 'killstreaks':
+              $sender->sendMessage(base64_encode(leaderboardData::getKillstreaksLeaderboard()));
+              break;
+            
+            case 'reecon':
+              $sender->sendMessage(base64_encode("AdvanceDeaths is installed properly. Have fun!"));
+              break;
+            default:
+              $sender->sendMessage(base64_encode("Contact the developer or create a ticket at the discord group. Something went wrong."));
+              break;
+          }
+          
+          return false;
+        
+      }
+
+      return true;
+      
+    }
 
 }
