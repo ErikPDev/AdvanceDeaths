@@ -233,11 +233,13 @@ class Main extends PluginBase implements Listener {
     public function onCommand(\pocketmine\command\CommandSender $sender, \pocketmine\command\Command $command, string $label, array $args) : bool{
       switch (strtolower( $command->getName() )) {
         case 'advancedeaths':
-          return $this->advanceDeathsCommand->onCommand($sender, $command, $label, $args);
+          // return $this->advanceDeathsCommand->onCommand($sender, $command, $label, $args);
+          return $sender->sendMessage("§bAdvance§cDeaths §6>§r Command is still being implemented.");
           break;
         
         case 'ads':
-          return $this->advanceDeathsCommand->onCommand($sender, $command, $label, $args);
+          // return $this->advanceDeathsCommand->onCommand($sender, $command, $label, $args);
+          return $sender->sendMessage("§bAdvance§cDeaths §6>§r Command is still being implemented.");
           break;
       }
 
