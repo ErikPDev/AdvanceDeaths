@@ -158,7 +158,7 @@ class Main extends PluginBase implements Listener {
   }
   
   public function JoinEvent(PlayerJoinEvent $event) : void{
-    if($event->getPlayer()->isOp() == true){
+    if($event->getPlayer()->hasPermission(DefaultPermissions::ROOT_OPERATOR) == true){
       if($this->isUpdated == false){
         $event->getPlayer()->sendMessage("§bAdvance§cDeaths §6>§r §ePlease update AdvanceDeaths to the lastest verison from poggit.pmmp.io.");
       }
