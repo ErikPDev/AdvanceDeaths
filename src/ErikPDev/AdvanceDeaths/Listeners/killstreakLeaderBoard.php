@@ -3,9 +3,8 @@
 namespace ErikPDev\AdvanceDeaths\Listeners;
 
 use pocketmine\event\Listener;
-use pocketmine\Player;
 use pocketmine\Server;
-use pocketmine\level\particle\FloatingTextParticle;
+use pocketmine\world\particle\FloatingTextParticle;
 use pocketmine\math\Vector3;
 use ErikPDev\AdvanceDeaths\utils\leaderboardData;
 use pocketmine\event\player\PlayerJoinEvent;
@@ -17,11 +16,11 @@ class killstreakLeaderBoard implements Listener{
     public function __construct($plugin){
         $pos = $plugin->getConfig()->get("KillstreaksFLeaderBoardCoordinates");
         $this->world = $plugin->getConfig()->get("KillstreaksFLeaderboardWorld");
-        if(!Server::getInstance()->isLevelLoaded($this->world)) {
-          Server::getInstance()->loadLevel($this->world);
+        if(!Server::getInstance()->isWorldLoaded($this->world)) {
+          Server::getInstance()->loadWorld($this->world);
         }
-        if(!Server::getInstance()->getLevelByName($this->world)->isChunkLoaded($pos["X"] >> 4, $pos["Z"] >> 4)) {
-          Server::getInstance()->getLevelByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
+        if(!Server::getInstance()->getWorldManager()->getWorldByName($this->world)->isChunkLoaded($pos["X"] >> 4, $pos["Z"] >> 4)) {
+          Server::getInstance()->getWorldManager()->getWorldByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
         }
         
         $this->KillstreakLeaderBoard = new FloatingTextParticle(new Vector3($pos["X"],$pos["Y"],$pos["Z"]), "Loading...", "§bAdvance§cDeaths§6 Killstreak");
@@ -31,7 +30,7 @@ class killstreakLeaderBoard implements Listener{
 
     private function updateLeaderboard(){
         $this->KillstreakLeaderBoard->setText(leaderboardData::getKillstreaksLeaderboard());
-        Server::getInstance()->getLevelByName($this->world)->addParticle($this->KillstreakLeaderBoard);
+        Server::getInstance()->getWorldManager()->getWorldByName($this->world)->addParticle($this->KillstreakLeaderBoard);
     }
 
     public function disableLeaderboard(){
@@ -39,7 +38,7 @@ class killstreakLeaderBoard implements Listener{
     }
 
     public function onJoin(PlayerJoinEvent $event){
-        Server::getInstance()->getLevelByName($this->world)->addParticle($this->KillstreakLeaderBoard, [$event->getPlayer()]);
+        Server::getInstance()->getWorldManager()->getWorldByName($this->world)->addParticle($this->KillstreakLeaderBoard, [$event->getPlayer()]);
     }
 
     public function onDeath(PlayerDeathEvent $event){

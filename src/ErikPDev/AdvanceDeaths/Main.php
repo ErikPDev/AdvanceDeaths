@@ -3,17 +3,15 @@
 namespace ErikPDev\AdvanceDeaths;
 
 use pocketmine\plugin\PluginBase;
-use pocketmine\plugin\PluginException;
 use pocketmine\{Player, Server};
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\level\Level;
-use pocketmine\level\particle\HeartParticle;
+use pocketmine\world\particle\HeartParticle;
 
-use ErikPDev\AdvanceDeaths\{DeathContainer,API};
+use ErikPDev\AdvanceDeaths\DeathContainer;
 use ErikPDev\AdvanceDeaths\utils\{
   DatabaseProvider,
   Update,
@@ -27,7 +25,7 @@ use ErikPDev\AdvanceDeaths\effects\{
   Lighting
 };
 use ErikPDev\AdvanceDeaths\Listeners\{
-  ScoreHUDListener,
+//   ScoreHUDListener,
   instantRespawn,
   EconomySupport,
   killsLeaderboard,
@@ -35,9 +33,6 @@ use ErikPDev\AdvanceDeaths\Listeners\{
   killstreakLeaderBoard
 };
 use ErikPDev\AdvanceDeaths\webhook\discord;
-use pocketmine\command\RemoteConsoleCommandSender;
-use raklib\utils\InternetAddress;
-use ErikPDev\AdvanceDeaths\WS\WebSocket;
 
 class Main extends PluginBase implements Listener {
 
@@ -49,15 +44,14 @@ class Main extends PluginBase implements Listener {
   public static $instance;
   /** @var bool */
   public $isUpdated;
-  private $scoreHud;
+//   private $scoreHud;
   private $advanceDeathsCommand;
   private $leaderboardData;
   private $killsLeaderboard;
   private $deathsLeaderboard;
   private $killstreakLeaderBoard;
-  private $internetAddress;
-  private $websocketServer;
-  public function onEnable() {
+
+  public function onEnable() : void{
       $this->getServer()->getPluginManager()->registerEvents($this,$this);
       $this->configLoad();
 
@@ -102,7 +96,7 @@ class Main extends PluginBase implements Listener {
     return self::$instance;
   }
   
-  public function onDisable() {
+  public function onDisable() : void{
     if(isset($this->database)) $this->database->close();
     if(isset($this->killsLeaderboard)) $this->killsLeaderboard->disableLeaderboard();
     if(isset($this->deathsLeaderboard)) $this->deathsLeaderboard->disableLeaderboard();
@@ -112,7 +106,7 @@ class Main extends PluginBase implements Listener {
     }
   }
   
-  public function onLoad(){
+  public function onLoad() : void{
     $this->reloadConfig();
     self::$instance = $this;
   }
@@ -140,11 +134,11 @@ class Main extends PluginBase implements Listener {
   }
 
   private function featuresLoad(){
-    if($this->getServer()->getPluginManager()->getPlugin("ScoreHud") != null){
-      $this->scoreHud = new ScoreHUDListener($this->database);
-      $this->getServer()->getPluginManager()->registerEvents($this->scoreHud, $this);
-      $this->getLogger()->debug("ScoreHud support is enabled.");
-    }
+//     if($this->getServer()->getPluginManager()->getPlugin("ScoreHud") != null){
+//       $this->scoreHud = new ScoreHUDListener($this->database);
+//       $this->getServer()->getPluginManager()->registerEvents($this->scoreHud, $this);
+//       $this->getLogger()->debug("ScoreHud support is enabled.");
+//     }
 
     if($this->getServer()->getPluginManager()->getPlugin("EconomyAPI") != null){
       $this->getServer()->getPluginManager()->registerEvents(new EconomySupport($this), $this);
@@ -172,7 +166,6 @@ class Main extends PluginBase implements Listener {
     public function onDeath(PlayerDeathEvent $event){
       $player = $event->getPlayer();
       if(!$player instanceof Player) return;
-      $name = $player->getName();
       $entity = $event->getEntity();
       $msgderive = $event->deriveMessage($entity->getDisplayName(), $entity->getLastDamageCause());
       $event->setDeathMessage(""); // Using BroadcastMessage instead.
@@ -192,7 +185,7 @@ class Main extends PluginBase implements Listener {
         $this->database->IncrecementKillstreak($damager->getUniqueId()->toString(), $damager->getName());
         $this->database->EndKillstreak($player->getUniqueId()->toString(), $player->getName());
       }
-      if(in_array($player->getLevel()->getFolderName(), $this->getConfig()->get("NotOnWorlds"))){return;}
+      if(in_array($player->getWorld()->getFolderName(), $this->getConfig()->get("NotOnWorlds"))){return;}
       if(strtolower( $this->getConfig()->get("onDeathEffect") ) == "none"){return;}
       switch (strtolower($this->getConfig()->get("onDeathEffect"))) {
         case 'creeperparticle':
@@ -218,19 +211,14 @@ class Main extends PluginBase implements Listener {
      */
     public function onDamage(EntityDamageEvent $event) {
       $player = $event->getEntity();
-      $entity = $event->getEntity();
       if($player instanceof Player && $player->isCreative()) return;
         
       if($event->isCancelled()){return;}
       if ($player instanceof Player && $this->getConfig()->get("Hitted-Hearts") == true && $event->getEntity()->getLastDamageCause() instanceof EntityDamageByEntityEvent){
-        $xd = (float) 1;
-        $yd = (float) 1;
-        $zd = (float) 1;
-        $level = $player->getLevel();
+        $level = $player->getWorld();
         $pos = $player->getPosition();
 
         $count = 1;
-        $data = null;
         $particle = new HeartParticle($pos, 0);
 
         for($i = 0; $i < $count; ++$i){
@@ -251,35 +239,6 @@ class Main extends PluginBase implements Listener {
         case 'ads':
           return $this->advanceDeathsCommand->onCommand($sender, $command, $label, $args);
           break;
-        
-        case 'rconadvancedeathsmanager':
-          if(!$sender instanceof RemoteConsoleCommandSender){
-            $sender->sendMessage("§bAdvance§cDeaths§r §6>§c This is a rcon command only!");
-            return true;
-          }
-          switch ($args[0]) {
-            case 'kills':
-              $sender->sendMessage(base64_encode(leaderboardData::getKillsLeaderboard()));
-              break;
-            
-            case 'deaths':
-              $sender->sendMessage(base64_encode(leaderboardData::getDeathsLeaderboard()));
-              break;
-            
-            case 'killstreaks':
-              $sender->sendMessage(base64_encode(leaderboardData::getKillstreaksLeaderboard()));
-              break;
-            
-            case 'reecon':
-              $sender->sendMessage(base64_encode("AdvanceDeaths is installed properly. Have fun!"));
-              break;
-            default:
-              $sender->sendMessage(base64_encode("Contact the developer or create a ticket at the discord group. Something went wrong."));
-              break;
-          }
-          
-          return false;
-        
       }
 
       return true;

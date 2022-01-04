@@ -3,9 +3,8 @@
 namespace ErikPDev\AdvanceDeaths\Listeners;
 
 use pocketmine\event\Listener;
-use pocketmine\Player;
 use pocketmine\Server;
-use pocketmine\level\particle\FloatingTextParticle;
+use pocketmine\world\particle\FloatingTextParticle;
 use pocketmine\math\Vector3;
 use ErikPDev\AdvanceDeaths\utils\leaderboardData;
 use pocketmine\event\player\PlayerJoinEvent;
@@ -20,8 +19,8 @@ class killsLeaderboard implements Listener{
         if(!Server::getInstance()->isLevelLoaded($this->world)) {
           Server::getInstance()->loadLevel($this->world);
         }
-        if(!Server::getInstance()->getLevelByName($this->world)->isChunkLoaded($pos["X"] >> 4, $pos["Z"] >> 4)) {
-          Server::getInstance()->getLevelByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
+        if(!Server::getInstance()->getWorldManager()->getWorldByName($this->world)->isChunkLoaded($pos["X"] >> 4, $pos["Z"] >> 4)) {
+          Server::getInstance()->getWorldManager()->getWorldByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
         }
         
         $this->KillsLeaderBoard = new FloatingTextParticle(new Vector3($pos["X"],$pos["Y"],$pos["Z"]), "Loading...", "§bAdvance§cDeaths§6 Kills");
@@ -31,7 +30,7 @@ class killsLeaderboard implements Listener{
 
     private function updateLeaderboard(){
         $this->KillsLeaderBoard->setText(leaderboardData::getKillsLeaderboard());
-        Server::getInstance()->getLevelByName($this->world)->addParticle($this->KillsLeaderBoard);
+        Server::getInstance()->getWorldManager()->getWorldByName($this->world)->addParticle($this->KillsLeaderBoard);
     }
 
     public function disableLeaderboard(){
@@ -39,7 +38,7 @@ class killsLeaderboard implements Listener{
     }
 
     public function onJoin(PlayerJoinEvent $event){
-        Server::getInstance()->getLevelByName($this->world)->addParticle($this->KillsLeaderBoard, [$event->getPlayer()]);
+        Server::getInstance()->getWorldManager()->getWorldByName($this->world)->addParticle($this->KillsLeaderBoard, [$event->getPlayer()]);
     }
 
     public function onDeath(PlayerDeathEvent $event){

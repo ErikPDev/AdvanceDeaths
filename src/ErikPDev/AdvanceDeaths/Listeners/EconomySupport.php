@@ -41,7 +41,7 @@ class EconomySupport implements Listener{
                     break;
                 
                 case "half":
-                    $player->sendMessage("§bAdvance§cDeaths §6>§r §aYou died and $OptionA $" . $playerMoney / 2);
+                    $player->sendMessage("§bAdvance§cDeaths §6>§r §aYou died and $OptionA $" . $PlayerMoney / 2);
                     $this->ModifyMoney($player, $PlayerMoney / 2, $DeathMoneyConfig["ValueType"]);
                     break;
 
