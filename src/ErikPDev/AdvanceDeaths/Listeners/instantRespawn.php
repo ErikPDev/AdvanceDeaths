@@ -4,8 +4,9 @@ namespace ErikPDev\AdvanceDeaths\Listeners;
 
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
-use pocketmine\event\entity\EntityLevelChangeEvent;
-use pocketmine\Player;
+use pocketmine\event\entity\EntityTeleportEvent;
+use pocketmine\network\mcpe\protocol\types\BoolGameRule;
+use pocketmine\player\Player;
 class instantRespawn implements Listener{
 
 
@@ -18,24 +19,25 @@ class instantRespawn implements Listener{
      */
     public function onJoin(PlayerJoinEvent $event){
         $pk = new \pocketmine\network\mcpe\protocol\GameRulesChangedPacket();
-        $pk->gameRules = ["doimmediaterespawn" => [1, true, false]];
-        $event->getPlayer()->sendDataPacket($pk);
+        $pk->gameRules = ["doimmediaterespawn" => new BoolGameRule(true, false)];
+        $event->getPlayer()->getNetworkSession()->sendDataPacket($pk);
     }
     
     /**
      * @priority HIGHEST
      * @ignoreCancelled false
-     * @param EntityLevelChangeEvent $event
+     * @param EntityTeleportEvent $event
      */
-    public function onLevelChange(EntityLevelChangeEvent $event){
+    public function onLevelChange(EntityTeleportEvent $event){
         $player = $event->getEntity();
         if (!$player instanceof Player) {
             return;
         }
         
         $pk = new \pocketmine\network\mcpe\protocol\GameRulesChangedPacket();
-        $pk->gameRules = ["doimmediaterespawn" => [1, true, false]];
-        $player->sendDataPacket($pk);
+        $pk->gameRules = ["doimmediaterespawn" => new BoolGameRule(true, false)];
+
+        $player->getNetworkSession()->sendDataPacket($pk);
     }
 
 }
