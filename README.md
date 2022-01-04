@@ -1,26 +1,69 @@
 # AdvanceDeaths
 [![](https://poggit.pmmp.io/shield.state/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths) [![](https://poggit.pmmp.io/shield.dl.total/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths) [![](https://poggit.pmmp.io/shield.dl/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths) [![](https://poggit.pmmp.io/shield.api/AdvanceDeaths)](https://poggit.pmmp.io/p/AdvanceDeaths)
 
+
 A plugin to take advantage of the Minecraft Death to improve your server.
 With this plugin you can customize death messages with advanced keywords.
 Vanilia like Instant Respawn, KDR, Kill and Death stats, including a Leaderboard!
 
 Read setup for more info!
 
+# Important
+When you are updating AdvanceDeaths to V3.0 make sure you delete the previous database.
+
 # Setup
 The setup is really easy, you'll just need to download the phar file at the plugins folder.
 After that reboot/start your server up, all configurations are now editable at the config.yml located at plugin_data/AdvanceDeaths. 
 If you own a sql server the set the parameters in the config.yml
 
-# What's new?
-- [x] Kill/Death Money
-- [x] Automatic Configuration Updater
-- [x] Added a command to see other player stats (/ads OR /advancedeaths)
-- [x] Fixed bugs
-- [x] Added GenericExplosion and failsafe to prevent crashing.
-- [x] KDR added to Scoreboard 
-- [X] Fixed ScoreBoard Bug where Kills/Deaths/KDR doesn't load.
-- [x] Pure Entities Support
+# Features
+Features:
+* Death Messages
+  * You can modify all the death messages with variables
+* EconomyAPI Support
+  * Gain/Lose money on both Death and Kill.
+* Commands
+  * Commands to see other player stats
+* Configuration
+  * All Configurations will be automatically updated from 2.0.0 to 2.5
+  * Configuration Validator to prevent crashes caused by mis-configured config file.
+* AI Mobs
+  * Pure Entities is now supported.
+* ScoreHud
+  * You can display a player Kills, Deaths or KDR on a scoreHud
+  * Multiworld is now supported
+* Instant Respawn
+  * Instant Respawn is now client sided unlike other plugins!
+* Leaderboards
+  * There are 3 leaderboards available that can be enabled on the config file. They include Kills, Killstreaks, and deaths leaderboards.
+* Effects
+  * There are currently two effects. `CreeperParticle` and `Lighting`.
+* Databases
+  * AdvanceDeaths supports SQLite and MySql Databases
+  * SQLite is preferred over MySql.
+  * Database queries are asynchronous
+* Particles
+  * You can enable hitted-hearts on config.yml to show hearts when a player is hit.
+* Killer Effetcs
+  * You can heal the killer after death.
+* Discord
+  * You can enable discord webhooks to display death messages in your discord server.
+  * You can also have support for the Discord Bot to get the ingame leaderboards.
+
+# Setting up the discord bot
+Steps:
+
+1] Enable RCON in your server from server.properties
+
+2] Add the AdvanceDeaths plugin to your server. Version 3 or higher should be installed.
+
+3] Add the bot to your server using this link. https://discord.com/api/oauth2/authorize?client_id=900282852577509436&permissions=537259089&scope=bot
+
+4] Run >help to see the list of command or run >setup to set your server up.
+
+If you ran into any errors, bugs, something isn't working or if you need help.
+
+Join the discord server.
 
 # Bug Report
 Found a bug?
@@ -52,18 +95,20 @@ Found a bug?
 | {player_deaths}       | Deaths of the player                    | Player                             |
 | {killer_kdr}          | KDR of the killer                       | Player                             |
 | {player_kdr}          | KDR of the player                       | Player                             |
+| {killer_killstreak}   | Killstreak of the killer                | Player                             |
 
 # Commands
 | Command       | Description                 | Permission        | Default |
 |---------------|-----------------------------|-------------------|---------|
 | advancedeaths | See an online player stats. | advancedeaths.use | True    |
 | ads           | See an online player stats. | advancedeaths.use | True    |
+
 # Photos
-<img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/FloatingText.png">
+<img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/Kill.jpg">
+<img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/Deaths.jpg">
+<img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/Killstreak.png">
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/ScoreBoard.png">
 <img src="https://github.com/ErikPDev/AdvanceDeaths/raw/master/assets/Form.png">
-# Config file
-If you are updating AdvanceDeaths, Make sure you rename the old file to something else other than `config.yml`
 
 # Effects
 There are currently two effects supported.
@@ -77,6 +122,10 @@ Special thank to minijaham for helping me out with this project, and Primus for 
 Usage example:
 `$AdvanceDeathDatabase = new \ErikPDev\AdvanceDeaths\utils\DatabaseProvider($AdvanceDeathsMain);`
 Check out the source code to see how to use it, or create an issue.
+
+# Used by:
+Create an issue or open an ticket on discord to add you server to this list.
+
 # Minecraft color coding
 Color coding the death messages is possible!
 Here's a list of color codes.

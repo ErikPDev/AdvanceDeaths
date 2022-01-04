@@ -35,7 +35,9 @@ class configValidator{
             "explosion" => "string",
             "GenericExplosion" => "string",
             "database" => "array",
-            "config-verison" => "float"
+            "config-verison" => "float",
+            "DiscordEnabled" => "bool",
+            "discordWebHook" => "string"
         );
         
     }

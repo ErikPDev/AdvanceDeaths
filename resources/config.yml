@@ -10,7 +10,7 @@
 # {player_deaths} - Deaths of the player
 # {killer_kdr} - KDR of the killer
 # {player_kdr} - KDR of the player
-
+# {killer_killstreak} - Kill streak of the killer
 # Warning! The Keywords are case-sensitive!! 
 
 # § - Custom color format, Same like minecraft default
@@ -42,16 +42,23 @@ HealMessage: "You have been healed!" # Message to send to the Player when it's h
 
 instant-respawn: true # Set this to true if you want the player to instantly respawn.
 
+# Discord Configuration
+DiscordEnabled: false
+discordWebHook: "https://discord.com/api/webhooks/"
+
+# End of Discord Configuration
 # Start of Death/Kill Money Config, NOTICE: EconomyAPI needs to be installed!
 
 # Possible Type:
   # all - Takes all of the Player Money when it dies.
-  # percent - Removes a percentage of the player money.
-  # amount - Removed the amount of money.
+  # percent - Removes/Gives a percentage of the player money.
+  # amount - Removed/Gives the amount of money.
+  # playerMoney - Gives/Removes the player money
 
 # Possible ValueType:
   # gain = The player will gain x amount of money.
   # lose = The player will lose x amount of money.
+
 DeathMoneyConfig: {
   isEnabled: true,
   disabledOnWorlds: [
@@ -59,7 +66,7 @@ DeathMoneyConfig: {
   ],
   type: "percent",
   ValueType: "lose",
-  amount: 10 # This does not need to be set if Type is set to "all" or "half"
+  amount: 10 # This does not need to be set if Type is set to "all", "half" or "playerMoney"
 }
 
 KillMoneyConfig: {
@@ -69,7 +76,7 @@ KillMoneyConfig: {
   ],
   type: "percent",
   ValueType: "gain",
-  amount: 10 # This does not need to be set if Type is set to "all" or "half"
+  amount: 10 # This does not need to be set if Type is set to "all", "half" or "playerMoney"
 }
 
 
@@ -82,15 +89,35 @@ NotOnWorlds: [ # Level names entered below on this array will not have the Death
 ]
 # End of Death Effect
 
-# Start of FloatingText Leaderboard config
-FEnableFloatingText: false # Set this to true to enable the floating text Leaderboard!
-FLeaderboardWorld: "TheWorldTheLeaderboardWillBeIn" # The world where the floating text will spawn in. Make sure it's the folder name.
-FLeaderBoardCoordinates: { # The coordinates where the floating text should be.
+# Start of FloatingText **Kills** Leaderboard config
+KillsFEnableFloatingText: false # Set this to true to enable the floating text Leaderboard!
+KillsFLeaderboardWorld: "TheWorldTheLeaderboardWillBeIn" # The world where the floating text will spawn in. Make sure it's the folder name.
+KillsFLeaderBoardCoordinates: { # The coordinates where the floating text should be.
   X: 250,
   Y: 77,
   Z: 273
 }
-# End of FloatingText Leaderboard config
+# End of FloatingText **Kills** Leaderboard config
+
+# Start of FloatingText **Deaths** Leaderboard config
+DeathsFEnableFloatingText: false # Set this to true to enable the floating text Leaderboard!
+DeathsFLeaderboardWorld: "TheWorldTheLeaderboardWillBeIn" # The world where the floating text will spawn in. Make sure it's the folder name.
+DeathsFLeaderBoardCoordinates: { # The coordinates where the floating text should be.
+  X: 250,
+  Y: 77,
+  Z: 275
+}
+# End of FloatingText **Deaths** Leaderboard config
+
+# Start of FloatingText **Killstreaks** Leaderboard config
+KillstreaksFEnableFloatingText: false # Set this to true to enable the floating text Leaderboard!
+KillstreaksFLeaderboardWorld: "TheWorldTheLeaderboardWillBeIn" # The world where the floating text will spawn in. Make sure it's the folder name.
+KillstreaksFLeaderBoardCoordinates: { # The coordinates where the floating text should be.
+  X: 250,
+  Y: 77,
+  Z: 275
+}
+# End of FloatingText **Killstreaks** Leaderboard config
 
 generic: "{name} died" # The player killed himself or he died by /kill.
 player: "{killer}[K:{killer_kills}][D:{killer_deaths}][KDR:{killer_kdr}] [{killerCurrentHealth}/{killerMaxHealth}] killed {name}[K:{player_kills}][D:{player_deaths}][KDR:{player_kdr}] with {weapon}" # When a player got killed by another player.
@@ -116,7 +143,7 @@ database:
   sqlite:
     # The file name of the database in the plugin data folder.
     # You can also put an absolute path here.
-    file: data.sqlite
+    file: V3data.sqlite
   # Edit these settings only if you choose "mysql".
   mysql:
     host: 127.0.0.1
@@ -131,4 +158,4 @@ database:
 
 
 # Don't modify the below value, or delete it.
-config-verison: 2.2
+config-verison: 2.4

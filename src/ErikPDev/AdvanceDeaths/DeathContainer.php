@@ -4,7 +4,7 @@ namespace ErikPDev\AdvanceDeaths;
 use ErikPDev\AdvanceDeaths\DeathTypes;
 use ErikPDev\AdvanceDeaths\Main;
 use ErikPDev\AdvanceDeaths\utils\DatabaseProvider;
-use pocketmine\player\Player;
+use pocketmine\Player;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 class DeathContainer {
     /** @var Main */
@@ -64,20 +64,20 @@ class DeathContainer {
         preg_match_all("/{(\w+)}/", $DeathMessage, $KeyWordsFound);
         foreach ($KeyWordsFound[0] as $value => $KeyWord) {
             if($entity->getLastDamageCause() instanceof EntityDamageByEntityEvent){
-                if($KeyWord == "{killer_kills}" || $KeyWord == "{killer_deaths}"  || $KeyWord == "{player_kills}" || $KeyWord == "{player_deaths}" || $KeyWord == "{player_kdr}" || $KeyWord == "{killer_kdr}"){continue;}      
+                if($KeyWord == "{killer_kills}" || $KeyWord == "{killer_deaths}"  || $KeyWord == "{player_kills}" || $KeyWord == "{player_deaths}" || $KeyWord == "{player_kdr}" || $KeyWord == "{killer_kdr}" || $KeyWord == "{killer_killstreak}"){continue;}      
             }
             $DeathMessage = str_replace($KeyWord, $this->ExecuteHelper($entity, $KeyWord, $translate->getText()), $DeathMessage);
         }
         
         preg_match_all("/{(\w+)}/", $DeathMessage, $RemaningMatches);
-        if(count($RemaningMatches[0]) == 0) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+        if(count($RemaningMatches[0]) == 0) return $this->broadcast($DeathMessage);
         foreach ($RemaningMatches[0] as $value => $RemainingKeyWord){
             if($RemainingKeyWord == "{killer_kills}"){
                 $this->database->getDatabase()->executeSelect(DatabaseProvider::GET_KILLS, ["UUID" => $entity->getLastDamageCause()->getDamager()->getUniqueID()->toString()], 
                 function(array $rows) use (&$RemainingKeyWord, &$DeathMessage, &$RemaningMatches, $value){
                     $kills = $rows[0]["Kills"] ?? 0;
                     $DeathMessage = str_replace("{killer_kills}", (string)$kills, $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
 
@@ -86,7 +86,7 @@ class DeathContainer {
                 function(array $rows) use (&$RemainingKeyWord, &$DeathMessage, &$RemaningMatches, $value){
                     $deaths = $rows[0]["Deaths"] ?? 0;
                     $DeathMessage = str_replace("{killer_deaths}", (string)$deaths, $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
 
@@ -96,7 +96,7 @@ class DeathContainer {
                 function(array $rows) use (&$RemainingKeyWord, &$DeathMessage, &$RemaningMatches, $value){
                     $kills = $rows[0]["Kills"] ?? 0;
                     $DeathMessage = str_replace("{player_kills}", (string)$kills, $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
 
@@ -105,7 +105,7 @@ class DeathContainer {
                 function(array $rows) use (&$RemainingKeyWord, &$DeathMessage, &$RemaningMatches, $value){
                     $deaths = $rows[0]["Deaths"] ?? 0;
                     $DeathMessage = str_replace("{player_deaths}", (string)$deaths, $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
 
@@ -116,7 +116,7 @@ class DeathContainer {
                     $kills = $rows[0]["Kills"] ?? 0;
                     
                     $DeathMessage = str_replace("{player_kdr}", (string)DatabaseProvider::getKillToDeathRatio($kills, $deaths), $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
             
@@ -127,11 +127,30 @@ class DeathContainer {
                     $kills = $rows[0]["Kills"] ?? 0;
                     
                     $DeathMessage = str_replace("{killer_kdr}", (string)DatabaseProvider::getKillToDeathRatio($kills, $deaths), $DeathMessage);
-                    if((count($RemaningMatches[0])-1) == $value) return $this->plugin->getServer()->broadcastMessage($DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
                 });
             }
+
+            if($RemainingKeyWord == "{killer_killstreak}"){
+                $this->database->getDatabase()->executeSelect(DatabaseProvider::getKillstreak, ["UUID" => $entity->getLastDamageCause()->getDamager()->getUniqueID()->toString()], 
+                function(array $rows) use (&$RemainingKeyWord, &$DeathMessage, &$RemaningMatches, $value){
+                    $Killstreak = $rows[0]["Killstreak"] ?? 0;
+                    
+                    $DeathMessage = str_replace("{killer_killstreak}", (string)$Killstreak, $DeathMessage);
+                    if((count($RemaningMatches[0])-1) == $value) return $this->broadcast($DeathMessage);
+                });
+            }
+
         }
         
+    }
+
+
+    private function broadcast($message){
+        if($this->plugin->getConfig()->get("DiscordEnabled") == true){
+            $this->plugin->discord->sendMessage($message);
+        }
+        $this->plugin->getServer()->broadcastMessage($message);
     }
 
 
