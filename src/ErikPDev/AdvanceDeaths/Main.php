@@ -10,7 +10,7 @@ use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\world\particle\HeartParticle;
-
+use pocketmine\permission\DefaultPermissions;
 use ErikPDev\AdvanceDeaths\DeathContainer;
 use ErikPDev\AdvanceDeaths\utils\{
   DatabaseProvider,
