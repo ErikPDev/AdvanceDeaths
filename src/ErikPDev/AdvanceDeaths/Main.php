@@ -65,7 +65,7 @@ class Main extends PluginBase implements Listener {
 
       $this->advanceDeathsCommand = new advancedeaths($this, $this->database);
       $this->isUpdated = true;
-      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "3.0"));
+      Server::getInstance()->getAsyncPool()->submitTask(new Update("AdvanceDeaths", "3.4"));
       
       // Discord Webhook
       if($this->getConfig()->get("DiscordEnabled") == true){
