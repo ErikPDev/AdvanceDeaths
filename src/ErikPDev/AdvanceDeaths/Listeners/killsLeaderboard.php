@@ -16,8 +16,8 @@ class killsLeaderboard implements Listener{
     public function __construct($plugin){
         $pos = $plugin->getConfig()->get("KillsFLeaderBoardCoordinates");
         $this->world = $plugin->getConfig()->get("KillsFLeaderboardWorld");
-        if(!Server::getInstance()->isLevelLoaded($this->world)) {
-          Server::getInstance()->loadLevel($this->world);
+        if(!Server::getInstance()->isWorldLoaded($this->world)) {
+          Server::getInstance()->loadWorld($this->world);
         }
         if(!Server::getInstance()->getWorldManager()->getWorldByName($this->world)->isChunkLoaded($pos["X"] >> 4, $pos["Z"] >> 4)) {
           Server::getInstance()->getWorldManager()->getWorldByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
