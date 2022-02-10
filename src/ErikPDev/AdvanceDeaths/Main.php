@@ -3,7 +3,7 @@
 namespace ErikPDev\AdvanceDeaths;
 
 use pocketmine\plugin\PluginBase;
-use pocketmine\{Player, Server};
+use pocketmine\{player\Player,Server};
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
