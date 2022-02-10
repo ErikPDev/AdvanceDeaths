@@ -16,8 +16,8 @@ class killstreakLeaderBoard implements Listener{
     public function __construct($plugin){
         $pos = $plugin->getConfig()->get("KillstreaksFLeaderBoardCoordinates");
         $this->world = $plugin->getConfig()->get("KillstreaksFLeaderboardWorld");
-        if(!Server::getInstance()->isWorldLoaded($this->world)) {
-          Server::getInstance()->loadWorld($this->world);
+        if(!Server::getInstance()->getWorldManager()->isWorldLoaded($this->world)) {
+          Server::getInstance()->getWorldManager()->loadWorld($this->world);
         }
         if(!Server::getInstance()->getWorldManager()->getWorldByName($this->world)->isChunkLoaded($pos["X"] >> 4, $pos["Z"] >> 4)) {
           Server::getInstance()->getWorldManager()->getWorldByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
