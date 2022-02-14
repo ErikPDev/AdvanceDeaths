@@ -11,10 +11,18 @@ use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\player\PlayerDeathEvent;
 
 class killsLeaderboard implements Listener{
-    private $world;
-    private $KillsLeaderBoard;
+    /**
+     * @var string $world
+     * @var Vector3 $vector3pos
+     */
+    private $world,$vector3pos;
+    /**
+     * @var FloatingTextParticle $KillstreakLeaderBoard
+     */
+    private $KillstreakLeaderBoard;
     public function __construct($plugin){
         $pos = $plugin->getConfig()->get("KillsFLeaderBoardCoordinates");
+        $this->vector3pos = new Vector3($pos["X"],$pos["Y"],$pos["Z"]);
         $this->world = $plugin->getConfig()->get("KillsFLeaderboardWorld");
         if(!Server::getInstance()->getWorldManager()->isWorldLoaded($this->world)) {
           Server::getInstance()->getWorldManager()->loadWorld($this->world);
@@ -23,14 +31,14 @@ class killsLeaderboard implements Listener{
           Server::getInstance()->getWorldManager()->getWorldByName($this->world)->loadChunk($pos["X"] >> 4, $pos["Z"] >> 4);
         }
         
-        $this->KillsLeaderBoard = new FloatingTextParticle(new Vector3($pos["X"],$pos["Y"],$pos["Z"]), "Loading...", "§bAdvance§cDeaths§6 Kills");
+        $this->KillsLeaderBoard = new FloatingTextParticle("Loading...", "§bAdvance§cDeaths§6 Kills");
         $this->KillsLeaderBoard->setInvisible(false);
         $this->updateLeaderboard();
     }
 
     private function updateLeaderboard(){
         $this->KillsLeaderBoard->setText(leaderboardData::getKillsLeaderboard());
-        Server::getInstance()->getWorldManager()->getWorldByName($this->world)->addParticle($this->KillsLeaderBoard);
+        Server::getInstance()->getWorldManager()->getWorldByName($this->world)->addParticle($this->vector3pos, $this->KillsLeaderBoard);
     }
 
     public function disableLeaderboard(){
@@ -38,7 +46,7 @@ class killsLeaderboard implements Listener{
     }
 
     public function onJoin(PlayerJoinEvent $event){
-        Server::getInstance()->getWorldManager()->getWorldByName($this->world)->addParticle($this->KillsLeaderBoard, [$event->getPlayer()]);
+        Server::getInstance()->getWorldManager()->getWorldByName($this->world)->addParticle($this->vector3pos, $this->KillsLeaderBoard, [$event->getPlayer()]);
     }
 
     public function onDeath(PlayerDeathEvent $event){
