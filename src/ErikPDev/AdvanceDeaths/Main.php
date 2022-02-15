@@ -219,11 +219,11 @@ class Main extends PluginBase implements Listener {
         $pos = $player->getPosition();
 
         $count = 1;
-        $particle = new HeartParticle($pos, 0);
+        $particle = new HeartParticle(0);
 
         for($i = 0; $i < $count; ++$i){
           $particle->setComponents($pos->x, $pos->y+0.5, $pos->z);
-          $level->addParticle($particle);
+          $level->addParticle($pos, $particle);
         }
       }
     
