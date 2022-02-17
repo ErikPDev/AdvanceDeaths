@@ -21,7 +21,7 @@ class sendMessageTask extends AsyncTask {
         $this->webhook = $webhook;
 	}
 
-	public function onRun(){
+	public function onRun() : void{
 		$ch = curl_init($this->webhook);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($this->message));
 		curl_setopt($ch, CURLOPT_POST,true);
@@ -33,7 +33,8 @@ class sendMessageTask extends AsyncTask {
 		curl_close($ch);
 	}
 
-	public function onCompletion(Server $server){
+	public function onCompletion() : void{
+        $server = Server::getInstance();
 		$response = $this->getResult();
 		if(!in_array($response[1], [200, 204])){
 			$server->getLogger()->error("[AdvanceDeaths] Got error ({$response[1]}): " . $response[0]);
