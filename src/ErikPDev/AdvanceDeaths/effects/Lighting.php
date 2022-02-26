@@ -17,7 +17,7 @@ class Lighting{
         $player = $this->player;
         $light = new AddActorPacket();
         $light->type = "minecraft:lightning_bolt";
-        $light->entityRuntimeId = Entity::$entityCount++;
+        $light->entityRuntimeId = Entity::nextRuntimeId();
         $light->metadata = [];
         $light->motion = null;
         $light->yaw = $player->getYaw();
