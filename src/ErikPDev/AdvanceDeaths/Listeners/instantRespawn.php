@@ -19,7 +19,7 @@ class instantRespawn implements Listener{
      * @param PlayerJoinEvent $event
      */
     public function onJoin(PlayerJoinEvent $event){
-        $pk = new GameRulesChangedPacket::create(
+        $pk = GameRulesChangedPacket::create(
             ["doimmediaterespawn" => new BoolGameRule(true, false)]
         );
         $event->getPlayer()->getNetworkSession()->sendDataPacket($pk);
@@ -36,7 +36,7 @@ class instantRespawn implements Listener{
             return;
         }
         
-        $pk = new GameRulesChangedPacket::create(
+        $pk = GameRulesChangedPacket::create(
             ["doimmediaterespawn" => new BoolGameRule(true, false)]
         );
 
