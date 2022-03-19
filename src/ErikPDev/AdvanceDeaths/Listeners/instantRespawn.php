@@ -5,6 +5,7 @@ namespace ErikPDev\AdvanceDeaths\Listeners;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerJoinEvent;
 use pocketmine\event\entity\EntityTeleportEvent;
+use pocketmine\network\mcpe\protocol\GameRulesChangedPacket;
 use pocketmine\network\mcpe\protocol\types\BoolGameRule;
 use pocketmine\player\Player;
 class instantRespawn implements Listener{
@@ -18,8 +19,9 @@ class instantRespawn implements Listener{
      * @param PlayerJoinEvent $event
      */
     public function onJoin(PlayerJoinEvent $event){
-        $pk = new \pocketmine\network\mcpe\protocol\GameRulesChangedPacket();
-        $pk->gameRules = ["doimmediaterespawn" => new BoolGameRule(true, false)];
+        $pk = new GameRulesChangedPacket::create(
+            ["doimmediaterespawn" => new BoolGameRule(true, false)]
+        );
         $event->getPlayer()->getNetworkSession()->sendDataPacket($pk);
     }
     
@@ -34,8 +36,9 @@ class instantRespawn implements Listener{
             return;
         }
         
-        $pk = new \pocketmine\network\mcpe\protocol\GameRulesChangedPacket();
-        $pk->gameRules = ["doimmediaterespawn" => new BoolGameRule(true, false)];
+        $pk = new GameRulesChangedPacket::create(
+            ["doimmediaterespawn" => new BoolGameRule(true, false)]
+        );
 
         $player->getNetworkSession()->sendDataPacket($pk);
     }
