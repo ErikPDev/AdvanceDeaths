@@ -5,10 +5,10 @@ namespace ErikPDev\AdvanceDeaths\listeners;
 
 use ErikPDev\AdvanceDeaths\utils\database\databaseProvider;
 use Ifera\ScoreHud\event\PlayerTagsUpdateEvent;
+use Ifera\ScoreHud\event\ServerTagUpdateEvent;
 use Ifera\ScoreHud\event\TagsResolveEvent;
 use Ifera\ScoreHud\scoreboard\ScoreTag;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
-use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
@@ -52,7 +52,7 @@ class scoreHUDTags implements Listener {
 		if (!$damageCause instanceof EntityDamageByEntityEvent) return;
 		/** @var EntityDamageByEntityEvent $damageCause */
 
-		if(!$damageCause->getDamager() instanceof Player) return;
+		if (!$damageCause->getDamager() instanceof Player) return;
 		/** @var Player $damager */
 		$damager = $damageCause->getDamager();
 
@@ -63,7 +63,7 @@ class scoreHUDTags implements Listener {
 	public function onLevelChange(EntityTeleportEvent $event): void {
 
 		$entity = $event->getEntity();
-		if(!$entity instanceof Player) return;
+		if (!$entity instanceof Player) return;
 		/** @var Player $entity */
 		$this->updateTags($entity);
 
@@ -72,10 +72,10 @@ class scoreHUDTags implements Listener {
 
 	public function updateTags(Player $player) {
 
-		$promise = databaseProvider::getAll($player->getName());
+		$promiseAll = databaseProvider::getAll($player->getName());
 
-		$promise->onCompletion(function (array $data) use ($player) {
-			$ev1 = new PlayerTagsUpdateEvent(
+		$promiseAll->onCompletion(function (array $data) use ($player) {
+			$ev = new PlayerTagsUpdateEvent(
 				$player,
 				[
 					new ScoreTag("advancedeaths.myDeaths", strval($data["Deaths"])),
@@ -84,8 +84,19 @@ class scoreHUDTags implements Listener {
 					new ScoreTag("advancedeaths.kdr", strval(databaseProvider::getKillToDeathRatio($data["Kills"], $data["Deaths"])))
 				]
 			);
-			$ev1->call();
+			$ev->call();
 
+		},
+			function () {
+			});
+
+		$promiseKillsTop = databaseProvider::getTopKiller();
+
+		$promiseKillsTop->onCompletion(function (array $data) use ($player) {
+			$ev = new ServerTagUpdateEvent(
+				new ScoreTag("advancedeaths.topKiller", $data["PlayerName"])
+			);
+			$ev->call();
 		},
 			function () {
 			});

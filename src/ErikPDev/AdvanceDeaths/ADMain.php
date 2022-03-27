@@ -177,6 +177,7 @@ class ADMain extends PluginBase implements Listener {
 				$intervalKill = $this->getConfig()->getNested("killstreakAnnouncements")["annonuceEveryXKillstreaks"];
 				$isMultiple = !str_contains(strval($killstreak / $intervalKill), ".");
 				if (!$isMultiple) return;
+				if($killstreak == 0) return;
 				$translation = translationContainer::translate("killstreakAnnouncement", true, [
 					"1" => $damager->getName(),
 					"2" => $killstreak
