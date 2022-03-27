@@ -125,7 +125,6 @@ class ADMain extends PluginBase implements Listener {
 	private function runDeathScript(Player $player): void {
 
 		$deathByEntity = false;
-		/** @var EntityDamageByEntityEvent|EntityDamageEvent $damageCause */
 		$damageCause = $player->getLastDamageCause();
 		if ($damageCause instanceof EntityDamageByEntityEvent) {
 			$deathByEntity = true;
@@ -136,6 +135,7 @@ class ADMain extends PluginBase implements Listener {
 			$functionPlayer = $player;
 			if (strtolower($function->getPlayerWanted()) == "playerkiller") {
 				if ($deathByEntity == false) return;
+				/** @var EntityDamageByEntityEvent $damageCause */
 				$functionPlayer = $damageCause->getDamager();
 			}
 
