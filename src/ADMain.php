@@ -167,10 +167,12 @@ class ADMain extends PluginBase implements Listener {
 
 		if ($this->getConfig()->getNested("killstreakAnnouncements")["isEnabled"] == false) return;
 		if($damager == null) return;
+		if(!$damager instanceof Player) return;
 
 		$promise = databaseProvider::getKillstreaks($damager->getName());
 		$promise->onCompletion(
-			function ($data) use ($event, $damager) {
+			function ($data) use ($damager) {
+				/** @var Player $damager */
 				$killstreak = $data["Killstreak"];
 				$intervalKill = $this->getConfig()->getNested("killstreakAnnouncements")["annonuceEveryXKillstreaks"];
 				$isMultiple = !str_contains(strval($killstreak / $intervalKill), ".");
