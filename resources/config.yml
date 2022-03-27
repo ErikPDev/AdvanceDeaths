@@ -1,161 +1,34 @@
-# Keywords:
-# {name} - The player that got killed.
-# {killer} - The player who killed {name}
-# {killerCurrentHealth} - Shows the killer's health
-# {killerMaxHealth} - Shows the killer's Max Health
-# {weapon} - What weapon the killer used
-# {killer_kills} - Kills of the Killer
-# {player_kills} - Kills of the player
-# {killer_deaths} - Deaths of the Killer
-# {player_deaths} - Deaths of the player
-# {killer_kdr} - KDR of the killer
-# {player_kdr} - KDR of the player
-# {killer_killstreak} - Kill streak of the killer
-# Warning! The Keywords are case-sensitive!! 
 
-# § - Custom color format, Same like minecraft default
-# A list of color codes
-# | Color Name   | Code |
-# |--------------|------|
-# | Dark Red     | §4   |
-# | Red          | §c   |
-# | Gold         | §6   |
-# | Yellow       | §e   |
-# | Dark Yellow  | §g   |
-# | Dark Green   | §2   |
-# | Green        | §a   |
-# | Aqua         | §b   |
-# | Dark Aqua    | §3   |
-# | Dark Blue    | §1   |
-# | Blue         | §9   |
-# | Light Purple | §d   |
-# | Dark Purple  | §5   |
-# | White        | §f   |
-# | Gray         | §7   |
-# | Dark Gray    | §8   |
-# | Black        | §0   |
+# Death Money settings
 
+onDeathMoney:
+  isEnabled: true
+  disabled-worlds:
+    - "World1"
+    - "AntiDeathMoneyWorld"
+  type: "percent" # Possible values = percent/amount/playerMoney
+  valueType: "lose" # Possible values =  lose/gain
+  amount: 10
 
-Hitted-Hearts: true # Set this to true if you want to the player to show heart particle on hit.
-Heal-Killer: true # Set this to true if you want to heal the Killer when he kills a player.
-HealMessage: "You have been healed!" # Message to send to the Player when it's healed.
+onKillMoney:
+  isEnabled: true
+  disabled-worlds:
+    - "World1"
+    - "AntiKillMoneyWorld"
+  type: "percent" # Possible values = percent/amount/playerMoney
+  valueType: "lose" # Possible values = lose/gain
+  amount: 10
 
-instant-respawn: true # Set this to true if you want the player to instantly respawn.
-
-# Discord Configuration
-DiscordEnabled: false
-discordWebHook: "https://discord.com/api/webhooks/"
-
-# End of Discord Configuration
-# Start of Death/Kill Money Config, NOTICE: EconomyAPI needs to be installed!
-
-# Possible Type:
-  # all - Takes all of the Player Money when it dies.
-  # percent - Removes/Gives a percentage of the player money.
-  # amount - Removed/Gives the amount of money.
-  # playerMoney - Gives/Removes the player money
-
-# Possible ValueType:
-  # gain = The player will gain x amount of money.
-  # lose = The player will lose x amount of money.
-
-DeathMoneyConfig: {
-  isEnabled: true,
-  disabledOnWorlds: [
-    "DeathMoneyWillBeDisabledOnThisWorldName"
-  ],
-  type: "percent",
-  ValueType: "lose",
-  amount: 10 # This does not need to be set if Type is set to "all", "half" or "playerMoney"
-}
-
-KillMoneyConfig: {
-  isEnabled: true,
-  disabledOnWorlds: [
-    "KillMoneyWillBeDisabledOnThisWorldName"
-  ],
-  type: "percent",
-  ValueType: "gain",
-  amount: 10 # This does not need to be set if Type is set to "all", "half" or "playerMoney"
-}
-
-
-# End of Death/Kill Money Config
-
-# Start of Death Effect config
-onDeathEffect: "CreeperParticle" # Available death effect types: "None", and "CreeperParticle", and "Lighting". Please add more Types in Github.
-NotOnWorlds: [ # Level names entered below on this array will not have the Death Effect.
-  "AWorldWithNoDeathEffect"
-]
-# End of Death Effect
-
-# Start of FloatingText **Kills** Leaderboard config
-KillsFEnableFloatingText: false # Set this to true to enable the floating text Leaderboard!
-KillsFLeaderboardWorld: "TheWorldTheLeaderboardWillBeIn" # The world where the floating text will spawn in. Make sure it's the folder name.
-KillsFLeaderBoardCoordinates: { # The coordinates where the floating text should be.
-  X: 250,
-  Y: 77,
-  Z: 273
-}
-# End of FloatingText **Kills** Leaderboard config
-
-# Start of FloatingText **Deaths** Leaderboard config
-DeathsFEnableFloatingText: false # Set this to true to enable the floating text Leaderboard!
-DeathsFLeaderboardWorld: "TheWorldTheLeaderboardWillBeIn" # The world where the floating text will spawn in. Make sure it's the folder name.
-DeathsFLeaderBoardCoordinates: { # The coordinates where the floating text should be.
-  X: 250,
-  Y: 77,
-  Z: 275
-}
-# End of FloatingText **Deaths** Leaderboard config
-
-# Start of FloatingText **Killstreaks** Leaderboard config
-KillstreaksFEnableFloatingText: false # Set this to true to enable the floating text Leaderboard!
-KillstreaksFLeaderboardWorld: "TheWorldTheLeaderboardWillBeIn" # The world where the floating text will spawn in. Make sure it's the folder name.
-KillstreaksFLeaderBoardCoordinates: { # The coordinates where the floating text should be.
-  X: 250,
-  Y: 77,
-  Z: 275
-}
-# End of FloatingText **Killstreaks** Leaderboard config
-
-generic: "{name} died" # The player killed himself or he died by /kill.
-player: "{killer}[K:{killer_kills}][D:{killer_deaths}][KDR:{killer_kdr}] [{killerCurrentHealth}/{killerMaxHealth}] killed {name}[K:{player_kills}][D:{player_deaths}][KDR:{player_kdr}] with {weapon}" # When a player got killed by another player.
-mob: "{killer} killed {name}" # When a player got killed by a mob.
-outOfWorld: "{name} fell out of the world" # When a player fell out of the world.
-suffocation: "{name} suffocated to death" # When a player died from suffocation.
-onFire: "{name} burned to death" # When a player died on a fire.
-inFire: "{name} went up in flames" # When a player died from a fire.
-drown: "{name} drowned" # When a player drowned.
-explosion: "{name} exploded" # When a player died by an explosion.
-magic: "{name} died by magic" # When a player died by magic.
-cactus: "{name} was pricked to death" # When a player died by a cactus.
-highplace: "{name} fell from a high place" # When a player died from fall damage.
-arrow: "{name} was shot by {killer}" # When a player got shot with a arrow.
-lava: "{name} tried to swim in lava" # When a player died from lava.
-explosion: "{name} was blown up by {killer}" # When a player got blown up from a player or an entity.
-GenericExplosion: "{name} exploded."
-
-database:
-  # The database type. "sqlite" and "mysql" are supported.
-  type: sqlite # I reccomend using sqlite for faster speeds.
-  # Edit these settings only if you choose "sqlite".
-  sqlite:
-    # The file name of the database in the plugin data folder.
-    # You can also put an absolute path here.
-    file: V3data.sqlite
-  # Edit these settings only if you choose "mysql".
-  mysql:
-    host: 127.0.0.1
-    # Avoid using the "root" user for security reasons.
-    username: root
-    password: ""
-    schema: your_database_name # Database name
-  # The maximum number of simultaneous SQL queries
-  # Recommended: 1 for sqlite, 2 for MySQL. You may want to further increase this value if your MySQL connection is very slow.
-  worker-limit: 1
+# =====================
 
 
 
-# Don't modify the below value, or delete it.
-config-verison: 2.4
+# Instant respawn settings
+
+instant-respawn: false
+
+instant-respawn-disabled-worlds: # Instant respawn will be disabled in the below worlds.
+  - "World1"
+  - "AntiInstantRespawn"
+
+# ===========================

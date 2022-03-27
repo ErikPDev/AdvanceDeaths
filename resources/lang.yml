@@ -1,0 +1,10 @@
+deathMoney: "§aYou died and %1 $%2"
+killMoney: "§aYou killed and %1 $%2"
+adsCommandSuccess:
+  "\n
+  %PlayerName% status\n
+  Deaths: %Deaths%\n
+  Kills: %Kills%\n
+  Killstreak: %Killstreak%\n
+  "
+adsCommandError: "Player not found."

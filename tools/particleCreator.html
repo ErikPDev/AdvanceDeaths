@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Particle Creator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        input[type="color"] {
+            width: 80px;
+            height: 80px;
+            padding: 0px;
+            border: 0;
+        }
+
+        table {
+            display: inline;
+        }
+
+        body {
+            display: grid;
+            justify-content: center;
+        }
+
+        .a {
+            text-align: center;
+        }
+
+        .fillDiv {
+            margin: auto;
+        }
+
+        .fillDiv > * {
+            display: inline-block;
+            vertical-align: middle;
+        }
+    </style>
+</head>
+<body>
+
+<div class="fillDiv">
+    <button onclick="fillColor()">Fill color</button>
+    <input id="colorFill" type="color" value="#000000">
+</div>
+
+<table id="colorTable">
+    <tbody>
+    <tr>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+    </tr>
+    <tr>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+    </tr>
+    <tr>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+    </tr>
+    <tr>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+    </tr>
+    <tr>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+    </tr>
+    <tr>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+    </tr>
+    <tr>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+    </tr>
+    <tr>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+        <td><input type="color" value="#000000" colorpick-eyedropper-active="false"></td>
+    </tr>
+    </tbody>
+</table>
+
+<div class="a">
+    <p>If the color is #FFFFFF then it will be invisible, save particles to plugin_data\AdvanceDeaths\scripts\particles </p>
+    <br>
+    <button onclick="generate()"> Generate</button>
+    <br>
+    <label>Output:</label>
+    <br>
+    <textarea style="height: 50vh; width: 20vw;" id="output"></textarea>
+</div>
+
+<script>
+    function generate() {
+
+        var template = {
+            "particleType": "DustParticle",
+            "particleRatio": "square",
+            "particles": []
+        };
+
+        var table = document.getElementById("colorTable");
+
+        for (var i = 0, row; row = table.rows[i]; i++) {
+
+            var rowData = "";
+            for (var j = 0, col; col = row.cells[j]; j++) {
+                if (col.firstChild.value == "#FFFFFF") {
+                    rowData += "#0,";
+                } else {
+                    rowData += col.firstChild.value + ",";
+                }
+            }
+            rowData = rowData.slice(0, -1);
+            template["particles"].push(rowData);
+
+        }
+
+        document.getElementById("output").innerHTML = JSON.stringify(template, null, "\t");
+        downloadURI("data:text/plain;base64,"+ btoa(JSON.stringify(template, null, "\t")), "NameMeParticle.json");
+    }
+
+    function downloadURI(uri, name) {
+        const link = document.createElement("a");
+        // If you don't know the name or want to use
+        // the webserver default set name = ''
+        link.setAttribute('download', name);
+        link.href = uri;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+    }
+
+    function fillColor() {
+        var colorValue = document.getElementById("colorFill").value;
+        var table = document.getElementById("colorTable");
+
+        for (var i = 0, row; row = table.rows[i]; i++) {
+            for (var j = 0, col; col = row.cells[j]; j++) {
+                col.firstChild.value = colorValue;
+
+            }
+        }
+    }
+</script>
+</body>
+</html>

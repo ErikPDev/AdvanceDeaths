@@ -1,0 +1,12 @@
+# Possible script variables are:
+#   "Player" - The player that got killed
+# Possible script commands are:
+#   particle(ParticleName, Player/PlayerKiller)
+#   playsound(soundName, Player/PlayerKiller)
+#   message(Message, Player/PlayerKiller)
+#   heal(PlayerKiller)
+
+script:
+  - 'particle(creeper, Player)'
+  - 'playsound(ambient.weather.thunder, PlayerKiller)'
+  - 'message(You died noob., Player)'

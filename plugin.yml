@@ -1,22 +1,15 @@
+---
 name: AdvanceDeaths
-author: ErikPDev
+version: 0.0.1
+main: ErikPDev\AdvanceDeaths\ADMain
+src-namespace-prefix: ErikPDev\AdvanceDeaths
 api: 4.0.0
-version: 3.5
-main: ErikPDev\AdvanceDeaths\Main
-
 softdepend:
-  - EconomyAPI
-  - ScoreHud
-
-commands:
-  advancedeaths:
-    description: "See a player stat!"
-    permission: "advancedeaths.use"
-  ads:
-    description: "See a player stat!"
-    permission: "advancedeaths.use"
-
+  - "DiscordBot"
+  - "EconomyAPI"
+  - "Capital"
 permissions:
   advancedeaths.use:
     description: "Permission to use the AdvanceDeaths commands."
     default: true
+...

@@ -2,25 +2,25 @@
 -- #{ advancedeaths
 -- #    { init
 CREATE TABLE IF NOT EXISTS "AdvanceDeaths" (
-	"UUID"	TEXT UNIQUE,
-	"PlayerName" TEXT DEFAULT "?",
-	"Kills"	INTEGER DEFAULT 0,
-	"Deaths"	INTEGER DEFAULT 0,
-	"Killstreak" INTEGER DEFAULT 0,
-	PRIMARY KEY("UUID")
+    "UUID"	TEXT UNIQUE,
+    "PlayerName" TEXT DEFAULT "?",
+    "Kills"	INTEGER DEFAULT 0,
+    "Deaths"	INTEGER DEFAULT 0,
+    "Killstreak" INTEGER DEFAULT 0,
+    PRIMARY KEY("UUID")
 )
--- #    }
--- #    { addKill
+    -- #    }
+-- #    { increaseKill
 -- # 	  :UUID string
 -- # 	  :PlayerName string
 INSERT OR REPLACE INTO "AdvanceDeaths" ("UUID", "PlayerName", "Kills", "Deaths", "Killstreak") VALUES (:UUID, :PlayerName,(ifnull((select Kills from AdvanceDeaths where UUID = :UUID), 1) + 1), ifnull((select Deaths from AdvanceDeaths where UUID = :UUID), 0), ifnull((select Killstreak from AdvanceDeaths where UUID = :UUID), 0));
 -- #    }
--- #    { addDeath
+-- #    { increaseDeath
 -- # 	  :UUID string
 -- # 	  :PlayerName string
 INSERT OR REPLACE INTO "AdvanceDeaths" ("UUID", "PlayerName", "Deaths", "Kills", "Killstreak") VALUES (:UUID, :PlayerName, (ifnull((select Deaths from AdvanceDeaths where UUID = :UUID), 1) + 1), ifnull((select Kills from AdvanceDeaths where UUID = :UUID), 0), ifnull((select Killstreak from AdvanceDeaths where UUID = :UUID), 0));
 -- #    }
--- #    { addKillstreak
+-- #    { increaseKillstreak
 -- # 	  :UUID string
 -- # 	  :PlayerName string
 INSERT OR REPLACE INTO "AdvanceDeaths" ("UUID", "PlayerName", "Deaths", "Kills", "Killstreak") VALUES (:UUID, :PlayerName, ifnull((select Deaths from AdvanceDeaths where UUID = :UUID), 0), ifnull((select Kills from AdvanceDeaths where UUID = :UUID), 0), (ifnull((select Killstreak from AdvanceDeaths where UUID = :UUID), 0)+1));
@@ -31,20 +31,20 @@ INSERT OR REPLACE INTO "AdvanceDeaths" ("UUID", "PlayerName", "Deaths", "Kills",
 INSERT OR REPLACE INTO "AdvanceDeaths" ("UUID", "PlayerName", "Deaths", "Kills", "Killstreak") VALUES (:UUID, :PlayerName, ifnull((select Deaths from AdvanceDeaths where UUID = :UUID), 0), ifnull((select Kills from AdvanceDeaths where UUID = :UUID), 0), 0);
 -- #    }
 -- #	{ getKills
--- # 	  :UUID string
-SELECT Kills FROM AdvanceDeaths WHERE UUID = :UUID
+-- # 	  :PlayerName string
+SELECT Kills FROM AdvanceDeaths WHERE PlayerName = :PlayerName
 -- #    }
 -- #	{ getDeaths
--- # 	  :UUID string
-SELECT Deaths FROM AdvanceDeaths WHERE UUID = :UUID
+-- # 	  :PlayerName string
+SELECT Deaths FROM AdvanceDeaths WHERE PlayerName = :PlayerName
 -- #    }
--- #	{ getKills&Deaths
--- # 	  :UUID string
-SELECT Deaths, Kills FROM AdvanceDeaths WHERE UUID = :UUID
+-- #	{ getKills&Deaths&Killstreak
+-- # 	  :PlayerName string
+SELECT Deaths, Kills, Killstreak,PlayerName FROM AdvanceDeaths WHERE lower(PlayerName) LIKE lower(:PlayerName)
 -- #    }
 -- #	{ getKillstreak
--- # 	  :UUID string
-SELECT Killstreak FROM AdvanceDeaths WHERE UUID = :UUID
+-- # 	  :PlayerName string
+SELECT Killstreak FROM AdvanceDeaths WHERE PlayerName = :PlayerName
 -- #    }
 -- #	{ ScoreBoardTOP
 SELECT "PlayerName", "Kills" FROM "AdvanceDeaths" ORDER BY "Kills" DESC LIMIT 1;
