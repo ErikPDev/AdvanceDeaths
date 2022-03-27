@@ -75,7 +75,7 @@ class discordListener implements Listener {
 
 	public function onReady(DiscordReady $event) {
 
-		$ac = new Activity("0 players", Activity::TYPE_WATCHING);
+		$ac = new Activity("0 players & `".self::$prefix."`", Activity::TYPE_WATCHING);
 		self::$api->updateBotPresence($ac, Member::STATUS_OFFLINE);
 
 	}
@@ -103,14 +103,14 @@ class discordListener implements Listener {
 
 	public function playerJoin(PlayerJoinEvent $event) {
 
-		$ac = new Activity(count(Server::getInstance()->getOnlinePlayers()) . " players", Activity::TYPE_WATCHING);
+		$ac = new Activity(count(Server::getInstance()->getOnlinePlayers()) . " players & `".self::$prefix."`", Activity::TYPE_WATCHING);
 		self::$api->updateBotPresence($ac);
 
 	}
 
 	public function playerQuit(PlayerQuitEvent $event) {
 
-		$ac = new Activity(count(Server::getInstance()->getOnlinePlayers()) - 1 . " players", Activity::TYPE_WATCHING);
+		$ac = new Activity(count(Server::getInstance()->getOnlinePlayers()) - 1 . " players & `".self::$prefix."`", Activity::TYPE_WATCHING);
 		self::$api->updateBotPresence($ac);
 
 	}

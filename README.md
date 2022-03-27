@@ -30,7 +30,7 @@ You can modify Death Messages by changing the `deathMessages.yml` located in `pl
 - Download the latest phar of <a href="https://poggit.pmmp.io/p/DiscordBot">DiscordBot from poggit</a>
 - Set it up following the <a href="https://github.com/DiscordBot-PMMP/DiscordBot/wiki/Creating-your-discord-bot">DiscordBot Wiki</a>
 - Open the DiscordBot Configuration located at `plugin_data/DiscordBot/config.yml`
-- Set the token.>
+- Set the token.
 
 ### Step 2:
 - Open the AdvanceDeaths discordBot configuration located at `plugin_data/AdvanceDeaths/discordBot.yml`
@@ -68,6 +68,8 @@ You can modify Death Messages by changing the `deathMessages.yml` located in `pl
         - Gain / Lose on Kill / Death
         - EconomyAPI & BedrockEconomy is currently supported. Capital support is next.
     - Instant Respawn
+- ScoreHud
+  - ScoreHud support is automatically available, check the <a href="#scorehud">Available Tags</a>.
 - Leaderboards
     - Coming soon!
 - Discord
@@ -96,12 +98,13 @@ You can use variables to customize text to your own needs.
 ## ScoreHUD
 Here are the available scoreHUD tags.
 
-| Tag                     | Description             |
-|-------------------------|-------------------------|
-| advancedeaths.myDeaths  | Get's the player Deaths |
-| advancedeaths.myKills   | Get's the player Kills  |
-| advancedeaths.topKiller | Shows the Top Killer    |
-| advancedeaths.kdr       | Shows the player KDR    |
+| Tag                         | Description             |
+|-----------------------------|-------------------------|
+| advancedeaths.myDeaths      | Get's the player Deaths |
+| advancedeaths.myKills       | Get's the player Kills  |
+| advancedeaths.myKillstreaks | Shows the player KDR    |
+| advancedeaths.topKiller     | Shows the Top Killer    |
+| advancedeaths.kdr           | Shows the player KDR    |
 
 ## deathMessages.yml
 Here are the variables used to modify the death messages.

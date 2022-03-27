@@ -7,7 +7,6 @@ api: 4.0.0
 softdepend:
   - "DiscordBot"
   - "EconomyAPI"
-  - "Capital"
   - "BedrockEconomy"
   - "ScoreHud"
 permissions:

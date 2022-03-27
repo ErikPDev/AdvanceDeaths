@@ -199,4 +199,14 @@ class databaseProvider implements Listener {
 
 	}
 
+	public static function getKillToDeathRatio(int $kills, int $deaths): string {
+		if ($deaths !== 0) {
+			$ratio = $kills / $deaths;
+			if ($ratio !== 0) {
+				return number_format($ratio, 1);
+			}
+		}
+		return "0.0";
+	}
+
 }
