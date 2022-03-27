@@ -15,24 +15,24 @@ class Particle {
 
 	public function __construct(private stdClass $particleData, private string $playerWanted) {
 
-		if ($particleData->particleType !== "DustParticle") {
+		if ($this->particleData->particleType !== "DustParticle") {
 			ADMain::getInstance()->getLogger()->critical("ParticleType value is not supported.");
 			throw new \ErrorException("ParticleType value is not supported.");
 		}
 
-		if ($particleData->particleRatio !== "square") {
+		if ($this->particleData->particleRatio !== "square") {
 			ADMain::getInstance()->getLogger()->critical("ParticleRatio value is not supported.");
 			throw new \ErrorException("ParticleRatio value is not supported");
 		}
 
-		if (count($particleData->particles) !== 8) {
+		if (count($this->particleData->particles) !== 8) {
 			ADMain::getInstance()->getLogger()->critical("Particles Y list is invalid.");
 			throw new \ErrorException("Particles Y list is invalid");
 		}
 
 		$cancel = false;
 
-		foreach ($particleData->particles as $Y => $colors) {
+		foreach ($this->particleData->particles as $Y => $colors) {
 			if (count(explode(",", $colors)) !== 8) {
 				$cancel = true;
 			}
@@ -46,7 +46,7 @@ class Particle {
 		// Generate the Particle colors.
 
 		$particleColors = "";
-		foreach ($particleData->particles as $Y => $colors) {
+		foreach ($this->particleData->particles as $Y => $colors) {
 			$particleColors .= "$colors,";
 			$this->particles[$Y] = explode(",", $colors);
 		}

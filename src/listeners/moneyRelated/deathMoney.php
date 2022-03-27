@@ -45,7 +45,7 @@ class deathMoney implements Listener {
 
 		$player = $event->getPlayer();
 		$this->currencyManager->getMoney($player)->onCompletion(
-			function (?int $balance) use ($player, $event) {
+			function (?int $balance) use ($player) {
 				$amount = match ($this->configuration["type"]) {
 					"playerMoney" => $this->currencyManager->getMoney($player),
 					"amount" => $this->configuration["amount"],
