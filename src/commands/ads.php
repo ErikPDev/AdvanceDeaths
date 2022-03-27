@@ -44,6 +44,7 @@ class ads extends Command implements PluginOwned {
 		return true;
 	}
 
+	/** @noinspection PhpPureAttributeCanBeAddedInspection */
 	public function getOwningPlugin(): Plugin {
 
 		return ADMain::getInstance();

@@ -1,6 +1,6 @@
 ---
 name: AdvanceDeaths
-version: 0.0.1
+version: 4.0.0
 main: ErikPDev\AdvanceDeaths\ADMain
 src-namespace-prefix: ErikPDev\AdvanceDeaths
 api: 4.0.0

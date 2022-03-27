@@ -91,7 +91,7 @@ class ADMain extends PluginBase implements Listener {
 			Server::getInstance()->getPluginManager()->registerEvents(new discordListener(), $this);
 		}
 
-		if(Server::getInstance()->getPluginManager()->getPlugin("ScoreHud") !== null){
+		if (Server::getInstance()->getPluginManager()->getPlugin("ScoreHud") !== null) {
 			Server::getInstance()->getPluginManager()->registerEvents(new scoreHUDTags(), $this);
 		}
 
@@ -163,6 +163,27 @@ class ADMain extends PluginBase implements Listener {
 			$event->getPlayer(),
 			$damager
 		));
+
+
+		if ($this->getConfig()->getNested("killstreakAnnouncements")["isEnabled"] == false) return;
+		if($damager == null) return;
+
+		$promise = databaseProvider::getKillstreaks($damager->getName());
+		$promise->onCompletion(
+			function ($data) use ($event, $damager) {
+				$killstreak = $data["Killstreak"];
+				$intervalKill = $this->getConfig()->getNested("killstreakAnnouncements")["annonuceEveryXKillstreaks"];
+				$isMultiple = !str_contains(strval($killstreak / $intervalKill), ".");
+				if (!$isMultiple) return;
+				$translation = translationContainer::translate("killstreakAnnouncement", true, [
+					"1" => $damager->getName(),
+					"2" => $killstreak
+				]);
+				Server::getInstance()->broadcastMessage($translation);
+			},
+			function () {
+			}
+		);
 
 	}
 

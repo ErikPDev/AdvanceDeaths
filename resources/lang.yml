@@ -8,3 +8,4 @@ adsCommandSuccess:
   Killstreak: %Killstreak%\n
   "
 adsCommandError: "Player not found."
+killstreakAnnouncement: "%1 is on a killing streak of %2 kills" # Output: Steve is on a killing streak of 4 kills

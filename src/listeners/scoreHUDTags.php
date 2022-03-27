@@ -75,8 +75,6 @@ class scoreHUDTags implements Listener {
 		$promise = databaseProvider::getAll($player->getName());
 
 		$promise->onCompletion(function (array $data) use ($player) {
-			var_dump($data);
-			$kdr =
 			$ev1 = new PlayerTagsUpdateEvent(
 				$player,
 				[

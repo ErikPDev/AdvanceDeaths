@@ -1,3 +1,9 @@
+# Killstreaks announcements
+killstreakAnnouncements:
+  isEnabled: true # Possible values = true/false
+  annonuceEveryXKillstreaks: 5
+# --------------------------
+
 
 # Death Money settings
 

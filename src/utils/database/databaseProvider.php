@@ -105,6 +105,25 @@ class databaseProvider implements Listener {
 
 	}
 
+	public static function getKillstreaks(string $PlayerName): Promise {
+
+		$promise = new PromiseResolver();
+
+		self::$database->executeSelect(databaseQueries::$getKillStreak, ["PlayerName" => $PlayerName], function (array $data) use ($promise): void {
+
+			if (count($data) == 0) {
+				$promise->reject();
+				return;
+			}
+
+			$promise->resolve($data[0]);
+
+		});
+
+		return $promise->getPromise();
+
+	}
+
 	public static function getAll(string $PlayerName): Promise {
 
 		$promise = new PromiseResolver();
@@ -199,6 +218,7 @@ class databaseProvider implements Listener {
 
 	}
 
+	/** @noinspection PhpPureAttributeCanBeAddedInspection */
 	public static function getKillToDeathRatio(int $kills, int $deaths): string {
 		if ($deaths !== 0) {
 			$ratio = $kills / $deaths;

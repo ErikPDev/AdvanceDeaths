@@ -10,5 +10,5 @@ projects:
       phpstan: true
     libs:
       - src: poggit/libasynql/libasynql
-        version: ^4.0.1
+        version: ^3.0
 ...

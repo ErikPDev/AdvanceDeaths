@@ -43,8 +43,6 @@ class Particle {
 			throw new \ErrorException("Particles Z list invalid.");
 		}
 
-		// Generate the Particle colors.
-
 		$particleColors = "";
 		foreach ($this->particleData->particles as $Y => $colors) {
 			$particleColors .= "$colors,";

@@ -44,7 +44,7 @@ SELECT Deaths, Kills, Killstreak,PlayerName FROM AdvanceDeaths WHERE lower(Playe
 -- #    }
 -- #	{ getKillstreak
 -- # 	  :PlayerName string
-SELECT Killstreak FROM AdvanceDeaths WHERE PlayerName = :PlayerName
+SELECT Killstreak FROM AdvanceDeaths WHERE lower(PlayerName) = lower(:PlayerName)
 -- #    }
 -- #	{ ScoreBoardTOP
 SELECT "PlayerName", "Kills" FROM "AdvanceDeaths" ORDER BY "Kills" DESC LIMIT 1;

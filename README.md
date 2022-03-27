@@ -68,6 +68,7 @@ You can modify Death Messages by changing the `deathMessages.yml` located in `pl
         - Gain / Lose on Kill / Death
         - EconomyAPI & BedrockEconomy is currently supported. Capital support is next.
     - Instant Respawn
+    - Killstreaks Announcement.
 - ScoreHud
   - ScoreHud support is automatically available, check the <a href="#scorehud">Available Tags</a>.
 - Leaderboards
