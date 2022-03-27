@@ -92,7 +92,7 @@ class scoreHUDTags implements Listener {
 
 		$promiseKillsTop = databaseProvider::getTopKiller();
 
-		$promiseKillsTop->onCompletion(function (array $data) use ($player) {
+		$promiseKillsTop->onCompletion(function (array $data) {
 			$ev = new ServerTagUpdateEvent(
 				new ScoreTag("advancedeaths.topKiller", $data["PlayerName"])
 			);
