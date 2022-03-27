@@ -7,7 +7,7 @@
 #       You have to setup the discord bot in plugin_data/DiscordBot
 #         Set it's token then set isEnabled to true below me.
 
-isEnabled: true
+isEnabled: false
 
 prefix: ">"
 

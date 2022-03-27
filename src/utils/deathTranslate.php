@@ -4,6 +4,8 @@ namespace ErikPDev\AdvanceDeaths\utils;
 
 use ErikPDev\AdvanceDeaths\ADMain;
 use ErrorException;
+use pocketmine\entity\Entity;
+use pocketmine\entity\Human;
 use pocketmine\entity\Living;
 use pocketmine\player\Player;
 use pocketmine\utils\Config;
@@ -33,13 +35,15 @@ class deathTranslate {
 	 * @param Living|Player|null $murderer
 	 * @return string
 	 */
-	public function get(string $derive, Player|Living $victim, Living|Player $murderer = null): string {
+	public function get(string $derive, Player|Living $victim, Living|Human|Player $murderer = null): string {
 
 		$deriveMessage = str_replace("{victim}", $victim->getName(), $this->deriveMessages[$derive]);
 
 		if ($murderer == null) return $deriveMessage;
 		$deriveMessage = str_replace("{murdererHealth}", ($murderer->getHealth() . "/" . $murderer->getMaxHealth()), $deriveMessage);
 		$deriveMessage = str_replace("{murderer}", $murderer->getName(), $deriveMessage);
+		if(!$murderer instanceof Human || !$murderer instanceof Player) return $deriveMessage;
+		/** @var Human $murderer */
 		$deriveMessage = str_replace("{itemUsed}", $murderer->getInventory()->getItemInHand()->getName(), $deriveMessage);
 
 		return $deriveMessage;

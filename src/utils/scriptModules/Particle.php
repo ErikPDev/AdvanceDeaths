@@ -17,17 +17,17 @@ class Particle {
 
 		if ($particleData->particleType !== "DustParticle") {
 			ADMain::getInstance()->getLogger()->critical("ParticleType value is not supported.");
-			return false;
+			throw new \ErrorException("ParticleType value is not supported.");
 		}
 
 		if ($particleData->particleRatio !== "square") {
 			ADMain::getInstance()->getLogger()->critical("ParticleRatio value is not supported.");
-			return false;
+			throw new \ErrorException("ParticleRatio value is not supported");
 		}
 
 		if (count($particleData->particles) !== 8) {
 			ADMain::getInstance()->getLogger()->critical("Particles Y list is invalid.");
-			return false;
+			throw new \ErrorException("Particles Y list is invalid");
 		}
 
 		$cancel = false;
@@ -40,7 +40,7 @@ class Particle {
 
 		if ($cancel == true) {
 			ADMain::getInstance()->getLogger()->critical("Particles Z list is invalid.");
-			return false;
+			throw new \ErrorException("Particles Z list invalid.");
 		}
 
 		// Generate the Particle colors.
@@ -74,6 +74,7 @@ class Particle {
 			$YAxis = 0.0;
 			for ($YAxisP = 0; $YAxisP <= 7; ++$YAxisP) {
 				for ($XAxisP = 0; $XAxisP <= 7; ++$XAxisP) {
+					$pos = new Vector3($entity->getPosition()->x, $entity->getPosition()->y, $entity->getPosition()->z);
 					if ($i == 1) {
 						$YO = $entity->getPosition()->y + 3;
 						$XO = $entity->getPosition()->x + 0.7;

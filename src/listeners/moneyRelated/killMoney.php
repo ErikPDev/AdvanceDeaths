@@ -49,7 +49,9 @@ class killMoney implements Listener {
 		$damageCause = $event->getEntity()->getLastDamageCause();
 
 		if (!$damageCause instanceof EntityDamageByEntityEvent) return;
+		if(!$damageCause->getDamager() instanceof Player) return;
 
+		/** @var Player $player */
 		$player = $damageCause->getDamager();
 		$this->currencyManager->getMoney($player)->onCompletion(
 			function (?int $balance) use ($player, $event) {
@@ -64,8 +66,7 @@ class killMoney implements Listener {
 				$player->sendMessage(translationContainer::translate("deathMoney", true, array("1" => self::$wordTranslation[$this->configuration["valueType"]], "2" => $amount)));
 
 			},
-			function () {
-			});
+		function(){});
 	}
 
 }
