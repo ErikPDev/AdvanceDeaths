@@ -3,7 +3,6 @@
 namespace ErikPDev\AdvanceDeaths\commands;
 
 use ErikPDev\AdvanceDeaths\ADMain;
-use ErikPDev\AdvanceDeaths\discord\discordListener;
 use ErikPDev\AdvanceDeaths\utils\database\databaseProvider;
 use ErikPDev\AdvanceDeaths\utils\translationContainer;
 use pocketmine\command\Command;
