@@ -45,12 +45,18 @@ class scoreHUDTags implements Listener {
 
 	public function onDeath(PlayerDeathEvent $event) {
 
-		/** @var EntityDamageByEntityEvent|EntityDamageEvent $damageCause */
+		$this->updateTags($event->getPlayer());
+
 		$damageCause = $event->getEntity()->getLastDamageCause();
 
-		if ($damageCause instanceof EntityDamageByEntityEvent) return;
+		if (!$damageCause instanceof EntityDamageByEntityEvent) return;
+		/** @var EntityDamageByEntityEvent $damageCause */
 
-		$this->updateTags($damageCause->getDamager());
+		if(!$damageCause->getDamager() instanceof Player) return;
+		/** @var Player $damager */
+		$damager = $damageCause->getDamager();
+
+		$this->updateTags($damager);
 
 	}
 
