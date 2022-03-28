@@ -35,7 +35,21 @@ class deathTranslate {
 	 * @param Living|Player|null $murderer
 	 * @return string
 	 */
-	public function get(string $derive, Player|Living $victim, Living|Human|Player $murderer = null): string {
+	public function get(string $derive, Player|Living $victim, Entity|Human|Player $murderer = null): string {
+
+		if($derive == "death.attack.player"){
+
+			if($murderer instanceof Human || $murderer instanceof Player){
+
+				if($murderer->getInventory()->getItemInHand()->getCustomName() !== ""){
+
+					$derive = "death.attack.player.item";
+
+				}
+
+			}
+
+		}
 
 		$deriveMessage = str_replace("{victim}", $victim->getName(), $this->deriveMessages[$derive]);
 
@@ -44,7 +58,7 @@ class deathTranslate {
 		$deriveMessage = str_replace("{murderer}", $murderer->getName(), $deriveMessage);
 		if(!$murderer instanceof Human || !$murderer instanceof Player) return $deriveMessage;
 		/** @var Human $murderer */
-		$deriveMessage = str_replace("{itemUsed}", $murderer->getInventory()->getItemInHand()->getName(), $deriveMessage);
+		$deriveMessage = str_replace("{itemUsed}", $murderer->getInventory()->getItemInHand()->getCustomName()."§r", $deriveMessage);
 
 		return $deriveMessage;
 
