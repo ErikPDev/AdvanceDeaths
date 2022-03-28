@@ -39,7 +39,7 @@ class deathTranslate {
 
 		if($derive == "death.attack.player"){
 
-			if($murderer instanceof Human || $murderer instanceof Player){
+			if($murderer instanceof Player){
 
 				if($murderer->getInventory()->getItemInHand()->getCustomName() !== ""){
 
