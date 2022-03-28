@@ -31,6 +31,11 @@ class ADMain extends PluginBase implements Listener {
 
 		$this->saveResources();
 
+		if($this->getConfig()->get("config-version",1) !== 4){
+			$this->getLogger()->critical("Your configuration is outdated. Delete or rename the old one to update it.");
+			Server::getInstance()->getPluginManager()->disablePlugin($this);
+		}
+
 		self::$instance = $this;
 
 		$this->deathTranslate = new deathTranslate();

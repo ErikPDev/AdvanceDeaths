@@ -38,3 +38,8 @@ instant-respawn-disabled-worlds: # Instant respawn will be disabled in the below
   - "AntiInstantRespawn"
 
 # ===========================
+
+
+# Don't modify the below settings
+config-version: 4
+# -------------------------------
