@@ -4,6 +4,7 @@ namespace ErikPDev\AdvanceDeaths;
 
 use ErikPDev\AdvanceDeaths\commands\ads;
 use ErikPDev\AdvanceDeaths\discord\discordListener;
+use ErikPDev\AdvanceDeaths\leaderboards\events\leaderboardClose;
 use ErikPDev\AdvanceDeaths\leaderboards\leaderboard;
 use ErikPDev\AdvanceDeaths\listeners\instantRespawn;
 use ErikPDev\AdvanceDeaths\listeners\moneyRelated\deathMoney;
@@ -57,6 +58,8 @@ class ADMain extends PluginBase implements Listener {
 	public function onDisable(): void {
 
 		databaseProvider::close();
+		$event = new leaderboardClose();
+		$event->call();
 
 	}
 

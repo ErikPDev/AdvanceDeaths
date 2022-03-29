@@ -3,6 +3,7 @@
 namespace ErikPDev\AdvanceDeaths\leaderboards;
 
 use ErikPDev\AdvanceDeaths\ADMain;
+use ErikPDev\AdvanceDeaths\leaderboards\events\leaderboardClose;
 use ErikPDev\AdvanceDeaths\leaderboards\events\leaderboardDataUpdate;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
@@ -59,7 +60,7 @@ class leaderboard implements Listener {
 
 	}
 
-	public function onDisabled(\pocketmine\event\plugin\PluginDisableEvent $event){
+	public function onDisabled(leaderboardClose $event){
 
 		$this->leaderboard->setInvisible(true);
 
@@ -67,25 +68,12 @@ class leaderboard implements Listener {
 
 	public function dataUpdate(leaderboardDataUpdate $event) {
 
-		switch($this->type){
-
-			case 0:
-				$typeName = "Kills";
-				break;
-
-			case 1:
-				$typeName = "Deaths";
-				break;
-
-			case 2:
-				$typeName = "Killstreak";
-				break;
-
-			default:
-				$typeName = "?";
-				break;
-
-		}
+		$typeName = match ($this->type) {
+			0 => "Kills",
+			1 => "Deaths",
+			2 => "Killstreak",
+			default => "?",
+		};
 
 		$data = $event->getData()[$typeName];
 		$text = "";
