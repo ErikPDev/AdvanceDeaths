@@ -9,6 +9,7 @@ use ErikPDev\AdvanceDeaths\discord\commands\players;
 use ErikPDev\AdvanceDeaths\discord\commands\topdeaths;
 use ErikPDev\AdvanceDeaths\discord\commands\topkills;
 use ErikPDev\AdvanceDeaths\discord\commands\topkillstreaks;
+use ErikPDev\AdvanceDeaths\discord\commands\version;
 use JaxkDev\DiscordBot\Models\Activity;
 use JaxkDev\DiscordBot\Models\Member;
 use JaxkDev\DiscordBot\Models\Messages\Embed\Embed;
@@ -54,6 +55,7 @@ class discordListener implements Listener {
 			"topkills" => new topkills("topkills", "Get top kills", self::$api, self::getTemplate("topkills")),
 			"topdeaths" => new topdeaths("topdeaths", "Get top deaths", self::$api, self::getTemplate("topdeaths")),
 			"topkillstreaks" => new topkillstreaks("topkillstreaks", "Get top killstreaks", self::$api, self::getTemplate("topkillstreaks")),
+			"version" => 	new version("version", "Version Information", self::$api, array()),
 			"help" => new help("help", "All commands", self::$api, null)
 		);
 
