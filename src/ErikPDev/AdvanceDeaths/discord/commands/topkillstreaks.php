@@ -10,7 +10,7 @@ class topkillstreaks extends simpleCommand {
 
 	public function run(Message $message, array $args): void {
 
-		$data = databaseProvider::$data["killstreaks"];
+		$data = databaseProvider::$data["Killstreak"];
 
 		$fields = [];
 

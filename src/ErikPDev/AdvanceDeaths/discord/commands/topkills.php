@@ -10,7 +10,7 @@ class topkills extends simpleCommand {
 
 	public function run(Message $message, array $args): void {
 
-		$data = databaseProvider::$data["kills"];
+		$data = databaseProvider::$data["Kills"];
 
 		$fields = [];
 

@@ -10,7 +10,7 @@ class topdeaths extends simpleCommand {
 
 	public function run(Message $message, array $args): void {
 
-		$data = databaseProvider::$data["deaths"];
+		$data = databaseProvider::$data["Deaths"];
 
 		$fields = [];
 
