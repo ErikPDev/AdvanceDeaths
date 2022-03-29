@@ -87,7 +87,6 @@ class leaderboard implements Listener {
 
 		$this->leaderboard->setText($text);
 
-
 	}
 
 	public function onJoin(PlayerJoinEvent $event) {
@@ -97,7 +96,9 @@ class leaderboard implements Listener {
 	}
 
 	public function onDeath(PlayerDeathEvent $event) {
+
 		$this->addParticle();
+
 	}
 
 }

@@ -14,6 +14,7 @@ use ErikPDev\AdvanceDeaths\utils\database\databaseProvider;
 use ErikPDev\AdvanceDeaths\utils\deathTranslate;
 use ErikPDev\AdvanceDeaths\utils\scriptModules\scriptToData;
 use ErikPDev\AdvanceDeaths\utils\translationContainer;
+use pocketmine\block\VanillaBlocks;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
@@ -22,6 +23,7 @@ use pocketmine\player\Player;
 use pocketmine\plugin\PluginBase;
 use pocketmine\Server;
 use pocketmine\utils\Config;
+use pocketmine\world\particle\BlockBreakParticle;
 
 class ADMain extends PluginBase implements Listener {
 
@@ -29,11 +31,13 @@ class ADMain extends PluginBase implements Listener {
 	private static ADMain $instance;
 	private array $onDeathScript;
 
+	private BlockBreakParticle $bloodFXParticle;
+
 	protected function onEnable(): void {
 
 		$this->saveResources();
 
-		if($this->getConfig()->get("config-version",1) !== 4){
+		if ($this->getConfig()->get("config-version", 1) !== 4) {
 			$this->getLogger()->critical("Your configuration is outdated. Delete or rename the old one to update it.");
 			Server::getInstance()->getPluginManager()->disablePlugin($this);
 			return;
@@ -52,6 +56,10 @@ class ADMain extends PluginBase implements Listener {
 		$this->loadScripts();
 
 		$this->getServer()->getCommandMap()->register("ads", new ads());
+
+		// Just some random variables
+
+		$this->bloodFXParticle = new BlockBreakParticle(VanillaBlocks::REDSTONE());
 
 	}
 
@@ -105,20 +113,20 @@ class ADMain extends PluginBase implements Listener {
 			Server::getInstance()->getPluginManager()->registerEvents(new scoreHUDTags(), $this);
 		}
 
-		$leaderboardConfiguration = new Config($this->getDataFolder()."leaderboards.yml");
+		$leaderboardConfiguration = new Config($this->getDataFolder() . "leaderboards.yml");
 
 		$killsConfiguration = $leaderboardConfiguration->getNested("kills");
-		if($killsConfiguration["isEnabled"] == true){
+		if ($killsConfiguration["isEnabled"] == true) {
 			Server::getInstance()->getPluginManager()->registerEvents(new leaderboard($killsConfiguration, 0), $this);
 		}
 
 		$deathsConfiguration = $leaderboardConfiguration->getNested("deaths");
-		if($deathsConfiguration["isEnabled"] == true){
+		if ($deathsConfiguration["isEnabled"] == true) {
 			Server::getInstance()->getPluginManager()->registerEvents(new leaderboard($deathsConfiguration, 1), $this);
 		}
 
 		$killstreaksConfiguration = $leaderboardConfiguration->getNested("killstreaks");
-		if($killstreaksConfiguration["isEnabled"] == true){
+		if ($killstreaksConfiguration["isEnabled"] == true) {
 			Server::getInstance()->getPluginManager()->registerEvents(new leaderboard($killstreaksConfiguration, 2), $this);
 		}
 
@@ -171,6 +179,16 @@ class ADMain extends PluginBase implements Listener {
 
 	}
 
+	public function entityDamage(EntityDamageEvent $event) {
+
+		if ($this->getConfig()->get("bloodHit", true) == true) {
+
+			$event->getEntity()->getWorld()->addParticle($event->getEntity()->getPosition()->add(0, 1, 0), $this->bloodFXParticle);
+
+		}
+
+	}
+
 	/**
 	 * @priority LOWEST
 	 */
@@ -193,8 +211,8 @@ class ADMain extends PluginBase implements Listener {
 
 
 		if ($this->getConfig()->getNested("killstreakAnnouncements")["isEnabled"] == false) return;
-		if($damager == null) return;
-		if(!$damager instanceof Player) return;
+		if ($damager == null) return;
+		if (!$damager instanceof Player) return;
 
 		$promise = databaseProvider::getKillstreaks($damager->getName());
 		$promise->onCompletion(
@@ -204,7 +222,7 @@ class ADMain extends PluginBase implements Listener {
 				$intervalKill = $this->getConfig()->getNested("killstreakAnnouncements")["annonuceEveryXKillstreaks"];
 				$isMultiple = !str_contains(strval($killstreak / $intervalKill), ".");
 				if (!$isMultiple) return;
-				if($killstreak == 0) return;
+				if ($killstreak == 0) return;
 				$translation = translationContainer::translate("killstreakAnnouncement", true, [
 					"1" => $damager->getName(),
 					"2" => $killstreak

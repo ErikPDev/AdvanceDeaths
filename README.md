@@ -69,6 +69,8 @@ You can modify Death Messages by changing the `deathMessages.yml` located in `pl
         - EconomyAPI & BedrockEconomy is currently supported. Capital support is next.
     - Instant Respawn
     - Killstreaks Announcement.
+- Player/Entity Damage
+  - Blood FX - Configurable in the `config.yml`
 - ScoreHud
   - ScoreHud support is automatically available, check the <a href="#scorehud">Available Tags</a>.
 - Leaderboards
