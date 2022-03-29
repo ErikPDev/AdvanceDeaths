@@ -63,7 +63,7 @@ class killMoney implements Listener {
 				};
 
 				$this->modifyMoney($player, $amount, $this->configuration["valueType"]);
-				$player->sendMessage(translationContainer::translate("deathMoney", true, array("1" => self::$wordTranslation[$this->configuration["valueType"]], "2" => $amount)));
+				$player->sendMessage(translationContainer::translate("killMoney", true, array("1" => self::$wordTranslation[$this->configuration["valueType"]], "2" => $amount)));
 
 			},
 		function(){});
