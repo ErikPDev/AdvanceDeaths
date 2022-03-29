@@ -43,7 +43,6 @@ class currencyManager {
 		if ($this->pluginUsed == 1) {
 			$EconomyAPI = \onebone\economyapi\EconomyAPI::getInstance();
 			$money = $EconomyAPI->myMoney($player);
-			var_dump($money);
 			if (is_bool($money)) {
 				$money = 0;
 			}
