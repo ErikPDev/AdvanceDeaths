@@ -53,7 +53,7 @@ class deathTranslate {
 
 		$deriveMessage = str_replace("{victim}", $victim->getName(), $this->deriveMessages[$derive]);
 
-		if ($murderer == null) return $deriveMessage;
+		if ($murderer == null || !str_starts_with($derive, "death.attack.player")) return $deriveMessage;
 		$deriveMessage = str_replace("{murdererHealth}", ($murderer->getHealth() . "/" . $murderer->getMaxHealth()), $deriveMessage);
 		$deriveMessage = str_replace("{murderer}", $murderer->getName(), $deriveMessage);
 		if(!$murderer instanceof Human || !$murderer instanceof Player) return $deriveMessage;

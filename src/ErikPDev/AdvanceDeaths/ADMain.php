@@ -4,6 +4,7 @@ namespace ErikPDev\AdvanceDeaths;
 
 use ErikPDev\AdvanceDeaths\commands\ads;
 use ErikPDev\AdvanceDeaths\discord\discordListener;
+use ErikPDev\AdvanceDeaths\leaderboards\leaderboard;
 use ErikPDev\AdvanceDeaths\listeners\instantRespawn;
 use ErikPDev\AdvanceDeaths\listeners\moneyRelated\deathMoney;
 use ErikPDev\AdvanceDeaths\listeners\moneyRelated\killMoney;
@@ -99,6 +100,23 @@ class ADMain extends PluginBase implements Listener {
 
 		if (Server::getInstance()->getPluginManager()->getPlugin("ScoreHud") !== null) {
 			Server::getInstance()->getPluginManager()->registerEvents(new scoreHUDTags(), $this);
+		}
+
+		$leaderboardConfiguration = new Config($this->getDataFolder()."leaderboards.yml");
+
+		$killsConfiguration = $leaderboardConfiguration->getNested("kills");
+		if($killsConfiguration["isEnabled"] == true){
+			Server::getInstance()->getPluginManager()->registerEvents(new leaderboard($killsConfiguration, 0), $this);
+		}
+
+		$deathsConfiguration = $leaderboardConfiguration->getNested("deaths");
+		if($deathsConfiguration["isEnabled"] == true){
+			Server::getInstance()->getPluginManager()->registerEvents(new leaderboard($deathsConfiguration, 1), $this);
+		}
+
+		$killstreaksConfiguration = $leaderboardConfiguration->getNested("killstreaks");
+		if($killstreaksConfiguration["isEnabled"] == true){
+			Server::getInstance()->getPluginManager()->registerEvents(new leaderboard($killstreaksConfiguration, 2), $this);
 		}
 
 	}

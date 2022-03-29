@@ -3,6 +3,7 @@
 namespace ErikPDev\AdvanceDeaths\utils\database;
 
 use ErikPDev\AdvanceDeaths\ADMain;
+use ErikPDev\AdvanceDeaths\leaderboards\events\leaderboardDataUpdate;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
@@ -28,12 +29,17 @@ class databaseProvider implements Listener {
 		"worker-limit" => 1
 	);
 
+	public static array $data;
+
+
 	public function __construct() {
 
 		self::$database = libasynql::create(ADMain::getInstance(), self::$databaseConfiguration, [
 			"sqlite" => "sqlite.sql"
 		]);
 		self::$database->executeGeneric(databaseQueries::$prepareDatabase);
+
+		$this->refreshData();
 
 	}
 
@@ -216,12 +222,37 @@ class databaseProvider implements Listener {
 
 	}
 
+	public function refreshData(): void {
+
+		self::getTop5kills()->onCompletion(function ($data) {
+			self::$data["Kills"] = $data;
+		}, function () {
+		});
+
+		self::getTop5deaths()->onCompletion(function ($data) {
+			self::$data["Deaths"] = $data;
+		}, function () {
+		});
+
+		self::getTop5killstreaks()->onCompletion(function ($data) {
+			self::$data["Killstreak"] = $data;
+
+			$ev = new leaderboardDataUpdate(self::$data);
+			$ev->call();
+
+		}, function () {
+		});
+
+	}
+
 	public function deathEvent(PlayerDeathEvent $event) {
 
 		$player = $event->getPlayer();
 
 		self::endKillStreak($player->getUniqueId(), $player->getName());
 		self::increaseDeath($player->getUniqueId(), $player->getName());
+
+		$this->refreshData();
 
 		/** @var EntityDamageByEntityEvent|EntityDamageEvent $damageCause */
 		$damageCause = $event->getEntity()->getLastDamageCause();

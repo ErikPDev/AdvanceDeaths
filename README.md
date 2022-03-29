@@ -72,7 +72,10 @@ You can modify Death Messages by changing the `deathMessages.yml` located in `pl
 - ScoreHud
   - ScoreHud support is automatically available, check the <a href="#scorehud">Available Tags</a>.
 - Leaderboards
-    - Coming soon!
+    - Kills
+    - Deaths
+    - Killstreaks
+    - All leaderboards are customizable from `leaderboards.yml` located at `plugin_data\AdvanceDeaths`.
 - Discord
     - You can now create your own discord bot, follow <a src="https://github.com/ErikPDev/AdvanceDeaths/tree/master/wikis/SettingUpDiscordBot.md">this wiki</a>
     - Available discord bot commands:

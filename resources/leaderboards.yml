@@ -1,0 +1,18 @@
+
+kills:
+  isEnabled: true
+  worldName: "world"
+  coordinates: "246,74,236"
+  title: "§bAdvance§cDeaths§6 Kills"
+
+deaths:
+  isEnabled: true
+  worldName: "world"
+  coordinates: "246,74,250"
+  title: "§bAdvance§cDeaths§6 Deaths"
+
+killstreaks:
+  isEnabled: true
+  worldName: "world"
+  coordinates: "246,74,220"
+  title: "§bAdvance§cDeaths§6 Killstreaks"

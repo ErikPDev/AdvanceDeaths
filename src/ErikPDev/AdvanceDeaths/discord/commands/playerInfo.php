@@ -14,6 +14,7 @@ class playerInfo extends simpleCommand {
 			discordListener::sendEmbeddedMessage($message->getChannelId(), "❌ Insufficient args", "Usage: " . discordListener::$prefix . $this->getCommandName(), [], 16711680);
 			return;
 		}
+
 		$responsePromise = databaseProvider::getAll(str_replace("%", "", $args[0]) . "%");
 		$responsePromise->onCompletion(
 			function (array $data) use ($message) {
