@@ -42,7 +42,7 @@ class currencyManager {
 
 		if ($this->pluginUsed == 1) {
 			$EconomyAPI = \onebone\economyapi\EconomyAPI::getInstance();
-			$promise->resolve($EconomyAPI->myMoney($player));
+			$promise->resolve($EconomyAPI->myMoney($player) ?? 0);
 			return $promise->getPromise();
 		}
 
