@@ -1,0 +1,11 @@
+deathMoney: "§aYou died and %1 $%2"
+killMoney: "§aYou killed and %1 $%2"
+adsCommandSuccess:
+  "\n
+  %PlayerName% status\n
+  Deaths: %Deaths%\n
+  Kills: %Kills%\n
+  Killstreak: %Killstreak%\n
+  "
+adsCommandError: "Player not found."
+killstreakAnnouncement: "%1 is on a killing streak of %2 kills" # Output: Steve is on a killing streak of 4 kills
