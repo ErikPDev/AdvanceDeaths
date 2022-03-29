@@ -1,0 +1,11 @@
+deathMoney: "§aHas muerto y %1 $%2"
+killMoney: "§aHas matado y %1 $%2"
+adsCommandSuccess:
+  "\n
+  %PlayerName% estado\n
+  Muertes: %Deaths%\n
+  Asesinatos: %Kills%\n
+  Racha de asesinatos: %Killstreak%\n
+  "
+adsCommandError: "Jugador no encontrado."
+killstreakAnnouncement: "%1 está en una racha de %2 asesinatos" # Mensaje: Steve está en una racha de 4 asesinatos
