@@ -8,4 +8,4 @@ adsCommandSuccess:
   Racha de asesinatos: %Killstreak%\n
   "
 adsCommandError: "Jugador no encontrado."
-killstreakAnnouncement: "%1 está en una racha de %2 asesinatos" # Output: Steve is on a killing streak of 4 kills
+killstreakAnnouncement: "%1 está en una racha de %2 asesinatos" # Mensaje: Steve está en una racha de 4 asesinatos
