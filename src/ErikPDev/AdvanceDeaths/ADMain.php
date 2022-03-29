@@ -57,8 +57,6 @@ class ADMain extends PluginBase implements Listener {
 
 		$this->getServer()->getCommandMap()->register("ads", new ads());
 
-		// Just some random variables
-
 		$this->bloodFXParticle = new BlockBreakParticle(VanillaBlocks::REDSTONE());
 
 	}
