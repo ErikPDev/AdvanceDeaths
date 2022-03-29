@@ -98,6 +98,9 @@ Found a bug?
 - Write information about the bug, then click on `Submit new issue`.
 - After that, I'll look into it.
 
+# Contribution
+All contributions are welcomed, just make sure you follow the <a href="https://github.com/ErikPDev/AdvanceDeaths/blob/master/Formatting.md">formatting</a>.
+
 # Variables
 
 You can use variables to customize text to your own needs.
