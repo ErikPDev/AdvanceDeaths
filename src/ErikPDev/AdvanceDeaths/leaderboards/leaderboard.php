@@ -22,12 +22,13 @@ class leaderboard implements Listener {
 
 	public function __construct(public array $configuration, private int $type) {
 
-		$pos = explode(",", $this->configuration["coordinates"]);
+		$pos = [];
 
-		foreach ($pos as $value) {
+		foreach (explode(",", $this->configuration["coordinates"]) as $value) {
 			if (preg_match("/^\d+$/", $value) == false) {
 				throw new \ErrorException("Coordinates is not an integer in leaderboards.yml");
 			}
+			$pos[] = intval($value);
 		}
 
 		$this->vectorPos = new Vector3($pos[0], $pos[1], $pos[2]);
