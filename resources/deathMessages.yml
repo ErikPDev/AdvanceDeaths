@@ -37,7 +37,7 @@ deathMessages: # Sorted alphabetically
   death.attack.onFire: "{victim} burned to death"
   death.attack.onFire.player: "{victim} was burnt to a crisp whilst fighting {murderer}"
   death.attack.outOfWorld: "{victim} fell out of the world"
-  death.attack.player: "{victim} was slain by {murderer} using {itemUsed}"
+  death.attack.player: "{victim} was slain by {murderer}" # Optional variables: {itemUsed}
   death.attack.player.item: "{victim} was slain by {murderer} using {itemUsed}"
   death.attack.spit: "{victim} was spitballed by {murderer}"
   death.attack.starve: "{victim} starved to death"
