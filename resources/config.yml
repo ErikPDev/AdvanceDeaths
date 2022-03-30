@@ -37,7 +37,7 @@ onKillMoney:
 
 # Instant respawn settings
 
-instant-respawn: false
+instant-respawn: true
 
 instant-respawn-disabled-worlds: # Instant respawn will be disabled in the below worlds.
   - "World1"

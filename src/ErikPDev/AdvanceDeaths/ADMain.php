@@ -15,6 +15,7 @@ use ErikPDev\AdvanceDeaths\utils\deathTranslate;
 use ErikPDev\AdvanceDeaths\utils\scriptModules\scriptToData;
 use ErikPDev\AdvanceDeaths\utils\translationContainer;
 use pocketmine\block\VanillaBlocks;
+use pocketmine\entity\object\ItemEntity;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
 use pocketmine\event\Listener;
@@ -178,6 +179,8 @@ class ADMain extends PluginBase implements Listener {
 	}
 
 	public function entityDamage(EntityDamageEvent $event) {
+
+		if($event->getEntity() instanceof ItemEntity) return;
 
 		if ($this->getConfig()->get("bloodHit", true) == true) {
 
