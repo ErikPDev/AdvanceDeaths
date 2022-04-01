@@ -8,11 +8,11 @@ class hextocolor {
 
 	/**
 	 * Convert Hexadec to Color
-	 * @param $color
-	 * @param false $opacity
+	 * @param string $color
+	 * @param bool $opacity
 	 * @return Color
 	 */
-	static function convert($color, $opacity = false): Color {
+	static function convert(string $color, bool $opacity): Color {
 
 		$default = new Color(0, 0, 0);
 

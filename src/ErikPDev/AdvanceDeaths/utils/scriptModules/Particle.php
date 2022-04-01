@@ -53,7 +53,7 @@ class Particle extends module {
 
 		foreach ($particleColorsHEX as $particleHEX) {
 			if ($particleHEX == "#0") continue;
-			$particleColor = hextocolor::convert($particleHEX);
+			$particleColor = hextocolor::convert($particleHEX, false);
 			$this->particlesColor[$particleHEX] = new DustParticle($particleColor);
 		}
 
