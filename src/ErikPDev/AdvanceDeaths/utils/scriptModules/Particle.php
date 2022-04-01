@@ -8,12 +8,12 @@ use pocketmine\math\Vector3;
 use pocketmine\world\particle\DustParticle;
 use stdClass;
 
-class Particle {
+class Particle extends module {
 
 	private array $particles;
 	private array $particlesColor;
 
-	public function __construct(private stdClass $particleData, private string $playerWanted) {
+	public function __construct(private stdClass $particleData, protected string $playerWanted) {
 
 		if ($this->particleData->particleType !== "DustParticle") {
 			ADMain::getInstance()->getLogger()->critical("ParticleType value is not supported.");
@@ -56,12 +56,6 @@ class Particle {
 			$particleColor = hextocolor::convert($particleHEX);
 			$this->particlesColor[$particleHEX] = new DustParticle($particleColor);
 		}
-
-	}
-
-	public function getPlayerWanted(): string {
-
-		return $this->playerWanted;
 
 	}
 

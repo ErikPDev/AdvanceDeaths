@@ -6,8 +6,12 @@ use pocketmine\color\Color;
 
 class hextocolor {
 
-	/* Convert hexdec color string to rgb(a) string */
-
+	/**
+	 * Convert Hexadec to Color
+	 * @param $color
+	 * @param false $opacity
+	 * @return Color
+	 */
 	static function convert($color, $opacity = false): Color {
 
 		$default = new Color(0, 0, 0);
@@ -30,7 +34,7 @@ class hextocolor {
 			return $default;
 		}
 
-		//Convert hexadec to rgb
+		//Convert hexadec to Color
 		$rgb = array_map('hexdec', $hex);
 
 		//Check if opacity is set(rgba or rgb)

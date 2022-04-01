@@ -43,36 +43,73 @@ class databaseProvider implements Listener {
 
 	}
 
+	/**
+	 * @internal This function should only be used by AdvanceDeaths.
+	 */
 	public static function close(): void {
 
 		if (isset(self::$database)) self::$database->close();
 
 	}
 
+	/**
+	 * Increase the kill count.
+	 *
+	 * Notice: You'll have to call the leaderboardDataUpdate event to update the leaderboard.
+	 * @param string $UUID
+	 * @param string $PlayerName
+	 */
 	public static function increaseKill(string $UUID, string $PlayerName): void {
 
 		self::$database->executeInsert(databaseQueries::$increaseKill, ["UUID" => $UUID, "PlayerName" => $PlayerName]);
 
 	}
 
+	/**
+	 * Increase the death count.
+	 *
+	 * Notice: You'll have to call the leaderboardDataUpdate event to update the leaderboard.
+	 * @param string $UUID
+	 * @param string $PlayerName
+	 */
 	public static function increaseDeath(string $UUID, string $PlayerName): void {
 
 		self::$database->executeInsert(databaseQueries::$increaseDeath, ["UUID" => $UUID, "PlayerName" => $PlayerName]);
 
 	}
 
+	/**
+	 * Increase the Killstreak count.
+	 *
+	 * Notice: You'll have to call the leaderboardDataUpdate event to update the leaderboard.
+	 * @param string $UUID
+	 * @param string $PlayerName
+ 	*/
 	public static function increaseKillStreak(string $UUID, string $PlayerName): void {
 
 		self::$database->executeInsert(databaseQueries::$increaseKillStreak, ["UUID" => $UUID, "PlayerName" => $PlayerName]);
 
 	}
 
+	/**
+	 * Set the killstreak count to 0.
+	 *
+	 * Notice: You'll have to call the leaderboardDataUpdate event to update the leaderboard.
+	 * @param string $UUID
+	 * @param string $PlayerName
+	 */
 	public static function endKillStreak(string $UUID, string $PlayerName): void {
 
 		self::$database->executeInsert(databaseQueries::$resetKillStreak, ["UUID" => $UUID, "PlayerName" => $PlayerName]);
 
 	}
 
+	/**
+	 * Get a player's kill count.
+	 * @deprecated Use databaseProvider->getAll() instead, this function will soon be removed.
+	 * @param string $PlayerName
+	 * @return Promise
+	 */
 	public static function getKills(string $PlayerName): Promise {
 
 		$promise = new PromiseResolver();
@@ -92,6 +129,12 @@ class databaseProvider implements Listener {
 
 	}
 
+	/**
+	 * Get a player's death count.
+	 * @deprecated Use databaseProvider->getAll() instead, this function will soon be removed.
+	 * @param string $PlayerName
+	 * @return Promise
+	 */
 	public static function getDeaths(string $PlayerName): Promise {
 
 		$promise = new PromiseResolver();
@@ -111,6 +154,11 @@ class databaseProvider implements Listener {
 
 	}
 
+	/**
+	 * Get a player Killstreak
+	 * @param string $PlayerName
+	 * @return Promise
+	 */
 	public static function getKillstreaks(string $PlayerName): Promise {
 
 		$promise = new PromiseResolver();
@@ -130,6 +178,12 @@ class databaseProvider implements Listener {
 
 	}
 
+	/**
+	 * Returns the Top Killer Username.
+	 *
+	 * Used in ScoreHud
+	 * @return Promise
+	 */
 	public static function getTopKiller(): Promise {
 
 		$promise = new PromiseResolver();
@@ -149,6 +203,11 @@ class databaseProvider implements Listener {
 
 	}
 
+	/**
+	 * Returns all the data of a player.
+	 * @param string $PlayerName
+	 * @return Promise
+	 */
 	public static function getAll(string $PlayerName): Promise {
 
 		$promise = new PromiseResolver();
@@ -168,6 +227,10 @@ class databaseProvider implements Listener {
 
 	}
 
+	/**
+	 * Gets the Top 5 Killers.
+	 * @return Promise
+	 */
 	public static function getTop5kills(): Promise {
 
 		$promise = new PromiseResolver();
@@ -186,6 +249,10 @@ class databaseProvider implements Listener {
 
 	}
 
+	/**
+	 * Gets the Top 5 Players that died.
+	 * @return Promise
+	 */
 	public static function getTop5deaths(): Promise {
 
 		$promise = new PromiseResolver();
@@ -204,6 +271,10 @@ class databaseProvider implements Listener {
 
 	}
 
+	/**
+	 * Gets the top 5 players with the highest KillStreak.
+	 * @return Promise
+	 */
 	public static function getTop5killstreaks(): Promise {
 
 		$promise = new PromiseResolver();
@@ -222,6 +293,9 @@ class databaseProvider implements Listener {
 
 	}
 
+	/**
+	 * This function refreshes the leaderboard and DiscordBot data.
+	 */
 	public function refreshData(): void {
 
 		self::getTop5kills()->onCompletion(function ($data) {
@@ -245,6 +319,22 @@ class databaseProvider implements Listener {
 
 	}
 
+	/**
+	 * Calculates the Kills to Death Ratio using the supplied arguments.
+	 * @param int $kills
+	 * @param int $deaths
+	 * @return string
+	 */
+	public static function getKillToDeathRatio(int $kills, int $deaths): string {
+		if ($deaths !== 0) {
+			$ratio = $kills / $deaths;
+			if ($ratio !== 0) {
+				return number_format($ratio, 1);
+			}
+		}
+		return "0.0";
+	}
+
 	public function deathEvent(PlayerDeathEvent $event) {
 
 		$player = $event->getPlayer();
@@ -266,17 +356,6 @@ class databaseProvider implements Listener {
 		self::increaseKillStreak($murderer->getUniqueId(), $murderer->getName());
 		self::increaseKill($murderer->getUniqueId(), $murderer->getName());
 
-	}
-
-	/** @noinspection PhpPureAttributeCanBeAddedInspection */
-	public static function getKillToDeathRatio(int $kills, int $deaths): string {
-		if ($deaths !== 0) {
-			$ratio = $kills / $deaths;
-			if ($ratio !== 0) {
-				return number_format($ratio, 1);
-			}
-		}
-		return "0.0";
 	}
 
 }

@@ -6,11 +6,11 @@ use pocketmine\network\mcpe\protocol\PlaySoundPacket;
 use pocketmine\player\Player;
 use pocketmine\Server;
 
-class playSound {
+class playSound extends module {
 
 	private PlaySoundPacket $sound;
 
-	public function __construct(string $soundID, private string $playerWanted) {
+	public function __construct(string $soundID, protected string $playerWanted) {
 
 		$this->sound = PlaySoundPacket::create(
 			$soundID,
@@ -20,12 +20,6 @@ class playSound {
 			1,
 			1
 		);
-
-	}
-
-	public function getPlayerWanted(): string {
-
-		return $this->playerWanted;
 
 	}
 

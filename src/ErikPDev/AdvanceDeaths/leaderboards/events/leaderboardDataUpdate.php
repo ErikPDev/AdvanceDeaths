@@ -8,7 +8,7 @@ class leaderboardDataUpdate extends Event {
 
 	public function __construct(protected array $data) {}
 
-	public function getData() {
+	public function getData(): array {
 
 		return $this->data;
 

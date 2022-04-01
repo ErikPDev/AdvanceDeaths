@@ -16,10 +16,10 @@ class translationContainer {
 
 	public static function translate(string $translationString, bool $showPrefix, array $params): array|string {
 
-		$prefix = "";
-		if ($showPrefix) {
-			$prefix = "§bAdvance§cDeaths §6>§r ";
-		}
+		$prefix = match ($showPrefix) {
+			true => "§bAdvance§cDeaths §6>§r ", // Make this customizable in config ??
+			default => "",
+		};
 
 		if (!array_key_exists($translationString, self::$translations)) return "null";
 

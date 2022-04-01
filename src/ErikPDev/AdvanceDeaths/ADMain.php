@@ -56,8 +56,6 @@ class ADMain extends PluginBase implements Listener {
 
 		$this->loadScripts();
 
-		$this->getServer()->getCommandMap()->register("ads", new ads());
-
 		$this->bloodFXParticle = new BlockBreakParticle(VanillaBlocks::REDSTONE());
 
 	}
@@ -88,6 +86,10 @@ class ADMain extends PluginBase implements Listener {
 	}
 
 	private function loadFeatures(): void {
+
+		if ($this->getConfig()->get("commandEnabled", true) == true){
+			$this->getServer()->getCommandMap()->register("AdvanceDeaths", new ads());
+		}
 
 		if ($this->getConfig()->get("instant-respawn", false) == true) {
 			Server::getInstance()->getPluginManager()->registerEvents(new instantRespawn(), $this);

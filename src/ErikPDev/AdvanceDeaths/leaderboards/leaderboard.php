@@ -82,7 +82,6 @@ class leaderboard implements Listener {
 
 			$text .= ($place+1).". ".$variables["PlayerName"]." - ".$variables[$typeName]." $typeName\n";
 
-
 		}
 
 		$this->leaderboard->setText($text);

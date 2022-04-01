@@ -4,16 +4,9 @@ namespace ErikPDev\AdvanceDeaths\utils\scriptModules;
 
 use pocketmine\player\Player;
 
-class heal {
+class heal extends module{
 
-	public function __construct(public string $message, private string $playerWanted) {
-	}
-
-	public function getPlayerWanted(): string {
-
-		return $this->playerWanted;
-
-	}
+	public function __construct(public string $message, protected string $playerWanted) {}
 
 	public function run($entity) {
 

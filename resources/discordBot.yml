@@ -13,6 +13,10 @@ prefix: ">"
 
 deathsChannelID: 123456789 # Discord Channel to send Death Messages, set to 0 to disable.
 
+automaticDiscordBotReload: false # Set this to true to re-enable the discordBot plugin when it's disabled. It's buggy in PHP JIT.
+
+reloadTimeout: 3 # After three reloads, it will stop re-enabling the plugin.
+
 templates:
   info:
     title: "{name} Info"

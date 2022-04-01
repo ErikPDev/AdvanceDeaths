@@ -6,6 +6,7 @@ use ErikPDev\AdvanceDeaths\ADMain;
 use ErikPDev\AdvanceDeaths\discord\commands\help;
 use ErikPDev\AdvanceDeaths\discord\commands\playerInfo;
 use ErikPDev\AdvanceDeaths\discord\commands\players;
+use ErikPDev\AdvanceDeaths\discord\commands\simpleCommand;
 use ErikPDev\AdvanceDeaths\discord\commands\topdeaths;
 use ErikPDev\AdvanceDeaths\discord\commands\topkills;
 use ErikPDev\AdvanceDeaths\discord\commands\topkillstreaks;
@@ -38,6 +39,7 @@ class discordListener implements Listener {
 	public static string $prefix;
 
 	private static array $commands;
+	private int $reloadTimeout = 0;
 
 	public function __construct() {
 
@@ -62,7 +64,20 @@ class discordListener implements Listener {
 	}
 
 	public static function getCommands(): array {
+
 		return self::$commands;
+
+	}
+
+	/**
+	 * Register a discord command
+	 * @param string $commandName
+	 * @param simpleCommand $commandClass
+	 */
+	public static function registerCommand(string $commandName, simpleCommand $commandClass): void {
+
+		self::$commands[$commandName] = $commandClass;
+
 	}
 
 	public static function getTemplate(string $templateName): array|\ErrorException {
@@ -84,6 +99,9 @@ class discordListener implements Listener {
 
 	public function onClose(DiscordClosed $event) {
 
+		if(self::$discordBotConfig->get("automaticDiscordBotReload", false) == false) return;
+		if($this->reloadTimeout == self::$discordBotConfig->get("reloadTimeout", 0)) return;
+		$this->reloadTimeout++;
 		ADMain::getInstance()->getScheduler()->scheduleDelayedTask(new ClosureTask(
 			function () use ($event) {
 

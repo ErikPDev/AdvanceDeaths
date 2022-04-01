@@ -1,8 +1,15 @@
+# Command Configuration - Responses can be edited via lang.yml
+
+commandEnabled: true
+
+# --------------------------------
+
 # onHitConfiguration
 
 bloodHit: true # Possible values = true/false
 
 # ------------------
+
 
 # Killstreaks announcements
 killstreakAnnouncements:
@@ -32,7 +39,6 @@ onKillMoney:
   amount: 10
 
 # =====================
-
 
 
 # Instant respawn settings
