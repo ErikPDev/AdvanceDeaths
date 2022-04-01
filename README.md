@@ -20,6 +20,8 @@ This version of AdvanceDeaths is different from the previous ones.
 
 You will need to re-modify all the configuration files.
 
+If you're using BedrockEconomy, make sure you're using the latest version of it.
+
 # Setup
 Setting up AdvanceDeaths is made easy.
 
