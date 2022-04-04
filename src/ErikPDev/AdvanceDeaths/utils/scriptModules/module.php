@@ -6,7 +6,7 @@ abstract class module {
 
 	protected string $playerWanted;
 
-	protected function getPlayerWanted(): string {
+	public function getPlayerWanted(): string {
 
 		return $this->playerWanted;
 
