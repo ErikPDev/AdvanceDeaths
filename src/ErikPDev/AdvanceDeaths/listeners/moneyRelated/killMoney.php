@@ -54,7 +54,7 @@ class killMoney implements Listener {
 		/** @var Player $player */
 		$player = $damageCause->getDamager();
 		$this->currencyManager->getMoney($player)->onCompletion(
-			function (?int $balance) use ($player) {
+			function (int|float $balance) use ($player) {
 				$amount = match ($this->configuration["type"]) {
 					"playerMoney" => $this->currencyManager->getMoney($player),
 					"amount" => $this->configuration["amount"],

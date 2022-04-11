@@ -19,9 +19,7 @@ class currencyManager {
 		if (Server::getInstance()->getPluginManager()->getPlugin("BedrockEconomy") !== null) {
 			$this->pluginUsed = 2;
 		}
-		if (Server::getInstance()->getPluginManager()->getPlugin("Capital") !== null) {
-			$this->pluginUsed = 3;
-		}
+
 		$this->checkSupported();
 
 	}
