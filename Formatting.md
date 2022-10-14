@@ -10,5 +10,5 @@ When submitting a pull request, you shall make sure it follows the plugin code s
         - camelCasing
         - deathMoney
     - What not to do:
-        - CamelCasing
-        - DeathMoney
+        - CamelCaSiNg
+        - deathmoney

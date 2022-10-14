@@ -7,9 +7,6 @@
         <img alt="Total Downloads" src="https://poggit.pmmp.io/shield.dl.total/AdvanceDeaths">
         <img alt="Downloads" src="https://poggit.pmmp.io/shield.dl/AdvanceDeaths">
     </a>
-    <a href="https://discord.gg/jcze7Pzb3D">
-        <img alt="Discord" src="https://img.shields.io/discord/897087738543755303?label=Support%2FFun&logo=Discord">
-    </a>
 </div>
 
 AdvanceDeaths is created to take advantage of the Death Feature in Minecraft: Bedrock Edition.
