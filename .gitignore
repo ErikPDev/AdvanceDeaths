@@ -5,3 +5,5 @@
 *.prefs
 .settings/org.eclipse.php.core.prefs
 .project
+.idea
+*.xml

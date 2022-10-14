@@ -5,6 +5,7 @@ namespace ErikPDev\AdvanceDeaths\leaderboards;
 use ErikPDev\AdvanceDeaths\ADMain;
 use ErikPDev\AdvanceDeaths\leaderboards\events\leaderboardClose;
 use ErikPDev\AdvanceDeaths\leaderboards\events\leaderboardDataUpdate;
+use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
 use pocketmine\event\player\PlayerJoinEvent;
@@ -26,7 +27,7 @@ class leaderboard implements Listener {
 		$pos = [];
 
 		foreach (explode(",", $this->configuration["coordinates"]) as $value) {
-			if (preg_match("/^\d+$/", $value) == false) {
+			if (!preg_match("/^\d+$/", str_replace("-", "", $value))) {
 				throw new \ErrorException("Coordinates is not an integer in leaderboards.yml");
 			}
 			$pos[] = intval($value);
@@ -89,10 +90,17 @@ class leaderboard implements Listener {
 	}
 
 	public function onJoin(PlayerJoinEvent $event) {
-
+        if ($event->getPlayer()->getWorld()->getDisplayName())
 		$this->addParticle();
 
 	}
+
+    public function onWorldChange(EntityTeleportEvent $event){
+        $oldWorld = $event->getFrom()->getWorld()->getDisplayName();
+        $newWorld = $event->getTo()->getWorld()->getDisplayName();
+        if($oldWorld === $newWorld) return;
+        $this->addParticle();
+    }
 
 	public function onDeath(PlayerDeathEvent $event) {
 
