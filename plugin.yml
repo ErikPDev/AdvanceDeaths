@@ -1,6 +1,6 @@
 ---
 name: AdvanceDeaths
-version: 4.0.0
+version: 4.0.2
 main: ErikPDev\AdvanceDeaths\ADMain
 api: 4.0.0
 softdepend:
