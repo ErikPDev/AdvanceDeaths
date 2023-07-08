@@ -23,7 +23,7 @@ class translationContainer {
 
 		if (!array_key_exists($translationString, self::$translations)) return "null";
 
-		$translated = $prefix . "" . self::$translations[$translationString];
+		$translated = $prefix . " " . self::$translations[$translationString];
 
 		foreach ($params as $transKey => $transValue) {
 			$translated = str_replace("%" . $transKey, $transValue, $translated);

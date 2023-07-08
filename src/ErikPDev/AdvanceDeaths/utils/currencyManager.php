@@ -2,6 +2,7 @@
 
 namespace ErikPDev\AdvanceDeaths\utils;
 
+use ErrorException;
 use pocketmine\player\Player;
 use pocketmine\promise\Promise;
 use pocketmine\promise\PromiseResolver;
@@ -9,13 +10,13 @@ use pocketmine\Server;
 
 class currencyManager {
 
-	private int $pluginUsed = 0; # Possible values are 0="not set", 1="EconomyAPI", 2="BedrockEconomy", 3="Capital"
+	private int $pluginUsed = 0; # Possible values are 0="not set", 2="BedrockEconomy", 3="Capital"
 
-	public function __construct() {
+    /**
+     * @throws ErrorException
+     */
+    public function __construct() {
 
-		if (Server::getInstance()->getPluginManager()->getPlugin("EconomyAPI") !== null) {
-			$this->pluginUsed = 1;
-		}
 		if (Server::getInstance()->getPluginManager()->getPlugin("BedrockEconomy") !== null) {
 			$this->pluginUsed = 2;
 		}
@@ -24,29 +25,26 @@ class currencyManager {
 
 	}
 
-	private function checkSupported(): void {
+    /**
+     * @throws ErrorException
+     */
+    private function checkSupported(): void {
 
 		if ($this->pluginUsed == 0) {
-			throw new \ErrorException("No supported currency plugin found.");
+			throw new ErrorException("No supported currency plugin found.");
 		}
 
 	}
 
-	public function getMoney(Player $player): Promise {
+    /**
+     * @throws ErrorException
+     */
+    public function getMoney(Player $player): Promise {
 
 		$this->checkSupported();
 
 		$promise = new PromiseResolver();
 
-		if ($this->pluginUsed == 1) {
-			$EconomyAPI = \onebone\economyapi\EconomyAPI::getInstance();
-			$money = $EconomyAPI->myMoney($player);
-			if (is_bool($money)) {
-				$money = 0;
-			}
-			$promise->resolve($money);
-			return $promise->getPromise();
-		}
 
 		if ($this->pluginUsed == 2) {
 			$BedrockEconomyAPI = \cooldogedev\BedrockEconomy\api\BedrockEconomyAPI::beta();
@@ -70,35 +68,25 @@ class currencyManager {
 
 	public function reduceMoney(Player $player, float $amount): void {
 
-		$this->checkSupported();
-		if ($this->pluginUsed == 1) {
-			$EconomyAPI = \onebone\economyapi\EconomyAPI::getInstance();
-			$EconomyAPI->reduceMoney($player, $amount, true, "AdvanceDeaths");
-			return;
-		}
 
 		if ($this->pluginUsed == 2) {
 			$BedrockEconomyAPI = \cooldogedev\BedrockEconomy\api\BedrockEconomyAPI::beta();
 			$BedrockEconomyAPI->deduct($player->getName(), $amount, "AdvanceDeaths");
-			return;
-		}
+        }
 
 	}
 
-	public function addMoney(Player $player, float $amount): void {
+    /**
+     * @throws ErrorException
+     */
+    public function addMoney(Player $player, float $amount): void {
 
 		$this->checkSupported();
-		if ($this->pluginUsed == 1) {
-			$EconomyAPI = \onebone\economyapi\EconomyAPI::getInstance();
-			$EconomyAPI->addMoney($player, $amount, true, "AdvanceDeaths");
-			return;
-		}
 
 		if ($this->pluginUsed == 2) {
 			$BedrockEconomyAPI = \cooldogedev\BedrockEconomy\api\BedrockEconomyAPI::beta();
 			$BedrockEconomyAPI->add($player->getName(), $amount, "AdvanceDeaths");
-			return;
-		}
+        }
 
 	}
 

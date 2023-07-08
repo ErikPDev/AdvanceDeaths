@@ -4,6 +4,7 @@ namespace ErikPDev\AdvanceDeaths\utils\scriptModules;
 
 use ErikPDev\AdvanceDeaths\ADMain;
 use ErikPDev\AdvanceDeaths\utils\modules\hextocolor;
+use ErrorException;
 use pocketmine\math\Vector3;
 use pocketmine\world\particle\DustParticle;
 use stdClass;
@@ -13,21 +14,24 @@ class Particle extends module {
 	private array $particles;
 	private array $particlesColor;
 
-	public function __construct(private stdClass $particleData, protected string $playerWanted) {
+    /**
+     * @throws ErrorException
+     */
+    public function __construct(private stdClass $particleData, protected string $playerWanted) {
 
 		if ($this->particleData->particleType !== "DustParticle") {
 			ADMain::getInstance()->getLogger()->critical("ParticleType value is not supported.");
-			throw new \ErrorException("ParticleType value is not supported.");
+			throw new ErrorException("ParticleType value is not supported.");
 		}
 
 		if ($this->particleData->particleRatio !== "square") {
 			ADMain::getInstance()->getLogger()->critical("ParticleRatio value is not supported.");
-			throw new \ErrorException("ParticleRatio value is not supported");
+			throw new ErrorException("ParticleRatio value is not supported");
 		}
 
 		if (count($this->particleData->particles) !== 8) {
 			ADMain::getInstance()->getLogger()->critical("Particles Y list is invalid.");
-			throw new \ErrorException("Particles Y list is invalid");
+			throw new ErrorException("Particles Y list is invalid");
 		}
 
 		$cancel = false;
@@ -38,9 +42,9 @@ class Particle extends module {
 			}
 		}
 
-		if ($cancel == true) {
+		if ($cancel) {
 			ADMain::getInstance()->getLogger()->critical("Particles Z list is invalid.");
-			throw new \ErrorException("Particles Z list invalid.");
+			throw new ErrorException("Particles Z list invalid.");
 		}
 
 		$particleColors = "";

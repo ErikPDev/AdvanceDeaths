@@ -5,6 +5,7 @@ namespace ErikPDev\AdvanceDeaths\leaderboards;
 use ErikPDev\AdvanceDeaths\ADMain;
 use ErikPDev\AdvanceDeaths\leaderboards\events\leaderboardClose;
 use ErikPDev\AdvanceDeaths\leaderboards\events\leaderboardDataUpdate;
+use ErrorException;
 use pocketmine\event\entity\EntityTeleportEvent;
 use pocketmine\event\Listener;
 use pocketmine\event\player\PlayerDeathEvent;
@@ -28,7 +29,7 @@ class leaderboard implements Listener {
 
 		foreach (explode(",", $this->configuration["coordinates"]) as $value) {
 			if (!preg_match("/^\d+$/", str_replace("-", "", $value))) {
-				throw new \ErrorException("Coordinates is not an integer in leaderboards.yml");
+				throw new ErrorException("Coordinates is not an integer in leaderboards.yml");
 			}
 			$pos[] = intval($value);
 		}
@@ -63,7 +64,7 @@ class leaderboard implements Listener {
 
 	public function onDisabled(leaderboardClose $event){
 
-		$this->leaderboard->setInvisible(true);
+		$this->leaderboard->setInvisible();
 
 	}
 

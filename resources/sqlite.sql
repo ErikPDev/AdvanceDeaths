@@ -3,12 +3,12 @@
 -- #    { init
 CREATE TABLE IF NOT EXISTS "AdvanceDeaths" (
     "UUID"	TEXT UNIQUE,
-    "PlayerName" TEXT DEFAULT "?",
+    "PlayerName" TEXT DEFAULT '?',
     "Kills"	INTEGER DEFAULT 0,
     "Deaths"	INTEGER DEFAULT 0,
     "Killstreak" INTEGER DEFAULT 0,
     PRIMARY KEY("UUID")
-)
+);
     -- #    }
 -- #    { increaseKill
 -- # 	  :UUID string
@@ -32,19 +32,19 @@ INSERT OR REPLACE INTO "AdvanceDeaths" ("UUID", "PlayerName", "Deaths", "Kills",
 -- #    }
 -- #	{ getKills
 -- # 	  :PlayerName string
-SELECT Kills FROM AdvanceDeaths WHERE PlayerName = :PlayerName
+SELECT Kills FROM AdvanceDeaths WHERE PlayerName = :PlayerName;
 -- #    }
 -- #	{ getDeaths
 -- # 	  :PlayerName string
-SELECT Deaths FROM AdvanceDeaths WHERE PlayerName = :PlayerName
+SELECT Deaths FROM AdvanceDeaths WHERE PlayerName = :PlayerName;
 -- #    }
 -- #	{ getKills&Deaths&Killstreak
 -- # 	  :PlayerName string
-SELECT Deaths, Kills, Killstreak,PlayerName FROM AdvanceDeaths WHERE lower(PlayerName) LIKE lower(:PlayerName)
+SELECT Deaths, Kills, Killstreak,PlayerName FROM AdvanceDeaths WHERE lower(PlayerName) LIKE lower(:PlayerName);
 -- #    }
 -- #	{ getKillstreak
 -- # 	  :PlayerName string
-SELECT Killstreak FROM AdvanceDeaths WHERE lower(PlayerName) = lower(:PlayerName)
+SELECT Killstreak FROM AdvanceDeaths WHERE lower(PlayerName) = lower(:PlayerName);
 -- #    }
 -- #	{ ScoreBoardTOP
 SELECT "PlayerName", "Kills" FROM "AdvanceDeaths" ORDER BY "Kills" DESC LIMIT 1;

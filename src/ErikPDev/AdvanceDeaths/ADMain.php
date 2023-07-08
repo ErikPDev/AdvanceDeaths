@@ -3,13 +3,11 @@
 namespace ErikPDev\AdvanceDeaths;
 
 use ErikPDev\AdvanceDeaths\commands\ads;
-use ErikPDev\AdvanceDeaths\discord\discordListener;
 use ErikPDev\AdvanceDeaths\leaderboards\events\leaderboardClose;
 use ErikPDev\AdvanceDeaths\leaderboards\leaderboard;
 use ErikPDev\AdvanceDeaths\listeners\instantRespawn;
 use ErikPDev\AdvanceDeaths\listeners\moneyRelated\deathMoney;
 use ErikPDev\AdvanceDeaths\listeners\moneyRelated\killMoney;
-use ErikPDev\AdvanceDeaths\listeners\scoreHUDTags;
 use ErikPDev\AdvanceDeaths\utils\database\databaseProvider;
 use ErikPDev\AdvanceDeaths\utils\deathTranslate;
 use ErikPDev\AdvanceDeaths\utils\scriptModules\scriptToData;
@@ -34,7 +32,10 @@ class ADMain extends PluginBase implements Listener {
 
 	private BlockBreakParticle $bloodFXParticle;
 
-	protected function onEnable(): void {
+    /**
+     * @throws \ErrorException
+     */
+    protected function onEnable(): void {
 
 		$this->saveResources();
 
@@ -78,56 +79,48 @@ class ADMain extends PluginBase implements Listener {
 
 		foreach ($this->getResources() as $resourceName => $data) {
 			if ($resourceName == "sqlite.sql") continue;
-			$this->saveResource($resourceName, false);
+			$this->saveResource($resourceName);
 		}
 
 		$this->reloadConfig();
 
 	}
 
-	private function loadFeatures(): void {
+    /**
+     * @throws \ErrorException
+     */
+    private function loadFeatures(): void {
 
-		if ($this->getConfig()->get("commandEnabled", true) == true){
+		if ($this->getConfig()->get("commandEnabled", true)){
 			$this->getServer()->getCommandMap()->register("AdvanceDeaths", new ads());
 		}
 
-		if ($this->getConfig()->get("instant-respawn", false) == true) {
+		if ($this->getConfig()->get("instant-respawn")) {
 			Server::getInstance()->getPluginManager()->registerEvents(new instantRespawn(), $this);
 		}
 
-		if ($this->getConfig()->getNested("onDeathMoney")["isEnabled"] == true) {
+		if ($this->getConfig()->getNested("onDeathMoney")["isEnabled"]) {
 			Server::getInstance()->getPluginManager()->registerEvents(new deathMoney($this->getConfig()->getNested("onDeathMoney")), $this);
 		}
 
-		if ($this->getConfig()->getNested("onKillMoney")["isEnabled"] == true) {
+		if ($this->getConfig()->getNested("onKillMoney")["isEnabled"]) {
 			Server::getInstance()->getPluginManager()->registerEvents(new killMoney($this->getConfig()->getNested("onKillMoney")), $this);
-		}
-
-		$discordBotConfig = new Config($this->getDataFolder() . "discordBot.yml");
-		if ($discordBotConfig->get("isEnabled") == true) {
-			if (Server::getInstance()->getPluginManager()->getPlugin("DiscordBot") == null)
-				throw new \ErrorException("DiscordBot is set to enabled but the DiscordBot plugin is not found.");
-			Server::getInstance()->getPluginManager()->registerEvents(new discordListener(), $this);
-		}
-
-		if (Server::getInstance()->getPluginManager()->getPlugin("ScoreHud") !== null) {
-			Server::getInstance()->getPluginManager()->registerEvents(new scoreHUDTags(), $this);
 		}
 
 		$leaderboardConfiguration = new Config($this->getDataFolder() . "leaderboards.yml");
 
 		$killsConfiguration = $leaderboardConfiguration->getNested("kills");
-		if ($killsConfiguration["isEnabled"] == true) {
+		if ($killsConfiguration["isEnabled"]) {
 			Server::getInstance()->getPluginManager()->registerEvents(new leaderboard($killsConfiguration, 0), $this);
 		}
 
 		$deathsConfiguration = $leaderboardConfiguration->getNested("deaths");
-		if ($deathsConfiguration["isEnabled"] == true) {
+		if ($deathsConfiguration["isEnabled"]) {
 			Server::getInstance()->getPluginManager()->registerEvents(new leaderboard($deathsConfiguration, 1), $this);
 		}
 
 		$killstreaksConfiguration = $leaderboardConfiguration->getNested("killstreaks");
-		if ($killstreaksConfiguration["isEnabled"] == true) {
+		if ($killstreaksConfiguration["isEnabled"]) {
 			Server::getInstance()->getPluginManager()->registerEvents(new leaderboard($killstreaksConfiguration, 2), $this);
 		}
 
@@ -152,7 +145,7 @@ class ADMain extends PluginBase implements Listener {
 		$this->onDeathScript = [];
 		foreach ($onDeathScript["script"] as $id => $value) {
 			$functionData = scriptToData::decode($value);
-			if ($functionData == false) continue;
+			if (!$functionData) continue;
 			$this->onDeathScript[] = $functionData;
 		}
 
@@ -170,7 +163,7 @@ class ADMain extends PluginBase implements Listener {
 		foreach ($this->onDeathScript as $function) {
 			$functionPlayer = $player;
 			if (strtolower($function->getPlayerWanted()) == "playerkiller") {
-				if ($deathByEntity == false) return;
+				if (!$deathByEntity) return;
 				/** @var EntityDamageByEntityEvent $damageCause */
 				$functionPlayer = $damageCause->getDamager();
 			}
@@ -184,7 +177,7 @@ class ADMain extends PluginBase implements Listener {
 
 		if($event->getEntity() instanceof ItemEntity) return;
 
-		if ($this->getConfig()->get("bloodHit", true) == true) {
+		if ($this->getConfig()->get("bloodHit", true)) {
 
 			$event->getEntity()->getWorld()->addParticle($event->getEntity()->getPosition()->add(0, 1, 0), $this->bloodFXParticle);
 
@@ -213,7 +206,7 @@ class ADMain extends PluginBase implements Listener {
 		));
 
 
-		if ($this->getConfig()->getNested("killstreakAnnouncements")["isEnabled"] == false) return;
+		if (!$this->getConfig()->getNested("killstreakAnnouncements")["isEnabled"]) return;
 		if ($damager == null) return;
 		if (!$damager instanceof Player) return;
 

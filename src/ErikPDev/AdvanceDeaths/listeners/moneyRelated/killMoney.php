@@ -26,7 +26,10 @@ class killMoney implements Listener {
 
 	}
 
-	private function modifyMoney(Player $player, float $amount, string $type) {
+    /**
+     * @throws ErrorException
+     */
+    private function modifyMoney(Player $player, float $amount, string $type) {
 
 		switch (strtolower($type)) {
 			case "lose":
@@ -54,7 +57,9 @@ class killMoney implements Listener {
 		/** @var Player $player */
 		$player = $damageCause->getDamager();
 		$this->currencyManager->getMoney($player)->onCompletion(
-			function (int|float $balance) use ($player) {
+        /**
+         * @throws ErrorException
+         */ function (int|float $balance) use ($player) {
 				$amount = match ($this->configuration["type"]) {
 					"playerMoney" => $this->currencyManager->getMoney($player),
 					"amount" => $this->configuration["amount"],

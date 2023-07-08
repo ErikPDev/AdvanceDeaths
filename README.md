@@ -68,29 +68,16 @@ You can modify Death Messages by changing the `deathMessages.yml` located in `pl
     - Modifiable Death Message.
     - Economies Support
         - Gain / Lose on Kill / Death
-        - EconomyAPI & BedrockEconomy is currently supported. Capital support is next.
+        - BedrockEconomy is currently supported. Capital support is coming soon.
     - Instant Respawn
     - Killstreaks Announcement.
 - Player/Entity Damage
   - Blood FX - Configurable in the `config.yml`
-- ScoreHud
-  - ScoreHud support is automatically available, check the <a href="#scorehud">Available Tags</a>.
 - Leaderboards
     - Kills
     - Deaths
     - Killstreaks
     - All leaderboards are customizable from `leaderboards.yml` located at `plugin_data\AdvanceDeaths`.
-- Discord
-    - You can now create your own discord bot, follow <a src="https://github.com/ErikPDev/AdvanceDeaths/tree/master/wikis/SettingUpDiscordBot.md">this wiki</a>
-    - Available discord bot commands:
-        - `>info (playerName)`
-        - `>players`
-        - `>topkills`
-        - `>topdeaths`
-        - `>topkillstreaks`
-        - Type `>help` to see their description on Discord.
-    - Notice:
-        - You can change the bot prefix.
 
 # Bug Report
 Found a bug? 
