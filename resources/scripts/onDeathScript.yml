@@ -8,5 +8,3 @@
 
 script:
   - 'particle(creeper, Player)'
-  - 'playsound(ambient.weather.thunder, PlayerKiller)'
-  - 'message(You can change this message in plugin_data/AdvanceDeaths/scripts., Player)'
