@@ -30,6 +30,7 @@ class ads extends Command implements PluginOwned {
 		$responsePromise->onCompletion(
 			function (array $data) use ($sender) {
 				$params = [];
+                $data["KDR"] = $data["Kills"] / $data["Deaths"];
 				foreach ($data as $key => $value) {
 					$params[$key."%"] = $value;
 				}

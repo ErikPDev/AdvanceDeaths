@@ -5,6 +5,7 @@ adsCommandSuccess:
   %PlayerName% status\n
   Deaths: %Deaths%\n
   Kills: %Kills%\n
+  KDR: %KDR%\n
   Killstreak: %Killstreak%\n
   "
 adsCommandError: "Player not found."
