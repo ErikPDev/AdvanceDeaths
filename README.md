@@ -11,7 +11,7 @@
 
 AdvanceDeaths is created to take advantage of the Death Feature in Minecraft: Bedrock Edition.
 
-With AdvanceDeaths, you can customize the death experience of your players, have your own discord bot, and more to come.
+With AdvanceDeaths, you can customize the death experience of your players and more to come.
 
 
 # Notice:
