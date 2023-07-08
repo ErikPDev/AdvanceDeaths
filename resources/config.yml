@@ -21,7 +21,7 @@ killstreakAnnouncements:
 # Death Money settings
 
 onDeathMoney:
-  isEnabled: true
+  isEnabled: false
   disabled-worlds:
     - "World1"
     - "AntiDeathMoneyWorld"
@@ -30,7 +30,7 @@ onDeathMoney:
   amount: 10
 
 onKillMoney:
-  isEnabled: true
+  isEnabled: false
   disabled-worlds:
     - "World1"
     - "AntiKillMoneyWorld"
