@@ -61,7 +61,7 @@ class killMoney implements Listener {
          * @throws ErrorException
          */ function (int|float $balance) use ($player) {
 				$amount = match ($this->configuration["type"]) {
-					"playerMoney" => $this->currencyManager->getMoney($player),
+					"playerMoney" => $balance,
 					"amount" => $this->configuration["amount"],
 					"percent" => ($this->configuration["amount"] / 100) * $balance,
 					default => throw new ErrorException("Kill Type is invalid, check your configuration."),
