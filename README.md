@@ -1,3 +1,7 @@
+# Important
+This plugin is no longer being maintaned. If you're willing to maintain it, send me a message through Discord (ErikPDev)
+Goodbye Pocketmine!
+
 <h1 align="center"> AdvanceDeaths </h1>
 
 <div align="center">
