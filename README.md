@@ -1,5 +1,5 @@
 # Important
-This plugin is no longer being maintaned. If you're willing to maintain it, send me a message through Discord (ErikPDev)
+This plugin is no longer being maintained. If you're willing to maintain it, fork this repository.
 Goodbye Pocketmine!
 
 <h1 align="center"> AdvanceDeaths </h1>
